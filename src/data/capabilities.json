@@ -45,7 +45,7 @@
         "subprocess": true,
         "unix_socket": false,
         "shared_memory": false,
-        "http": false,
+        "http": true,
         "worker_pool": false
       },
       "patterns": {
