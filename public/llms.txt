@@ -1,4 +1,4 @@
-# VGI-RPC
+# vgi-rpc
 
 > Transport-agnostic RPC framework built on Apache Arrow IPC serialization. Multi-language (Python, TypeScript, Go, C++), no code generation required.
 
@@ -19,7 +19,7 @@
 
 ## Key Concepts
 
-VGI-RPC uses Apache Arrow IPC as its serialization format, giving callers zero-copy access to columnar data without schema negotiation or code generation. Clients create typed proxy objects that mirror the server's service interface; method calls are dispatched over a pluggable transport layer.
+vgi-rpc uses Apache Arrow IPC as its serialization format, giving callers zero-copy access to columnar data without schema negotiation or code generation. Clients create typed proxy objects that mirror the server's service interface; method calls are dispatched over a pluggable transport layer.
 
 **Transports:** pipe, subprocess, Unix socket, shared memory, HTTP, and worker pool. Each transport implements the same framing protocol so services are portable across deployment topologies.
 
@@ -56,4 +56,4 @@ VGI-RPC uses Apache Arrow IPC as its serialization format, giving callers zero-c
 
 - [PyPI Package](https://pypi.org/project/vgi-rpc/): Install Python implementation via pip
 - [Benchmarks](https://vgi-rpc.query.farm/benchmarks): Transport and serialization performance data
-- [VGI-RPC Website](https://vgi-rpc.query.farm): Project homepage with feature comparison
+- [vgi-rpc Website](https://vgi-rpc.query.farm): Project homepage with feature comparison
