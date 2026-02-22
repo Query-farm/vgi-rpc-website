@@ -2,6 +2,7 @@
 const frameworks = [
   {
     name: 'vgi-rpc',
+    url: '/',
     serialization: 'Arrow IPC',
     idl: 'No (Protocol classes)',
     streaming: 'Producer + Exchange',
@@ -11,6 +12,7 @@ const frameworks = [
   },
   {
     name: 'Arrow Flight',
+    url: 'https://arrow.apache.org/docs/format/Flight.html',
     serialization: 'Arrow IPC + gRPC',
     idl: 'No (fixed API)',
     streaming: 'get/put/exchange',
@@ -20,6 +22,7 @@ const frameworks = [
   },
   {
     name: 'gRPC',
+    url: 'https://grpc.io/',
     serialization: 'Protobuf',
     idl: 'Yes (.proto)',
     streaming: 'All 4 patterns',
@@ -29,6 +32,7 @@ const frameworks = [
   },
   {
     name: 'Apache Thrift',
+    url: 'https://thrift.apache.org/',
     serialization: 'Thrift binary/compact',
     idl: 'Yes (.thrift)',
     streaming: 'No',
@@ -38,6 +42,7 @@ const frameworks = [
   },
   {
     name: 'ConnectRPC',
+    url: 'https://connectrpc.com/',
     serialization: 'Protobuf',
     idl: 'Yes (.proto)',
     streaming: 'All 4 patterns',
@@ -47,6 +52,7 @@ const frameworks = [
   },
   {
     name: "Cap'n Proto",
+    url: 'https://capnproto.org/',
     serialization: "Cap'n Proto",
     idl: 'Yes (.capnp)',
     streaming: 'Promise pipelining',
@@ -56,6 +62,7 @@ const frameworks = [
   },
   {
     name: 'JSON-RPC',
+    url: 'https://www.jsonrpc.org/',
     serialization: 'JSON',
     idl: 'No',
     streaming: 'No',
@@ -102,7 +109,14 @@ const frameworks = [
                   ? 'text-farm-green-deep dark:text-farm-green-field font-bold'
                   : 'text-farm-text dark:text-farm-text-light'
               ]}>
-                {fw.name}
+                {fw.highlight ? (
+                  <a href={fw.url}>{fw.name}</a>
+                ) : (
+                  <a href={fw.url} target="_blank" rel="noopener noreferrer"
+                    class="hover:text-farm-green-deep dark:hover:text-farm-green-field transition-colors underline decoration-farm-cream-dark dark:decoration-farm-dark-border hover:decoration-current">
+                    {fw.name}
+                  </a>
+                )}
               </td>
               <td class="px-4 py-3 text-farm-text-muted dark:text-farm-text-light-muted">{fw.serialization}</td>
               <td class="px-4 py-3 text-farm-text-muted dark:text-farm-text-light-muted">{fw.idl}</td>

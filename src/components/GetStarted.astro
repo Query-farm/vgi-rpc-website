@@ -2,21 +2,25 @@
 const installs = [
   {
     lang: 'Python',
+    logo: '/logos/python.svg',
     command: 'pip install vgi-rpc',
     docs: 'https://vgi-rpc-python.query.farm/quickstart/',
   },
   {
     lang: 'TypeScript',
-    command: 'bun add vgi-rpc  # coming soon',
+    logo: '/logos/typescript.svg',
+    command: 'bun add vgi-rpc-typescript',
     docs: 'https://vgi-rpc-typescript.query.farm',
   },
   {
     lang: 'Go',
-    command: 'go get github.com/Query-farm/vgi-rpc-go  # coming soon',
+    logo: '/logos/go.svg',
+    command: 'go get github.com/Query-farm/vgi-rpc-go',
     docs: 'https://github.com/Query-farm/vgi-rpc-go',
   },
   {
     lang: 'C++',
+    logo: '/logos/cpp.svg',
     command: 'git clone https://github.com/Query-farm/vgi-rpc-cpp.git',
     docs: 'https://vgi-rpc-cpp.query.farm',
   },
@@ -39,7 +43,8 @@ const installs = [
         <div class="p-4 rounded-xl bg-white dark:bg-farm-dark-card
           border border-farm-cream-dark dark:border-farm-dark-border">
           <div class="flex items-center justify-between mb-2">
-            <span class="font-semibold text-farm-green-deep dark:text-farm-cream">
+            <span class="flex items-center gap-2 font-semibold text-farm-green-deep dark:text-farm-cream">
+              <img src={install.logo} alt={`${install.lang} logo`} class="w-5 h-5" />
               {install.lang}
             </span>
             <a href={install.docs} target="_blank" rel="noopener noreferrer"

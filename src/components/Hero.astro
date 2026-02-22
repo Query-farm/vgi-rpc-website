@@ -23,7 +23,8 @@
       <p class="mt-4 text-xl md:text-2xl max-w-2xl mx-auto
         text-farm-text-muted dark:text-farm-text-light-muted">
         Transport-agnostic RPC built on
-        <span class="text-farm-gold font-semibold">Apache Arrow</span>
+        <a href="https://arrow.apache.org/" target="_blank" rel="noopener noreferrer"
+          class="text-farm-gold font-semibold hover:text-farm-gold-light transition-colors">Apache Arrow</a>
       </p>
 
       <p class="mt-3 text-base md:text-lg max-w-xl mx-auto
@@ -34,20 +35,16 @@
 
       <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
         <a
-          href="https://vgi-rpc-python.query.farm"
-          target="_blank"
-          rel="noopener noreferrer"
+          href="#get-started"
           class="px-6 py-3 rounded-lg font-semibold text-white
             bg-farm-green-deep hover:bg-farm-green-field
             dark:bg-farm-green-field dark:hover:bg-farm-green-light
             transition-colors shadow-lg shadow-farm-green-deep/20"
         >
-          Read the Docs
+          🚀 Get Started
         </a>
         <a
-          href="https://github.com/Query-farm/vgi-rpc"
-          target="_blank"
-          rel="noopener noreferrer"
+          href="/wire-protocol"
           class="px-6 py-3 rounded-lg font-semibold
             border-2 border-farm-green-deep text-farm-green-deep
             hover:bg-farm-green-deep hover:text-white
@@ -55,19 +52,29 @@
             dark:hover:bg-farm-green-field dark:hover:text-white
             transition-colors"
         >
-          View on GitHub
+          How It Works
         </a>
       </div>
 
       <!-- Language badges -->
       <div class="mt-10 flex flex-wrap items-center justify-center gap-3">
-        {['Python', 'TypeScript', 'Go', 'C++'].map(lang => (
-          <span class="px-3 py-1 rounded-full text-sm font-medium
+        {[
+          { name: 'Python', url: 'https://vgi-rpc-python.query.farm', logo: '/logos/python.svg' },
+          { name: 'TypeScript', url: 'https://vgi-rpc-typescript.query.farm', logo: '/logos/typescript.svg' },
+          { name: 'Go', url: 'https://github.com/Query-farm/vgi-rpc-go', logo: '/logos/go.svg' },
+          { name: 'C++', url: 'https://vgi-rpc-cpp.query.farm', logo: '/logos/cpp.svg' },
+        ].map(lang => (
+          <a href={lang.url} target="_blank" rel="noopener noreferrer"
+            class="flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium
             bg-farm-cream-dark dark:bg-farm-dark-card
             text-farm-text-muted dark:text-farm-text-light-muted
-            border border-farm-cream-dark dark:border-farm-dark-border">
-            {lang}
-          </span>
+            border border-farm-cream-dark dark:border-farm-dark-border
+            hover:border-farm-green-field hover:text-farm-green-deep
+            dark:hover:border-farm-green-field dark:hover:text-farm-green-field
+            transition-colors">
+            <img src={lang.logo} alt={`${lang.name} logo`} class="w-4 h-4" />
+            {lang.name}
+          </a>
         ))}
       </div>
     </div>
