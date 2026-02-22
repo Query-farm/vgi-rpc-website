@@ -1,0 +1,82 @@
+---
+const installs = [
+  {
+    lang: 'Python',
+    command: 'pip install vgi-rpc',
+    docs: 'https://vgi-rpc-python.query.farm/quickstart/',
+  },
+  {
+    lang: 'TypeScript',
+    command: 'bun add vgi-rpc  # coming soon',
+    docs: 'https://github.com/Query-farm/vgi-rpc-ts',
+  },
+  {
+    lang: 'Go',
+    command: 'go get github.com/Query-farm/vgi-rpc-go  # coming soon',
+    docs: 'https://github.com/Query-farm/vgi-rpc-go',
+  },
+];
+---
+
+<section id="get-started" class="py-20 bg-farm-cream-dark/50 dark:bg-farm-dark-card/30
+  border-t border-farm-cream-dark dark:border-farm-dark-border">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 class="text-3xl md:text-4xl font-bold text-center
+      text-farm-green-deep dark:text-farm-cream">
+      Get Started
+    </h2>
+    <p class="mt-3 text-center text-lg text-farm-text-muted dark:text-farm-text-light-muted max-w-2xl mx-auto">
+      Install in your language and define your first service in minutes.
+    </p>
+
+    <div class="mt-10 space-y-4">
+      {installs.map(install => (
+        <div class="p-4 rounded-xl bg-white dark:bg-farm-dark-card
+          border border-farm-cream-dark dark:border-farm-dark-border">
+          <div class="flex items-center justify-between mb-2">
+            <span class="font-semibold text-farm-green-deep dark:text-farm-cream">
+              {install.lang}
+            </span>
+            <a href={install.docs} target="_blank" rel="noopener noreferrer"
+              class="text-sm text-farm-gold hover:text-farm-gold-light transition-colors">
+              Docs &rarr;
+            </a>
+          </div>
+          <code class="block w-full px-3 py-2 rounded-lg text-sm font-mono
+            bg-farm-cream-dark dark:bg-farm-dark
+            text-farm-text dark:text-farm-text-light
+            select-all">
+            {install.command}
+          </code>
+        </div>
+      ))}
+    </div>
+
+    <!-- Quick example -->
+    <div class="mt-10 rounded-xl overflow-hidden border border-farm-cream-dark dark:border-farm-dark-border">
+      <div class="px-4 py-2 bg-farm-cream-dark dark:bg-farm-dark-card text-sm font-medium
+        text-farm-text-muted dark:text-farm-text-light-muted">
+        Complete Python example
+      </div>
+      <pre class="p-4 bg-white dark:bg-farm-dark overflow-x-auto text-sm"><code class="text-farm-text dark:text-farm-text-light"><span class="text-farm-green-field">from</span> typing <span class="text-farm-green-field">import</span> Protocol
+<span class="text-farm-green-field">from</span> vgi_rpc <span class="text-farm-green-field">import</span> connect, run_server
+
+<span class="text-farm-text-muted dark:text-farm-text-light-muted"># 1. Define your interface</span>
+<span class="text-farm-green-field">class</span> <span class="text-farm-gold">Calculator</span>(Protocol):
+    <span class="text-farm-green-field">def</span> <span class="text-farm-gold">add</span>(self, a: <span class="text-farm-brown">float</span>, b: <span class="text-farm-brown">float</span>) -> <span class="text-farm-brown">float</span>: ...
+    <span class="text-farm-green-field">def</span> <span class="text-farm-gold">greet</span>(self, name: <span class="text-farm-brown">str</span>) -> <span class="text-farm-brown">str</span>: ...
+
+<span class="text-farm-text-muted dark:text-farm-text-light-muted"># 2. Implement it</span>
+<span class="text-farm-green-field">class</span> <span class="text-farm-gold">CalculatorImpl</span>:
+    <span class="text-farm-green-field">def</span> <span class="text-farm-gold">add</span>(self, a: <span class="text-farm-brown">float</span>, b: <span class="text-farm-brown">float</span>) -> <span class="text-farm-brown">float</span>:
+        <span class="text-farm-green-field">return</span> a + b
+    <span class="text-farm-green-field">def</span> <span class="text-farm-gold">greet</span>(self, name: <span class="text-farm-brown">str</span>) -> <span class="text-farm-brown">str</span>:
+        <span class="text-farm-green-field">return</span> <span class="text-farm-gold">f"Hello, {'{'}name{'}'}!"</span>
+
+<span class="text-farm-text-muted dark:text-farm-text-light-muted"># 3. Use it (subprocess transport)</span>
+<span class="text-farm-green-field">with</span> connect(Calculator, [<span class="text-farm-gold">"python"</span>, <span class="text-farm-gold">"worker.py"</span>]) <span class="text-farm-green-field">as</span> calc:
+    print(calc.add(a=<span class="text-farm-brown">2.0</span>, b=<span class="text-farm-brown">3.0</span>))    <span class="text-farm-text-muted dark:text-farm-text-light-muted"># 5.0</span>
+    print(calc.greet(name=<span class="text-farm-gold">"World"</span>))  <span class="text-farm-text-muted dark:text-farm-text-light-muted"># Hello, World!</span></code></pre>
+    </div>
+  </div>
+</section>

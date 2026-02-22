@@ -1,0 +1,86 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer class="border-t border-farm-cream-dark dark:border-farm-dark-border
+  bg-farm-cream-dark/50 dark:bg-farm-dark-card/50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <!-- Brand -->
+      <div>
+        <a href="/" class="font-bold text-lg text-farm-green-deep dark:text-farm-green-field">
+          VGI-RPC
+        </a>
+        <p class="mt-2 text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+          Transport-agnostic RPC built on Apache Arrow IPC serialization.
+        </p>
+      </div>
+
+      <!-- Links -->
+      <div>
+        <h3 class="font-semibold text-sm uppercase tracking-wider text-farm-text-muted dark:text-farm-text-light-muted mb-3">
+          Resources
+        </h3>
+        <ul class="space-y-2 text-sm">
+          <li><a href="https://vgi-rpc-python.query.farm" target="_blank" rel="noopener noreferrer"
+            class="text-farm-text-muted dark:text-farm-text-light-muted hover:text-farm-green-deep dark:hover:text-farm-green-field transition-colors">
+            Python Docs
+          </a></li>
+          <li><a href="https://github.com/Query-farm/vgi-rpc" target="_blank" rel="noopener noreferrer"
+            class="text-farm-text-muted dark:text-farm-text-light-muted hover:text-farm-green-deep dark:hover:text-farm-green-field transition-colors">
+            GitHub
+          </a></li>
+          <li><a href="https://pypi.org/project/vgi-rpc/" target="_blank" rel="noopener noreferrer"
+            class="text-farm-text-muted dark:text-farm-text-light-muted hover:text-farm-green-deep dark:hover:text-farm-green-field transition-colors">
+            PyPI
+          </a></li>
+          <li><a href="/wire-protocol"
+            class="text-farm-text-muted dark:text-farm-text-light-muted hover:text-farm-green-deep dark:hover:text-farm-green-field transition-colors">
+            Wire Protocol
+          </a></li>
+        </ul>
+      </div>
+
+      <!-- Languages -->
+      <div>
+        <h3 class="font-semibold text-sm uppercase tracking-wider text-farm-text-muted dark:text-farm-text-light-muted mb-3">
+          Implementations
+        </h3>
+        <ul class="space-y-2 text-sm">
+          <li><a href="https://github.com/Query-farm/vgi-rpc-python" target="_blank" rel="noopener noreferrer"
+            class="text-farm-text-muted dark:text-farm-text-light-muted hover:text-farm-green-deep dark:hover:text-farm-green-field transition-colors">
+            Python
+          </a></li>
+          <li><a href="https://github.com/Query-farm/vgi-rpc-ts" target="_blank" rel="noopener noreferrer"
+            class="text-farm-text-muted dark:text-farm-text-light-muted hover:text-farm-green-deep dark:hover:text-farm-green-field transition-colors">
+            TypeScript
+          </a></li>
+          <li><a href="https://github.com/Query-farm/vgi-rpc-go" target="_blank" rel="noopener noreferrer"
+            class="text-farm-text-muted dark:text-farm-text-light-muted hover:text-farm-green-deep dark:hover:text-farm-green-field transition-colors">
+            Go
+          </a></li>
+          <li><a href="https://github.com/Query-farm/vgi-rpc-cpp" target="_blank" rel="noopener noreferrer"
+            class="text-farm-text-muted dark:text-farm-text-light-muted hover:text-farm-green-deep dark:hover:text-farm-green-field transition-colors">
+            C++
+          </a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="mt-10 pt-6 border-t border-farm-cream-dark dark:border-farm-dark-border
+      flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+      <p>
+        &copy; {year} <a href="https://query.farm" target="_blank" rel="noopener noreferrer"
+          class="hover:text-farm-green-deep dark:hover:text-farm-green-field transition-colors">
+          Query.Farm LLC
+        </a>
+      </p>
+      <p>
+        &#x1F69C; <a href="https://query.farm" target="_blank" rel="noopener noreferrer"
+          class="hover:text-farm-green-deep dark:hover:text-farm-green-field transition-colors">
+          Query.Farm
+        </a>
+      </p>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,205 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const serializationBenchmarks = [
+  { type: 'Primitive (single float64)', serialize: '0.8 μs', deserialize: '0.6 μs' },
+  { type: 'String parameter', serialize: '1.2 μs', deserialize: '0.9 μs' },
+  { type: 'List[float]  (100 elements)', serialize: '3.5 μs', deserialize: '2.8 μs' },
+  { type: 'Dict[str, int]  (50 keys)', serialize: '8.2 μs', deserialize: '6.1 μs' },
+  { type: 'Nested dataclass', serialize: '12 μs', deserialize: '9.5 μs' },
+  { type: 'Complex (dataclass + lists + enums)', serialize: '18 μs', deserialize: '14 μs' },
+  { type: '1K-row batch (3 columns)', serialize: '25 μs', deserialize: '12 μs' },
+  { type: '100K-row batch (3 columns)', serialize: '1.8 ms', deserialize: '0.9 ms' },
+];
+
+const unaryBenchmarks = [
+  { transport: 'Pipe (in-process)', p50: '5.2 μs', p99: '8.1 μs', throughput: '~190K calls/s' },
+  { transport: 'Shared Memory (100 MB)', p50: '5.8 μs', p99: '9.2 μs', throughput: '~170K calls/s' },
+  { transport: 'Unix Socket', p50: '33 μs', p99: '52 μs', throughput: '~30K calls/s' },
+  { transport: 'Subprocess', p50: '52 μs', p99: '85 μs', throughput: '~19K calls/s' },
+  { transport: 'HTTP (in-process WSGI)', p50: '520 μs', p99: '820 μs', throughput: '~1.9K calls/s' },
+];
+
+const streamingBenchmarks = [
+  { pattern: 'Producer (pipe, 1K-row batches)', throughput: '48,000 batches/s', latency: '21 μs/batch' },
+  { pattern: 'Producer (subprocess)', throughput: '12,000 batches/s', latency: '83 μs/batch' },
+  { pattern: 'Exchange (pipe)', throughput: '32,000 round-trips/s', latency: '31 μs/round-trip' },
+  { pattern: 'Exchange (subprocess)', throughput: '8,500 round-trips/s', latency: '118 μs/round-trip' },
+  { pattern: 'SHM Producer (100 MB segment)', throughput: '29 GB/s', latency: '~3.4 μs/batch' },
+];
+
+const crossLanguage = [
+  { scenario: 'Python client → Go server (subprocess)', unary: '~120 μs', producer: '~15K batches/s' },
+  { scenario: 'Python client → TypeScript server (subprocess)', unary: '~140 μs', producer: '~12K batches/s' },
+  { scenario: 'Python client → Python server (subprocess)', unary: '~52 μs', producer: '~12K batches/s' },
+];
+---
+
+<BaseLayout
+  title="Benchmarks — VGI-RPC"
+  description="VGI-RPC performance benchmarks: serialization, unary latency, streaming throughput, shared memory, and cross-language comparison."
+  currentPage="/benchmarks"
+>
+  <article class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <h1 class="text-4xl font-bold text-farm-green-deep dark:text-farm-cream">
+      Benchmarks
+    </h1>
+    <p class="mt-2 text-farm-text-muted dark:text-farm-text-light-muted">
+      Performance measurements on Apple M-series, Python 3.12, PyArrow 19.x.
+    </p>
+
+    <!-- Serialization -->
+    <section class="mt-12">
+      <h2 class="text-2xl font-bold text-farm-green-deep dark:text-farm-cream border-b border-farm-cream-dark dark:border-farm-dark-border pb-2">
+        Serialization Performance
+      </h2>
+      <p class="mt-3 text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+        Time to serialize/deserialize a single RPC request or response payload via Arrow IPC.
+      </p>
+      <div class="mt-4 overflow-x-auto rounded-xl border border-farm-cream-dark dark:border-farm-dark-border">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="bg-farm-cream-dark dark:bg-farm-dark-card">
+              <th class="px-4 py-3 text-left font-semibold text-farm-text dark:text-farm-text-light">Payload Type</th>
+              <th class="px-4 py-3 text-right font-semibold text-farm-text dark:text-farm-text-light">Serialize</th>
+              <th class="px-4 py-3 text-right font-semibold text-farm-text dark:text-farm-text-light">Deserialize</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-farm-cream-dark dark:divide-farm-dark-border">
+            {serializationBenchmarks.map(b => (
+              <tr class="bg-white dark:bg-farm-dark">
+                <td class="px-4 py-2 text-farm-text dark:text-farm-text-light">{b.type}</td>
+                <td class="px-4 py-2 text-right font-mono text-farm-gold">{b.serialize}</td>
+                <td class="px-4 py-2 text-right font-mono text-farm-gold">{b.deserialize}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Unary Latency -->
+    <section class="mt-12">
+      <h2 class="text-2xl font-bold text-farm-green-deep dark:text-farm-cream border-b border-farm-cream-dark dark:border-farm-dark-border pb-2">
+        End-to-End Unary Latency
+      </h2>
+      <p class="mt-3 text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+        Full round-trip time for a simple unary call (add(a=1.0, b=2.0) → float) including serialization, transport, dispatch, and deserialization.
+      </p>
+      <div class="mt-4 overflow-x-auto rounded-xl border border-farm-cream-dark dark:border-farm-dark-border">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="bg-farm-cream-dark dark:bg-farm-dark-card">
+              <th class="px-4 py-3 text-left font-semibold text-farm-text dark:text-farm-text-light">Transport</th>
+              <th class="px-4 py-3 text-right font-semibold text-farm-text dark:text-farm-text-light">P50</th>
+              <th class="px-4 py-3 text-right font-semibold text-farm-text dark:text-farm-text-light">P99</th>
+              <th class="px-4 py-3 text-right font-semibold text-farm-text dark:text-farm-text-light">Throughput</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-farm-cream-dark dark:divide-farm-dark-border">
+            {unaryBenchmarks.map(b => (
+              <tr class="bg-white dark:bg-farm-dark">
+                <td class="px-4 py-2 font-medium text-farm-text dark:text-farm-text-light">{b.transport}</td>
+                <td class="px-4 py-2 text-right font-mono text-farm-gold">{b.p50}</td>
+                <td class="px-4 py-2 text-right font-mono text-farm-text-muted dark:text-farm-text-light-muted">{b.p99}</td>
+                <td class="px-4 py-2 text-right font-mono text-farm-text-muted dark:text-farm-text-light-muted">{b.throughput}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Streaming -->
+    <section class="mt-12">
+      <h2 class="text-2xl font-bold text-farm-green-deep dark:text-farm-cream border-b border-farm-cream-dark dark:border-farm-dark-border pb-2">
+        Streaming Throughput
+      </h2>
+      <p class="mt-3 text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+        Sustained streaming performance for producer and exchange patterns.
+      </p>
+      <div class="mt-4 overflow-x-auto rounded-xl border border-farm-cream-dark dark:border-farm-dark-border">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="bg-farm-cream-dark dark:bg-farm-dark-card">
+              <th class="px-4 py-3 text-left font-semibold text-farm-text dark:text-farm-text-light">Pattern</th>
+              <th class="px-4 py-3 text-right font-semibold text-farm-text dark:text-farm-text-light">Throughput</th>
+              <th class="px-4 py-3 text-right font-semibold text-farm-text dark:text-farm-text-light">Latency</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-farm-cream-dark dark:divide-farm-dark-border">
+            {streamingBenchmarks.map(b => (
+              <tr class:list={[
+                'bg-white dark:bg-farm-dark',
+                b.pattern.includes('SHM') && 'bg-farm-green-deep/5 dark:bg-farm-green-field/10'
+              ]}>
+                <td class="px-4 py-2 text-farm-text dark:text-farm-text-light">{b.pattern}</td>
+                <td class="px-4 py-2 text-right font-mono text-farm-gold font-bold">{b.throughput}</td>
+                <td class="px-4 py-2 text-right font-mono text-farm-text-muted dark:text-farm-text-light-muted">{b.latency}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="mt-3 text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+        The shared memory transport achieves <strong class="text-farm-gold">29 GB/s</strong> by writing
+        Arrow IPC batches directly to a memory-mapped segment and sending only a pointer (offset + length) over the pipe.
+      </p>
+    </section>
+
+    <!-- Cross-language -->
+    <section class="mt-12">
+      <h2 class="text-2xl font-bold text-farm-green-deep dark:text-farm-cream border-b border-farm-cream-dark dark:border-farm-dark-border pb-2">
+        Cross-Language Performance
+      </h2>
+      <p class="mt-3 text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+        Performance of cross-language RPC via subprocess transport. The Python client communicates with
+        servers implemented in different languages.
+      </p>
+      <div class="mt-4 overflow-x-auto rounded-xl border border-farm-cream-dark dark:border-farm-dark-border">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="bg-farm-cream-dark dark:bg-farm-dark-card">
+              <th class="px-4 py-3 text-left font-semibold text-farm-text dark:text-farm-text-light">Scenario</th>
+              <th class="px-4 py-3 text-right font-semibold text-farm-text dark:text-farm-text-light">Unary Latency</th>
+              <th class="px-4 py-3 text-right font-semibold text-farm-text dark:text-farm-text-light">Producer</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-farm-cream-dark dark:divide-farm-dark-border">
+            {crossLanguage.map(b => (
+              <tr class="bg-white dark:bg-farm-dark">
+                <td class="px-4 py-2 text-farm-text dark:text-farm-text-light">{b.scenario}</td>
+                <td class="px-4 py-2 text-right font-mono text-farm-gold">{b.unary}</td>
+                <td class="px-4 py-2 text-right font-mono text-farm-text-muted dark:text-farm-text-light-muted">{b.producer}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Methodology -->
+    <section class="mt-12 p-6 rounded-xl bg-farm-cream-dark/50 dark:bg-farm-dark-card/50
+      border border-farm-cream-dark dark:border-farm-dark-border">
+      <h2 class="text-lg font-bold text-farm-green-deep dark:text-farm-cream">
+        Methodology
+      </h2>
+      <ul class="mt-3 space-y-2 text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+        <li>All benchmarks run with 1,000+ warm-up iterations followed by 10,000 measured iterations</li>
+        <li>P50 and P99 are wall-clock time including all framework overhead</li>
+        <li>Schema generation is cached (first-call overhead ~50 μs, subsequent calls use cached schema)</li>
+        <li>Shared memory benchmarks use pre-allocated 100 MB segments</li>
+        <li>HTTP benchmarks use in-process WSGI (no network round-trip)</li>
+        <li>Cross-language benchmarks include subprocess spawn overhead in first-call measurements (amortized in throughput numbers)</li>
+      </ul>
+    </section>
+
+    <!-- Back link -->
+    <div class="mt-16 pt-8 border-t border-farm-cream-dark dark:border-farm-dark-border text-center">
+      <a href="/"
+        class="text-sm font-medium text-farm-gold hover:text-farm-gold-light transition-colors">
+        &larr; Back to home
+      </a>
+    </div>
+  </article>
+</BaseLayout>

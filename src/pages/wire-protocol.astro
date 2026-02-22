@@ -1,0 +1,467 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Wire Protocol — VGI-RPC"
+  description="VGI-RPC wire protocol specification: Arrow IPC framing, metadata keys, request/response format, streaming, HTTP transport, shared memory, and more."
+  currentPage="/wire-protocol"
+>
+  <article class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <h1 class="text-4xl font-bold text-farm-green-deep dark:text-farm-cream">
+      Wire Protocol Specification
+    </h1>
+    <p class="mt-2 text-farm-text-muted dark:text-farm-text-light-muted">
+      Version 1 &mdash; Normative &mdash; For cross-language implementors
+    </p>
+
+    <!-- TOC -->
+    <nav class="mt-8 p-4 rounded-xl bg-farm-cream-dark dark:bg-farm-dark-card
+      border border-farm-cream-dark dark:border-farm-dark-border">
+      <h2 class="font-semibold text-sm uppercase tracking-wider text-farm-text-muted dark:text-farm-text-light-muted mb-3">
+        Contents
+      </h2>
+      <ol class="space-y-1 text-sm list-decimal list-inside">
+        <li><a href="#overview" class="text-farm-gold hover:text-farm-gold-light transition-colors">Overview & Conventions</a></li>
+        <li><a href="#framing" class="text-farm-gold hover:text-farm-gold-light transition-colors">Arrow IPC Framing</a></li>
+        <li><a href="#metadata" class="text-farm-gold hover:text-farm-gold-light transition-colors">Metadata Key Reference</a></li>
+        <li><a href="#types" class="text-farm-gold hover:text-farm-gold-light transition-colors">Type Mapping</a></li>
+        <li><a href="#request" class="text-farm-gold hover:text-farm-gold-light transition-colors">Request Batch Format</a></li>
+        <li><a href="#response" class="text-farm-gold hover:text-farm-gold-light transition-colors">Response Format (Unary)</a></li>
+        <li><a href="#classification" class="text-farm-gold hover:text-farm-gold-light transition-colors">Batch Classification</a></li>
+        <li><a href="#log-error" class="text-farm-gold hover:text-farm-gold-light transition-colors">Log & Error Batches</a></li>
+        <li><a href="#stream" class="text-farm-gold hover:text-farm-gold-light transition-colors">Stream Protocol</a></li>
+        <li><a href="#http" class="text-farm-gold hover:text-farm-gold-light transition-colors">HTTP Transport</a></li>
+        <li><a href="#shm" class="text-farm-gold hover:text-farm-gold-light transition-colors">Shared Memory Transport</a></li>
+        <li><a href="#external" class="text-farm-gold hover:text-farm-gold-light transition-colors">External Storage</a></li>
+        <li><a href="#versioning" class="text-farm-gold hover:text-farm-gold-light transition-colors">Version Negotiation</a></li>
+        <li><a href="#introspection" class="text-farm-gold hover:text-farm-gold-light transition-colors">Introspection</a></li>
+      </ol>
+    </nav>
+
+    <div class="mt-12 prose-farm space-y-12">
+
+      <!-- Section 1: Overview -->
+      <section id="overview">
+        <h2 class="text-2xl font-bold text-farm-green-deep dark:text-farm-cream border-b border-farm-cream-dark dark:border-farm-dark-border pb-2">
+          1. Overview & Conventions
+        </h2>
+        <div class="mt-4 space-y-3 text-farm-text dark:text-farm-text-light leading-relaxed">
+          <p>
+            VGI-RPC is an RPC framework where <strong>serialization</strong> uses the
+            <a href="https://arrow.apache.org/docs/format/Columnar.html#ipc-streaming-format" target="_blank" rel="noopener noreferrer"
+              class="text-farm-gold hover:text-farm-gold-light transition-colors">Apache Arrow IPC Streaming Format</a>.
+          </p>
+          <ul class="list-disc list-inside space-y-1 text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+            <li>All integers are little-endian unless stated otherwise</li>
+            <li>All metadata strings are UTF-8 encoded</li>
+            <li>Wire protocol version: <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">"1"</code> (ASCII <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">0x31</code>)</li>
+            <li>Metadata keys in the <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.*</code> namespace are framework-reserved</li>
+          </ul>
+
+          <div class="mt-4 overflow-x-auto rounded-lg border border-farm-cream-dark dark:border-farm-dark-border">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="bg-farm-cream-dark dark:bg-farm-dark-card">
+                  <th class="px-4 py-2 text-left font-semibold">Term</th>
+                  <th class="px-4 py-2 text-left font-semibold">Definition</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-farm-cream-dark dark:divide-farm-dark-border">
+                <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-medium">IPC stream</td><td class="px-4 py-2 text-farm-text-muted dark:text-farm-text-light-muted">A complete Arrow IPC streaming-format sequence: schema + record batches + EOS marker</td></tr>
+                <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-medium">Batch</td><td class="px-4 py-2 text-farm-text-muted dark:text-farm-text-light-muted">An Arrow RecordBatch — zero or more rows conforming to a schema</td></tr>
+                <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-medium">Custom metadata</td><td class="px-4 py-2 text-farm-text-muted dark:text-farm-text-light-muted">Per-batch KeyValueMetadata (distinct from schema-level metadata)</td></tr>
+                <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-medium">Zero-row batch</td><td class="px-4 py-2 text-farm-text-muted dark:text-farm-text-light-muted">A batch with num_rows == 0. Used for log, error, pointer, and completion signals</td></tr>
+                <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-medium">Data batch</td><td class="px-4 py-2 text-farm-text-muted dark:text-farm-text-light-muted">A batch with num_rows &gt; 0, or a zero-row batch without log/error metadata</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 2: Framing -->
+      <section id="framing">
+        <h2 class="text-2xl font-bold text-farm-green-deep dark:text-farm-cream border-b border-farm-cream-dark dark:border-farm-dark-border pb-2">
+          2. Arrow IPC Framing
+        </h2>
+        <div class="mt-4 space-y-3 text-farm-text dark:text-farm-text-light leading-relaxed">
+          <p>
+            Each logical message exchange uses one or more IPC streams written sequentially on the same byte stream
+            (pipe, TCP socket, HTTP body, etc.).
+          </p>
+          <p>An IPC stream consists of:</p>
+          <ol class="list-decimal list-inside space-y-1 text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+            <li><strong>Schema message</strong> — describes the columns and their Arrow types</li>
+            <li><strong>Zero or more RecordBatch messages</strong> — each optionally carrying per-batch custom metadata</li>
+            <li><strong>EOS marker</strong> — the 8-byte sequence <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">0xFF 0xFF 0xFF 0xFF 0x00 0x00 0x00 0x00</code></li>
+          </ol>
+          <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+            Multiple IPC streams are written sequentially on the same underlying byte stream.
+            Each reader opens one stream, reads until EOS, and stops. The next reader picks up immediately after.
+          </p>
+        </div>
+      </section>
+
+      <!-- Section 3: Metadata -->
+      <section id="metadata">
+        <h2 class="text-2xl font-bold text-farm-green-deep dark:text-farm-cream border-b border-farm-cream-dark dark:border-farm-dark-border pb-2">
+          3. Metadata Key Reference
+        </h2>
+        <div class="mt-4 space-y-4">
+          <h3 class="text-lg font-semibold text-farm-text dark:text-farm-text-light">Request metadata</h3>
+          <div class="overflow-x-auto rounded-lg border border-farm-cream-dark dark:border-farm-dark-border">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="bg-farm-cream-dark dark:bg-farm-dark-card">
+                  <th class="px-4 py-2 text-left font-semibold">Key</th>
+                  <th class="px-4 py-2 text-left font-semibold">Value</th>
+                  <th class="px-4 py-2 text-left font-semibold">Description</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-farm-cream-dark dark:divide-farm-dark-border text-farm-text-muted dark:text-farm-text-light-muted">
+                <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.method</td><td class="px-4 py-2">UTF-8 method name</td><td class="px-4 py-2">Target RPC method. <strong class="text-farm-text dark:text-farm-text-light">Required.</strong></td></tr>
+                <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.request_version</td><td class="px-4 py-2">"1"</td><td class="px-4 py-2">Wire protocol version. <strong class="text-farm-text dark:text-farm-text-light">Required.</strong></td></tr>
+                <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.request_id</td><td class="px-4 py-2">16-char hex</td><td class="px-4 py-2">Per-request correlation ID. Optional.</td></tr>
+                <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">traceparent</td><td class="px-4 py-2">W3C Trace Context</td><td class="px-4 py-2">OpenTelemetry trace propagation. Optional.</td></tr>
+                <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.shm_segment_name</td><td class="px-4 py-2">UTF-8 OS name</td><td class="px-4 py-2">Shared memory segment name. Optional.</td></tr>
+                <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.shm_segment_size</td><td class="px-4 py-2">Decimal integer</td><td class="px-4 py-2">SHM segment total size in bytes. Optional.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3 class="text-lg font-semibold text-farm-text dark:text-farm-text-light mt-6">Response / log / error metadata</h3>
+          <div class="overflow-x-auto rounded-lg border border-farm-cream-dark dark:border-farm-dark-border">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="bg-farm-cream-dark dark:bg-farm-dark-card">
+                  <th class="px-4 py-2 text-left font-semibold">Key</th>
+                  <th class="px-4 py-2 text-left font-semibold">Value</th>
+                  <th class="px-4 py-2 text-left font-semibold">Description</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-farm-cream-dark dark:divide-farm-dark-border text-farm-text-muted dark:text-farm-text-light-muted">
+                <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.log_level</td><td class="px-4 py-2">EXCEPTION, ERROR, WARN, INFO, DEBUG, TRACE</td><td class="px-4 py-2">Severity level. Present on log/error batches.</td></tr>
+                <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.log_message</td><td class="px-4 py-2">UTF-8 string</td><td class="px-4 py-2">Human-readable message text.</td></tr>
+                <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.log_extra</td><td class="px-4 py-2">JSON string</td><td class="px-4 py-2">Additional structured data. Optional.</td></tr>
+                <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.server_id</td><td class="px-4 py-2">12-char hex</td><td class="px-4 py-2">Server instance identifier.</td></tr>
+                <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.request_id</td><td class="px-4 py-2">UTF-8 string</td><td class="px-4 py-2">Echoed request correlation ID.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: Type Mapping -->
+      <section id="types">
+        <h2 class="text-2xl font-bold text-farm-green-deep dark:text-farm-cream border-b border-farm-cream-dark dark:border-farm-dark-border pb-2">
+          4. Type Mapping
+        </h2>
+        <div class="mt-4 space-y-3 text-farm-text dark:text-farm-text-light leading-relaxed">
+          <p>
+            RPC parameters and return values are serialized as Arrow columns.
+            Cross-language implementations MUST use these Arrow types for interoperability.
+          </p>
+          <div class="overflow-x-auto rounded-lg border border-farm-cream-dark dark:border-farm-dark-border">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="bg-farm-cream-dark dark:bg-farm-dark-card">
+                  <th class="px-4 py-2 text-left font-semibold">Abstract Type</th>
+                  <th class="px-4 py-2 text-left font-semibold">Arrow Type</th>
+                  <th class="px-4 py-2 text-left font-semibold">Notes</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-farm-cream-dark dark:divide-farm-dark-border text-farm-text-muted dark:text-farm-text-light-muted">
+                <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">string</td><td class="px-4 py-2 font-mono text-xs">utf8</td><td class="px-4 py-2">UTF-8 encoded</td></tr>
+                <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">bytes / binary</td><td class="px-4 py-2 font-mono text-xs">binary</td><td class="px-4 py-2">Raw byte sequence</td></tr>
+                <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">int / integer</td><td class="px-4 py-2 font-mono text-xs">int64</td><td class="px-4 py-2">64-bit signed integer</td></tr>
+                <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">float / double</td><td class="px-4 py-2 font-mono text-xs">float64</td><td class="px-4 py-2">IEEE 754 double precision</td></tr>
+                <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">bool</td><td class="px-4 py-2 font-mono text-xs">bool</td><td class="px-4 py-2">&mdash;</td></tr>
+                <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">list[T]</td><td class="px-4 py-2 font-mono text-xs">list(T)</td><td class="px-4 py-2">Recursive</td></tr>
+                <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">dict[K, V]</td><td class="px-4 py-2 font-mono text-xs">map(K, V)</td><td class="px-4 py-2">Serialized as (key, value) tuples</td></tr>
+                <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">set[T]</td><td class="px-4 py-2 font-mono text-xs">list(T)</td><td class="px-4 py-2">Order undefined</td></tr>
+                <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">enum</td><td class="px-4 py-2 font-mono text-xs">dictionary(int16, utf8)</td><td class="px-4 py-2">Serialized as member name</td></tr>
+                <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">optional[T]</td><td class="px-4 py-2 font-mono text-xs">T (nullable=true)</td><td class="px-4 py-2">null = absent value</td></tr>
+                <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">dataclass</td><td class="px-4 py-2 font-mono text-xs">binary</td><td class="px-4 py-2">Serialized as IPC stream</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 5: Request Format -->
+      <section id="request">
+        <h2 class="text-2xl font-bold text-farm-green-deep dark:text-farm-cream border-b border-farm-cream-dark dark:border-farm-dark-border pb-2">
+          5. Request Batch Format
+        </h2>
+        <div class="mt-4 space-y-3 text-farm-text dark:text-farm-text-light leading-relaxed">
+          <p>
+            Every RPC request is a single IPC stream containing exactly one batch with one row:
+          </p>
+          <pre class="p-4 rounded-lg bg-white dark:bg-farm-dark-card border border-farm-cream-dark dark:border-farm-dark-border overflow-x-auto text-sm font-mono text-farm-text-muted dark:text-farm-text-light-muted">{`IPC Stream:
+  Schema message:
+    - One field per method parameter
+    - Field types per the type mapping
+  RecordBatch message:
+    - Exactly 1 row
+    - custom_metadata:
+        vgi_rpc.method = "<method_name>"       (REQUIRED)
+        vgi_rpc.request_version = "1"          (REQUIRED)
+  EOS marker`}</pre>
+          <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+            For methods with no parameters, the schema has zero fields and the batch
+            has one row with zero columns.
+          </p>
+        </div>
+      </section>
+
+      <!-- Section 6: Response Format -->
+      <section id="response">
+        <h2 class="text-2xl font-bold text-farm-green-deep dark:text-farm-cream border-b border-farm-cream-dark dark:border-farm-dark-border pb-2">
+          6. Response Format (Unary)
+        </h2>
+        <div class="mt-4 space-y-3 text-farm-text dark:text-farm-text-light leading-relaxed">
+          <p>A unary response is a single IPC stream on the result schema:</p>
+          <pre class="p-4 rounded-lg bg-white dark:bg-farm-dark-card border border-farm-cream-dark dark:border-farm-dark-border overflow-x-auto text-sm font-mono text-farm-text-muted dark:text-farm-text-light-muted">{`IPC Stream:
+  Schema message:
+    - Single field named "result" (or empty for void)
+  0..N log batches (zero-row, with log metadata)
+  1 result or error batch:
+    - Result: 1-row batch with return value
+    - Void: 0-row batch on empty schema
+    - Error: 0-row batch with EXCEPTION metadata
+  EOS marker`}</pre>
+          <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+            Log batches MUST appear before the result/error batch.
+          </p>
+        </div>
+      </section>
+
+      <!-- Section 7: Batch Classification -->
+      <section id="classification">
+        <h2 class="text-2xl font-bold text-farm-green-deep dark:text-farm-cream border-b border-farm-cream-dark dark:border-farm-dark-border pb-2">
+          7. Batch Classification Algorithm
+        </h2>
+        <div class="mt-4">
+          <pre class="p-4 rounded-lg bg-white dark:bg-farm-dark-card border border-farm-cream-dark dark:border-farm-dark-border overflow-x-auto text-sm font-mono text-farm-text-muted dark:text-farm-text-light-muted">{`receive(batch, custom_metadata):
+  IF custom_metadata is NULL         → DATA batch
+  IF batch.num_rows > 0              → DATA batch
+
+  // Zero rows, metadata exists:
+  IF has "vgi_rpc.log_level" AND "vgi_rpc.log_message":
+    IF level == "EXCEPTION"          → ERROR batch → raise RpcError
+    ELSE                             → LOG batch → on_log callback
+
+  IF has "vgi_rpc.location"          → EXTERNAL POINTER batch
+  IF has "vgi_rpc.shm_offset"        → SHM POINTER batch
+  IF has "vgi_rpc.stream_state"      → STATE TOKEN batch
+
+  → DATA batch (void return, stream-finish)`}</pre>
+        </div>
+      </section>
+
+      <!-- Section 8: Log & Error -->
+      <section id="log-error">
+        <h2 class="text-2xl font-bold text-farm-green-deep dark:text-farm-cream border-b border-farm-cream-dark dark:border-farm-dark-border pb-2">
+          8. Log & Error Batch Format
+        </h2>
+        <div class="mt-4 space-y-3 text-farm-text dark:text-farm-text-light leading-relaxed">
+          <p>
+            A log batch is a zero-row batch on the response stream's schema with
+            <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.log_level</code> and
+            <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.log_message</code> in custom metadata.
+          </p>
+          <p>
+            When <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">log_level</code> is
+            <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">"EXCEPTION"</code>,
+            the client MUST raise/throw an error with:
+          </p>
+          <ul class="list-disc list-inside space-y-1 text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+            <li><strong>error_type</strong>: from <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">log_extra.exception_type</code></li>
+            <li><strong>error_message</strong>: from <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.log_message</code></li>
+            <li><strong>remote_traceback</strong>: from <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">log_extra.traceback</code></li>
+            <li><strong>request_id</strong>: from <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.request_id</code></li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Section 9: Stream Protocol -->
+      <section id="stream">
+        <h2 class="text-2xl font-bold text-farm-green-deep dark:text-farm-cream border-b border-farm-cream-dark dark:border-farm-dark-border pb-2">
+          9. Stream Protocol (Pipe / Subprocess)
+        </h2>
+        <div class="mt-4 space-y-4 text-farm-text dark:text-farm-text-light leading-relaxed">
+          <p>Streaming methods use a multi-phase exchange over a bidirectional byte stream.</p>
+
+          <h3 class="text-lg font-semibold">Phase 1: Request parameters</h3>
+          <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+            Identical to a unary request: IPC stream with params schema, 1 request row, EOS.
+          </p>
+
+          <h3 class="text-lg font-semibold">Phase 1.5: Optional header stream</h3>
+          <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+            When the stream method declares a header type, the server sends a header IPC stream
+            (header schema, log batches, 1 header row, EOS) before the main data exchange.
+          </p>
+
+          <h3 class="text-lg font-semibold">Phase 2: Lockstep data exchange</h3>
+          <pre class="p-4 rounded-lg bg-white dark:bg-farm-dark-card border border-farm-cream-dark dark:border-farm-dark-border overflow-x-auto text-sm font-mono text-farm-text-muted dark:text-farm-text-light-muted">{`Producer:                        Exchange:
+  Client    →   tick (0-row)       Client    →   input batch
+  Server    ←   log* + data        Server    ←   log* + output
+  Client    →   tick (0-row)       Client    →   input batch
+  Server    ←   log* + data        Server    ←   log* + output
+  Client    →   tick               Client    →   [EOS]
+  Server    ←   [EOS] (finish)     Server    ←   [EOS]`}</pre>
+        </div>
+      </section>
+
+      <!-- Section 10: HTTP Transport -->
+      <section id="http">
+        <h2 class="text-2xl font-bold text-farm-green-deep dark:text-farm-cream border-b border-farm-cream-dark dark:border-farm-dark-border pb-2">
+          10. HTTP Transport
+        </h2>
+        <div class="mt-4 space-y-3 text-farm-text dark:text-farm-text-light leading-relaxed">
+          <p>
+            The HTTP transport maps the pipe-based protocol to stateless HTTP request/response pairs.
+            All requests use <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">Content-Type: application/vnd.apache.arrow.stream</code>.
+          </p>
+
+          <div class="overflow-x-auto rounded-lg border border-farm-cream-dark dark:border-farm-dark-border">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="bg-farm-cream-dark dark:bg-farm-dark-card">
+                  <th class="px-4 py-2 text-left font-semibold">Endpoint</th>
+                  <th class="px-4 py-2 text-left font-semibold">Method</th>
+                  <th class="px-4 py-2 text-left font-semibold">Description</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-farm-cream-dark dark:divide-farm-dark-border text-farm-text-muted dark:text-farm-text-light-muted">
+                <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">{'{prefix}'}/{'{method}'}</td><td class="px-4 py-2">POST</td><td class="px-4 py-2">Unary RPC call</td></tr>
+                <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">{'{prefix}'}/{'{method}'}/init</td><td class="px-4 py-2">POST</td><td class="px-4 py-2">Stream initialization</td></tr>
+                <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">{'{prefix}'}/{'{method}'}/exchange</td><td class="px-4 py-2">POST</td><td class="px-4 py-2">Stream continuation</td></tr>
+                <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">{'{prefix}'}/__describe__</td><td class="px-4 py-2">POST</td><td class="px-4 py-2">Introspection</td></tr>
+                <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">{'{prefix}'}/__capabilities__</td><td class="px-4 py-2">OPTIONS</td><td class="px-4 py-2">Server capability discovery</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+            Streaming state is serialized into HMAC-signed tokens passed in Arrow batch metadata.
+            Tokens include a configurable TTL (default 1 hour).
+          </p>
+        </div>
+      </section>
+
+      <!-- Section 11: Shared Memory -->
+      <section id="shm">
+        <h2 class="text-2xl font-bold text-farm-green-deep dark:text-farm-cream border-b border-farm-cream-dark dark:border-farm-dark-border pb-2">
+          11. Shared Memory (SHM) Transport
+        </h2>
+        <div class="mt-4 space-y-3 text-farm-text dark:text-farm-text-light leading-relaxed">
+          <p>
+            The shared memory side-channel enables zero-copy batch transfer between co-located processes.
+            The pipe carries control messages; large batches are written to shared memory and replaced with
+            pointer batches.
+          </p>
+          <pre class="p-4 rounded-lg bg-white dark:bg-farm-dark-card border border-farm-cream-dark dark:border-farm-dark-border overflow-x-auto text-sm font-mono text-farm-text-muted dark:text-farm-text-light-muted">{`Segment header (64 KiB):
+  Offset  Size    Field
+  0       4       magic: "VGIS" (0x56 0x47 0x49 0x53)
+  4       4       version: uint32 = 1
+  8       8       data_size: uint64
+  16      4       num_allocs: uint32
+  20      4       padding: uint32 = 0
+  24      N*16    allocations: (offset, length) pairs`}</pre>
+          <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+            SHM pointer batches are zero-row batches with <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.shm_offset</code>
+            and <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.shm_length</code> in custom metadata.
+            The allocator uses first-fit with implicit coalescing. Maximum 4,094 allocations.
+          </p>
+        </div>
+      </section>
+
+      <!-- Section 12: External Storage -->
+      <section id="external">
+        <h2 class="text-2xl font-bold text-farm-green-deep dark:text-farm-cream border-b border-farm-cream-dark dark:border-farm-dark-border pb-2">
+          12. External Storage Pointer Batches
+        </h2>
+        <div class="mt-4 space-y-3 text-farm-text dark:text-farm-text-light leading-relaxed">
+          <p>
+            When batches exceed a configurable size threshold, they can be externalized to remote storage
+            (S3, GCS) and replaced with pointer batches containing a
+            <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.location</code> URL.
+          </p>
+          <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+            Resolution: fetch URL, optionally decompress (zstd), open as IPC stream, dispatch log batches,
+            extract data batch. Supports retries (max 3 attempts) and redirect-loop detection.
+          </p>
+        </div>
+      </section>
+
+      <!-- Section 13: Version Negotiation -->
+      <section id="versioning">
+        <h2 class="text-2xl font-bold text-farm-green-deep dark:text-farm-cream border-b border-farm-cream-dark dark:border-farm-dark-border pb-2">
+          13. Version Negotiation & Error Handling
+        </h2>
+        <div class="mt-4 space-y-3 text-farm-text dark:text-farm-text-light leading-relaxed">
+          <p>
+            Every request batch MUST carry
+            <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.request_version = "1"</code>.
+          </p>
+          <div class="overflow-x-auto rounded-lg border border-farm-cream-dark dark:border-farm-dark-border">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="bg-farm-cream-dark dark:bg-farm-dark-card">
+                  <th class="px-4 py-2 text-left font-semibold">Condition</th>
+                  <th class="px-4 py-2 text-left font-semibold">HTTP Status</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-farm-cream-dark dark:divide-farm-dark-border text-farm-text-muted dark:text-farm-text-light-muted">
+                <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2">Bad IPC, missing metadata, version mismatch</td><td class="px-4 py-2 font-mono">400</td></tr>
+                <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2">Authentication failure</td><td class="px-4 py-2 font-mono">401</td></tr>
+                <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2">Unknown method</td><td class="px-4 py-2 font-mono">404</td></tr>
+                <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2">Wrong Content-Type</td><td class="px-4 py-2 font-mono">415</td></tr>
+                <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2">Server implementation error</td><td class="px-4 py-2 font-mono">500</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 14: Introspection -->
+      <section id="introspection">
+        <h2 class="text-2xl font-bold text-farm-green-deep dark:text-farm-cream border-b border-farm-cream-dark dark:border-farm-dark-border pb-2">
+          14. Introspection (__describe__)
+        </h2>
+        <div class="mt-4 space-y-3 text-farm-text dark:text-farm-text-light leading-relaxed">
+          <p>
+            The <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">__describe__</code>
+            method is a built-in synthetic unary method that returns machine-readable metadata
+            about all methods exposed by the server.
+          </p>
+          <p>
+            The response contains one row per method with columns including
+            <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">name</code>,
+            <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">method_type</code>,
+            <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">doc</code>,
+            <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">params_schema_ipc</code>,
+            <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">result_schema_ipc</code>,
+            and more.
+          </p>
+          <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+            See the <a href="https://vgi-rpc-python.query.farm" target="_blank" rel="noopener noreferrer"
+              class="text-farm-gold hover:text-farm-gold-light transition-colors">full documentation</a>
+            for complete introspection response schema details.
+          </p>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Back link -->
+    <div class="mt-16 pt-8 border-t border-farm-cream-dark dark:border-farm-dark-border text-center">
+      <a href="/"
+        class="text-sm font-medium text-farm-gold hover:text-farm-gold-light transition-colors">
+        &larr; Back to home
+      </a>
+    </div>
+  </article>
+</BaseLayout>

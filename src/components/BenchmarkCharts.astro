@@ -1,0 +1,95 @@
+---
+const unaryBenchmarks = [
+  { transport: 'Pipe (in-process)', latency: '5.2 μs', bar: 1 },
+  { transport: 'Shared Memory', latency: '5.8 μs', bar: 1.1 },
+  { transport: 'Subprocess', latency: '52 μs', bar: 10 },
+  { transport: 'Unix Socket', latency: '33 μs', bar: 6.3 },
+  { transport: 'HTTP (in-process)', latency: '520 μs', bar: 100 },
+];
+
+const streamingBenchmarks = [
+  { label: 'Shared Memory Throughput', value: '29 GB/s', detail: '100 MB segment, batch transfer' },
+  { label: 'Producer (pipe)', value: '48,000 batches/s', detail: '1K-row Arrow batches' },
+  { label: 'Exchange (pipe)', value: '32,000 round-trips/s', detail: 'Lockstep bidirectional' },
+  { label: 'Serialization (primitive)', value: '0.8 μs', detail: 'Single float64 column' },
+  { label: 'Serialization (complex)', value: '12 μs', detail: 'Nested dataclass with lists' },
+];
+---
+
+<section id="benchmarks" class="py-20 border-t border-farm-cream-dark dark:border-farm-dark-border">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 class="text-3xl md:text-4xl font-bold text-center
+      text-farm-green-deep dark:text-farm-cream">
+      Performance
+    </h2>
+    <p class="mt-3 text-center text-lg text-farm-text-muted dark:text-farm-text-light-muted max-w-2xl mx-auto">
+      Apache Arrow's columnar format combined with transport flexibility delivers exceptional throughput.
+    </p>
+
+    <div class="mt-12 grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <!-- Unary Latency -->
+      <div class="p-6 rounded-xl bg-white dark:bg-farm-dark-card
+        border border-farm-cream-dark dark:border-farm-dark-border">
+        <h3 class="text-lg font-semibold text-farm-green-deep dark:text-farm-cream mb-6">
+          Unary Call Latency (Python)
+        </h3>
+        <div class="space-y-4">
+          {unaryBenchmarks.map(bench => (
+            <div>
+              <div class="flex items-center justify-between mb-1">
+                <span class="text-sm font-medium text-farm-text dark:text-farm-text-light">
+                  {bench.transport}
+                </span>
+                <span class="text-sm font-mono text-farm-gold">
+                  {bench.latency}
+                </span>
+              </div>
+              <div class="w-full h-2 rounded-full bg-farm-cream-dark dark:bg-farm-dark">
+                <div
+                  class="h-2 rounded-full bg-farm-green-field dark:bg-farm-green-light"
+                  style={`width: ${Math.min(bench.bar, 100)}%`}
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+        <p class="mt-4 text-xs text-farm-text-muted dark:text-farm-text-light-muted">
+          Lower is better. Measured on Apple M-series, Python 3.12.
+        </p>
+      </div>
+
+      <!-- Streaming & Throughput -->
+      <div class="p-6 rounded-xl bg-white dark:bg-farm-dark-card
+        border border-farm-cream-dark dark:border-farm-dark-border">
+        <h3 class="text-lg font-semibold text-farm-green-deep dark:text-farm-cream mb-6">
+          Streaming & Throughput
+        </h3>
+        <div class="space-y-4">
+          {streamingBenchmarks.map(bench => (
+            <div class="p-3 rounded-lg bg-farm-cream/50 dark:bg-farm-dark/50">
+              <div class="flex items-baseline justify-between">
+                <span class="text-sm font-medium text-farm-text dark:text-farm-text-light">
+                  {bench.label}
+                </span>
+                <span class="text-lg font-bold font-mono text-farm-gold">
+                  {bench.value}
+                </span>
+              </div>
+              <p class="mt-1 text-xs text-farm-text-muted dark:text-farm-text-light-muted">
+                {bench.detail}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-8 text-center">
+      <a href="/benchmarks"
+        class="inline-flex items-center gap-1 text-sm font-medium
+          text-farm-gold hover:text-farm-gold-light transition-colors">
+        View detailed benchmarks &rarr;
+      </a>
+    </div>
+  </div>
+</section>

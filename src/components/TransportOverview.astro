@@ -1,0 +1,104 @@
+---
+const transports = [
+  {
+    name: 'Pipe',
+    description: 'In-process, bidirectional byte stream. Lowest latency — ideal for tests and embedded use.',
+    latency: '~5 μs',
+    useCase: 'Testing, demos',
+    color: 'farm-green-field',
+  },
+  {
+    name: 'Subprocess',
+    description: 'Spawn a worker process, communicate over stdin/stdout. Process isolation with low overhead.',
+    latency: '~50 μs',
+    useCase: 'Isolated workers, CLI tools',
+    color: 'farm-green-field',
+  },
+  {
+    name: 'Unix Socket',
+    description: 'Kernel-mediated local IPC. Long-lived connections with per-client threading support.',
+    latency: '~30 μs',
+    useCase: 'Local services, daemons',
+    color: 'farm-gold',
+  },
+  {
+    name: 'Shared Memory',
+    description: 'Zero-copy Arrow batch transfer via memory-mapped segments. Only pointers cross the pipe.',
+    latency: '~5 μs',
+    useCase: 'Large batches, co-located',
+    color: 'farm-gold',
+  },
+  {
+    name: 'HTTP',
+    description: 'Stateless HTTP transport with signed state tokens for streaming. Works with any WSGI server.',
+    latency: '~500 μs',
+    useCase: 'Network services, browsers',
+    color: 'farm-brown',
+  },
+];
+---
+
+<section id="transports" class="py-20 border-t border-farm-cream-dark dark:border-farm-dark-border">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 class="text-3xl md:text-4xl font-bold text-center
+      text-farm-green-deep dark:text-farm-cream">
+      Five Transports, One Interface
+    </h2>
+    <p class="mt-3 text-center text-lg text-farm-text-muted dark:text-farm-text-light-muted max-w-2xl mx-auto">
+      Your service code stays the same. Only the transport setup changes.
+    </p>
+
+    <div class="mt-12 space-y-4">
+      {transports.map(transport => (
+        <div class="flex flex-col md:flex-row items-start md:items-center gap-4 p-5 rounded-xl
+          bg-white dark:bg-farm-dark-card
+          border border-farm-cream-dark dark:border-farm-dark-border
+          hover:border-farm-green-field dark:hover:border-farm-green-field
+          transition-colors">
+          <div class="flex-shrink-0 w-full md:w-40">
+            <h3 class="text-lg font-bold text-farm-green-deep dark:text-farm-cream">
+              {transport.name}
+            </h3>
+            <span class="inline-block mt-1 px-2 py-0.5 text-xs font-mono rounded
+              bg-farm-cream-dark dark:bg-farm-dark
+              text-farm-text-muted dark:text-farm-text-light-muted">
+              {transport.latency}
+            </span>
+          </div>
+          <p class="flex-1 text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+            {transport.description}
+          </p>
+          <span class="flex-shrink-0 px-3 py-1 text-xs font-medium rounded-full
+            bg-farm-cream-dark dark:bg-farm-dark
+            text-farm-text-muted dark:text-farm-text-light-muted">
+            {transport.useCase}
+          </span>
+        </div>
+      ))}
+    </div>
+
+    <!-- Visual diagram -->
+    <div class="mt-12 p-6 rounded-xl bg-white dark:bg-farm-dark-card
+      border border-farm-cream-dark dark:border-farm-dark-border">
+      <pre class="text-center text-sm font-mono leading-relaxed
+        text-farm-text-muted dark:text-farm-text-light-muted overflow-x-auto">
+{`
+  ┌──────────────┐         ┌──────────────┐
+  │    Client     │         │    Server     │
+  │  (typed proxy)│         │ (impl class)  │
+  └──────┬───────┘         └──────┬───────┘
+         │                        │
+         │   Arrow IPC batches    │
+         │◄──────────────────────►│
+         │                        │
+    ┌────┴────────────────────────┴────┐
+    │         RpcTransport             │
+    ├──────────────────────────────────┤
+    │  Pipe │ Subprocess │ Unix Socket │
+    │  Shared Memory │ HTTP            │
+    └──────────────────────────────────┘
+`}
+      </pre>
+    </div>
+  </div>
+</section>

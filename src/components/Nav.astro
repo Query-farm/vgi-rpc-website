@@ -1,0 +1,104 @@
+---
+interface Props {
+  currentPage?: string;
+}
+
+const { currentPage = '/' } = Astro.props;
+
+const navLinks = [
+  { href: '/#what-is', label: 'About' },
+  { href: '/#why', label: 'Why VGI-RPC' },
+  { href: '/#transports', label: 'Transports' },
+  { href: '/#comparison', label: 'Comparison' },
+  { href: '/#benchmarks', label: 'Benchmarks' },
+  { href: '/#languages', label: 'Languages' },
+  { href: '/wire-protocol', label: 'Wire Protocol' },
+];
+---
+
+<nav class="sticky top-0 z-50 border-b backdrop-blur-md
+  bg-farm-cream/90 border-farm-cream-dark
+  dark:bg-farm-dark/90 dark:border-farm-dark-border">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+      <a href="/" class="flex items-center gap-2 font-bold text-lg
+        text-farm-green-deep dark:text-farm-green-field hover:text-farm-green-field dark:hover:text-farm-green-light
+        transition-colors">
+        VGI-RPC
+      </a>
+
+      <!-- Desktop nav -->
+      <div class="hidden md:flex items-center gap-6">
+        {navLinks.map(link => (
+          <a
+            href={link.href}
+            class:list={[
+              'text-sm font-medium transition-colors',
+              link.href === currentPage
+                ? 'text-farm-green-deep dark:text-farm-green-field'
+                : 'text-farm-text-muted dark:text-farm-text-light-muted hover:text-farm-green-deep dark:hover:text-farm-green-field'
+            ]}
+          >
+            {link.label}
+          </a>
+        ))}
+        <a
+          href="https://github.com/Query-farm/vgi-rpc"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-sm font-medium px-3 py-1.5 rounded-md
+            bg-farm-green-deep text-white hover:bg-farm-green-field
+            dark:bg-farm-green-field dark:hover:bg-farm-green-light
+            transition-colors"
+        >
+          GitHub
+        </a>
+      </div>
+
+      <!-- Mobile menu button -->
+      <button
+        id="mobile-menu-btn"
+        class="md:hidden p-2 rounded-md text-farm-text-muted dark:text-farm-text-light-muted
+          hover:text-farm-text dark:hover:text-farm-text-light"
+        aria-label="Toggle menu"
+      >
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile menu -->
+  <div id="mobile-menu" class="hidden md:hidden border-t border-farm-cream-dark dark:border-farm-dark-border">
+    <div class="px-4 py-3 space-y-2">
+      {navLinks.map(link => (
+        <a
+          href={link.href}
+          class="block px-3 py-2 rounded-md text-sm font-medium
+            text-farm-text-muted dark:text-farm-text-light-muted
+            hover:text-farm-green-deep hover:bg-farm-cream-dark
+            dark:hover:text-farm-green-field dark:hover:bg-farm-dark-card
+            transition-colors"
+        >
+          {link.label}
+        </a>
+      ))}
+      <a
+        href="https://github.com/Query-farm/vgi-rpc"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="block px-3 py-2 rounded-md text-sm font-medium
+          text-farm-green-deep dark:text-farm-green-field"
+      >
+        GitHub
+      </a>
+    </div>
+  </div>
+</nav>
+
+<script>
+  const btn = document.getElementById('mobile-menu-btn');
+  const menu = document.getElementById('mobile-menu');
+  btn?.addEventListener('click', () => menu?.classList.toggle('hidden'));
+</script>

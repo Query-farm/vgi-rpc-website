@@ -1,0 +1,58 @@
+---
+---
+
+<section id="what-is" class="py-20 border-t border-farm-cream-dark dark:border-farm-dark-border">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 class="text-3xl md:text-4xl font-bold text-center
+      text-farm-green-deep dark:text-farm-cream">
+      What is VGI-RPC?
+    </h2>
+
+    <div class="mt-8 space-y-5 text-lg leading-relaxed text-farm-text dark:text-farm-text-light">
+      <p>
+        <strong>VGI-RPC</strong> is an RPC framework where you define services as
+        <strong>typed interfaces</strong> &mdash; the framework automatically derives
+        <a href="https://arrow.apache.org/" target="_blank" rel="noopener noreferrer"
+          class="text-farm-gold hover:text-farm-gold-light transition-colors font-medium">
+          Apache Arrow
+        </a> schemas from your type annotations and handles all serialization.
+      </p>
+
+      <p>
+        There are <strong>no <code class="px-1.5 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card">.proto</code> files</strong>,
+        no code generation step, and no IDL to learn.
+        Write a Protocol class in Python (or the equivalent interface in Go, TypeScript, or C++), and you get
+        a fully typed RPC service.
+      </p>
+
+      <p>
+        The <strong>same interface works across every transport</strong>: in-process pipes,
+        subprocess stdin/stdout, Unix sockets, shared memory (zero-copy, 29 GB/s), and HTTP.
+        Switch transports without changing a line of service code.
+      </p>
+
+      <p>
+        VGI-RPC supports <strong>unary calls</strong>, <strong>producer streams</strong> (server pushes data),
+        and <strong>exchange streams</strong> (lockstep bidirectional), with built-in
+        error propagation, logging, introspection, and OpenTelemetry tracing.
+      </p>
+    </div>
+
+    <!-- Quick code example -->
+    <div class="mt-10 rounded-xl overflow-hidden border border-farm-cream-dark dark:border-farm-dark-border">
+      <div class="px-4 py-2 bg-farm-cream-dark dark:bg-farm-dark-card text-sm font-medium
+        text-farm-text-muted dark:text-farm-text-light-muted">
+        Define a service — no code generation needed
+      </div>
+      <pre class="p-4 bg-white dark:bg-farm-dark overflow-x-auto"><code class="text-farm-text dark:text-farm-text-light"><span class="text-farm-green-field">from</span> typing <span class="text-farm-green-field">import</span> Protocol
+
+<span class="text-farm-green-field">class</span> <span class="text-farm-gold">MathService</span>(Protocol):
+    <span class="text-farm-green-field">def</span> <span class="text-farm-gold">add</span>(self, a: <span class="text-farm-brown">float</span>, b: <span class="text-farm-brown">float</span>) -> <span class="text-farm-brown">float</span>: ...
+    <span class="text-farm-green-field">def</span> <span class="text-farm-gold">multiply</span>(self, a: <span class="text-farm-brown">float</span>, b: <span class="text-farm-brown">float</span>) -> <span class="text-farm-brown">float</span>: ...
+
+<span class="text-farm-text-muted dark:text-farm-text-light-muted"># Use it over any transport</span>
+<span class="text-farm-green-field">with</span> connect(MathService, [<span class="text-farm-gold">"python"</span>, <span class="text-farm-gold">"worker.py"</span>]) <span class="text-farm-green-field">as</span> proxy:
+    result = proxy.add(a=<span class="text-farm-brown">1.0</span>, b=<span class="text-farm-brown">2.0</span>)  <span class="text-farm-text-muted dark:text-farm-text-light-muted"># Fully typed!</span></code></pre>
+    </div>
+  </div>
+</section>

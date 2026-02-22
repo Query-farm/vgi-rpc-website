@@ -1,0 +1,157 @@
+---
+import capabilities from '../data/capabilities.json';
+
+const languages = ['python', 'typescript', 'go', 'cpp'] as const;
+const langLabels: Record<string, string> = {
+  python: 'Python',
+  typescript: 'TypeScript',
+  go: 'Go',
+  cpp: 'C++',
+};
+
+const transportLabels: Record<string, string> = {
+  pipe: 'Pipe',
+  subprocess: 'Subprocess',
+  unix_socket: 'Unix Socket',
+  shared_memory: 'Shared Memory',
+  http: 'HTTP',
+  worker_pool: 'Worker Pool',
+};
+
+const patternLabels: Record<string, string> = {
+  unary: 'Unary',
+  unary_void: 'Unary (void)',
+  producer: 'Producer',
+  producer_with_header: 'Producer + Header',
+  exchange: 'Exchange',
+  exchange_with_header: 'Exchange + Header',
+};
+
+const featureLabels: Record<string, string> = {
+  introspection: 'Introspection',
+  client_logging: 'Client Logging',
+  error_propagation: 'Error Propagation',
+  complex_types: 'Complex Types',
+  optional_types: 'Optional Types',
+  dataclass_types: 'Dataclass Types',
+  annotated_types: 'Annotated Types',
+  authentication: 'Authentication',
+  external_storage: 'External Storage',
+  opentelemetry: 'OpenTelemetry',
+};
+
+type LangKey = typeof languages[number];
+type CapLang = typeof capabilities.languages;
+---
+
+<section id="capabilities" class="py-20 border-t border-farm-cream-dark dark:border-farm-dark-border">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 class="text-3xl md:text-4xl font-bold text-center
+      text-farm-green-deep dark:text-farm-cream">
+      Capability Matrix
+    </h2>
+    <p class="mt-3 text-center text-lg text-farm-text-muted dark:text-farm-text-light-muted max-w-2xl mx-auto">
+      Feature support across all implementations. Updated automatically via CI.
+    </p>
+
+    <!-- Transports -->
+    <div class="mt-10">
+      <h3 class="text-lg font-semibold text-farm-green-deep dark:text-farm-cream mb-4">Transports</h3>
+      <div class="overflow-x-auto rounded-xl border border-farm-cream-dark dark:border-farm-dark-border">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="bg-farm-cream-dark dark:bg-farm-dark-card">
+              <th class="px-4 py-3 text-left font-semibold text-farm-text dark:text-farm-text-light">Transport</th>
+              {languages.map(lang => (
+                <th class="px-4 py-3 text-center font-semibold text-farm-text dark:text-farm-text-light">{langLabels[lang]}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-farm-cream-dark dark:divide-farm-dark-border">
+            {Object.entries(transportLabels).map(([key, label]) => (
+              <tr class="bg-white dark:bg-farm-dark">
+                <td class="px-4 py-2 font-medium text-farm-text dark:text-farm-text-light">{label}</td>
+                {languages.map(lang => (
+                  <td class="px-4 py-2 text-center">
+                    {(capabilities.languages[lang as keyof CapLang] as any).transports[key]
+                      ? <span class="text-farm-green-field font-bold">&#x2713;</span>
+                      : <span class="text-farm-text-muted dark:text-farm-text-light-muted">&#x2014;</span>
+                    }
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Patterns -->
+    <div class="mt-8">
+      <h3 class="text-lg font-semibold text-farm-green-deep dark:text-farm-cream mb-4">RPC Patterns</h3>
+      <div class="overflow-x-auto rounded-xl border border-farm-cream-dark dark:border-farm-dark-border">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="bg-farm-cream-dark dark:bg-farm-dark-card">
+              <th class="px-4 py-3 text-left font-semibold text-farm-text dark:text-farm-text-light">Pattern</th>
+              {languages.map(lang => (
+                <th class="px-4 py-3 text-center font-semibold text-farm-text dark:text-farm-text-light">{langLabels[lang]}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-farm-cream-dark dark:divide-farm-dark-border">
+            {Object.entries(patternLabels).map(([key, label]) => (
+              <tr class="bg-white dark:bg-farm-dark">
+                <td class="px-4 py-2 font-medium text-farm-text dark:text-farm-text-light">{label}</td>
+                {languages.map(lang => (
+                  <td class="px-4 py-2 text-center">
+                    {(capabilities.languages[lang as keyof CapLang] as any).patterns[key]
+                      ? <span class="text-farm-green-field font-bold">&#x2713;</span>
+                      : <span class="text-farm-text-muted dark:text-farm-text-light-muted">&#x2014;</span>
+                    }
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Features -->
+    <div class="mt-8">
+      <h3 class="text-lg font-semibold text-farm-green-deep dark:text-farm-cream mb-4">Features</h3>
+      <div class="overflow-x-auto rounded-xl border border-farm-cream-dark dark:border-farm-dark-border">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="bg-farm-cream-dark dark:bg-farm-dark-card">
+              <th class="px-4 py-3 text-left font-semibold text-farm-text dark:text-farm-text-light">Feature</th>
+              {languages.map(lang => (
+                <th class="px-4 py-3 text-center font-semibold text-farm-text dark:text-farm-text-light">{langLabels[lang]}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-farm-cream-dark dark:divide-farm-dark-border">
+            {Object.entries(featureLabels).map(([key, label]) => (
+              <tr class="bg-white dark:bg-farm-dark">
+                <td class="px-4 py-2 font-medium text-farm-text dark:text-farm-text-light">{label}</td>
+                {languages.map(lang => (
+                  <td class="px-4 py-2 text-center">
+                    {(capabilities.languages[lang as keyof CapLang] as any).features[key]
+                      ? <span class="text-farm-green-field font-bold">&#x2713;</span>
+                      : <span class="text-farm-text-muted dark:text-farm-text-light-muted">&#x2014;</span>
+                    }
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <p class="mt-6 text-center text-xs text-farm-text-muted dark:text-farm-text-light-muted">
+      Last updated: {new Date(capabilities.generated_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+    </p>
+  </div>
+</section>
