@@ -38,7 +38,7 @@
     "typescript": {
       "version": "0.1.0",
       "repo": "https://github.com/Query-farm/vgi-rpc-ts",
-      "docs": null,
+      "docs": "https://vgi-rpc-typescript.query.farm",
       "package_url": null,
       "transports": {
         "pipe": false,
@@ -106,7 +106,7 @@
     "cpp": {
       "version": "0.1.0",
       "repo": "https://github.com/Query-farm/vgi-rpc-cpp",
-      "docs": null,
+      "docs": "https://vgi-rpc-cpp.query.farm",
       "package_url": null,
       "transports": {
         "pipe": true,

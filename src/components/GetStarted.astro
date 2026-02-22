@@ -8,12 +8,17 @@ const installs = [
   {
     lang: 'TypeScript',
     command: 'bun add vgi-rpc  # coming soon',
-    docs: 'https://github.com/Query-farm/vgi-rpc-ts',
+    docs: 'https://vgi-rpc-typescript.query.farm',
   },
   {
     lang: 'Go',
     command: 'go get github.com/Query-farm/vgi-rpc-go  # coming soon',
     docs: 'https://github.com/Query-farm/vgi-rpc-go',
+  },
+  {
+    lang: 'C++',
+    command: 'git clone https://github.com/Query-farm/vgi-rpc-cpp.git',
+    docs: 'https://vgi-rpc-cpp.query.farm',
   },
 ];
 ---
@@ -44,8 +49,7 @@ const installs = [
           </div>
           <code class="block w-full px-3 py-2 rounded-lg text-sm font-mono
             bg-farm-cream-dark dark:bg-farm-dark
-            text-farm-text dark:text-farm-text-light
-            select-all">
+            text-farm-text dark:text-farm-text-light">
             {install.command}
           </code>
         </div>

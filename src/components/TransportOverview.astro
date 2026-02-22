@@ -5,35 +5,30 @@ const transports = [
     description: 'In-process, bidirectional byte stream. Lowest latency — ideal for tests and embedded use.',
     latency: '~5 μs',
     useCase: 'Testing, demos',
-    color: 'farm-green-field',
   },
   {
     name: 'Subprocess',
     description: 'Spawn a worker process, communicate over stdin/stdout. Process isolation with low overhead.',
     latency: '~50 μs',
     useCase: 'Isolated workers, CLI tools',
-    color: 'farm-green-field',
   },
   {
     name: 'Unix Socket',
     description: 'Kernel-mediated local IPC. Long-lived connections with per-client threading support.',
     latency: '~30 μs',
     useCase: 'Local services, daemons',
-    color: 'farm-gold',
   },
   {
     name: 'Shared Memory',
     description: 'Zero-copy Arrow batch transfer via memory-mapped segments. Only pointers cross the pipe.',
     latency: '~5 μs',
     useCase: 'Large batches, co-located',
-    color: 'farm-gold',
   },
   {
     name: 'HTTP',
     description: 'Stateless HTTP transport with signed state tokens for streaming. Works with any WSGI server.',
     latency: '~500 μs',
     useCase: 'Network services, browsers',
-    color: 'farm-brown',
   },
 ];
 ---
@@ -75,19 +70,6 @@ const transports = [
           </span>
         </div>
       ))}
-    </div>
-
-    <!-- Architecture diagram (D2-rendered SVG) -->
-    <div class="mt-12 flex justify-center">
-      <div class="w-full max-w-4xl rounded-xl overflow-hidden
-        border border-farm-cream-dark dark:border-farm-dark-border
-        bg-white dark:bg-farm-dark-card p-4 md:p-6">
-        <img
-          src="/diagrams/transport-overview.svg"
-          alt="VGI-RPC architecture: Client with typed proxy sends Arrow IPC batches to Server implementation, connected through pluggable RpcTransport layer supporting Pipe, Subprocess, Unix Socket, Shared Memory, and HTTP"
-          class="w-full h-auto dark:brightness-90 dark:contrast-110"
-        />
-      </div>
     </div>
   </div>
 </section>
