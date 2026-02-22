@@ -28,6 +28,9 @@ jobs:
           node-version: '22'
           cache: 'npm'
 
+      - name: Install D2
+        run: curl -fsSL https://d2lang.com/install.sh | sh -s --
+
       - name: Install Node dependencies
         run: npm ci
 

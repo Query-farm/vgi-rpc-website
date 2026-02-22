@@ -1,0 +1,107 @@
+direction: down
+
+client: Client (Typed Proxy) {
+  style: {
+    fill: "#e8f0d8"
+    stroke: "#4a7c23"
+    font-color: "#2d5016"
+    border-radius: 12
+    font-size: 16
+    bold: true
+    shadow: true
+  }
+}
+
+client -> transport: {
+  label: "Arrow IPC Batches"
+  style: {
+    stroke: "#c8a43a"
+    stroke-width: 3
+    font-color: "#6b4423"
+    font-size: 13
+    bold: true
+  }
+}
+
+transport: RpcTransport {
+  direction: right
+
+  pipe: Pipe\n~5 μs {
+    style: {
+      fill: "#dcedc8"
+      stroke: "#4a7c23"
+      font-color: "#2d5016"
+      border-radius: 8
+      font-size: 13
+    }
+  }
+  subprocess: Subprocess\n~50 μs {
+    style: {
+      fill: "#dcedc8"
+      stroke: "#4a7c23"
+      font-color: "#2d5016"
+      border-radius: 8
+      font-size: 13
+    }
+  }
+  unix: Unix Socket\n~30 μs {
+    style: {
+      fill: "#f5ecd0"
+      stroke: "#c8a43a"
+      font-color: "#6b4423"
+      border-radius: 8
+      font-size: 13
+    }
+  }
+  shm: Shared Memory\n29 GB/s {
+    style: {
+      fill: "#f5ecd0"
+      stroke: "#c8a43a"
+      font-color: "#6b4423"
+      border-radius: 8
+      font-size: 13
+      bold: true
+    }
+  }
+  http: HTTP\n~500 μs {
+    style: {
+      fill: "#f0e0d0"
+      stroke: "#6b4423"
+      font-color: "#6b4423"
+      border-radius: 8
+      font-size: 13
+    }
+  }
+
+  style: {
+    fill: "#faf8f0"
+    stroke: "#2d5016"
+    font-color: "#2d5016"
+    border-radius: 12
+    font-size: 15
+    bold: true
+  }
+}
+
+transport -> server: {
+  label: "Arrow IPC Batches"
+  style: {
+    stroke: "#c8a43a"
+    stroke-width: 3
+    font-color: "#6b4423"
+    font-size: 13
+    bold: true
+  }
+}
+
+server: Server (Implementation) {
+  style: {
+    fill: "#e8f0d8"
+    stroke: "#4a7c23"
+    font-color: "#2d5016"
+    border-radius: 12
+    font-size: 16
+    bold: true
+    shadow: true
+  }
+}

@@ -3,8 +3,9 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "dev": "astro dev",
-    "build": "astro build",
+    "diagrams": "mkdir -p public/diagrams && d2 --layout=elk src/diagrams/transport-overview.d2 public/diagrams/transport-overview.svg",
+    "dev": "npm run diagrams && astro dev",
+    "build": "npm run diagrams && astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
