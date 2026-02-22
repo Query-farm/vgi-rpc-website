@@ -1,0 +1,59 @@
+# VGI-RPC
+
+> Transport-agnostic RPC framework built on Apache Arrow IPC serialization. Multi-language (Python, TypeScript, Go, C++), no code generation required.
+
+## Docs
+
+- [Python Documentation](https://vgi-rpc-python.query.farm): Full Python API reference and guides
+- [TypeScript Documentation](https://vgi-rpc-typescript.query.farm): TypeScript API reference and guides
+- [C++ Documentation](https://vgi-rpc-cpp.query.farm): C++ API reference and guides
+- [Wire Protocol](https://vgi-rpc.query.farm/wire-protocol): Binary framing and message format specification
+- [Benchmarks](https://vgi-rpc.query.farm/benchmarks): Performance benchmarks across transports and languages
+
+## Repositories
+
+- [vgi-rpc-python](https://github.com/Query-farm/vgi-rpc-python): Python implementation
+- [vgi-rpc-ts](https://github.com/Query-farm/vgi-rpc-ts): TypeScript implementation
+- [vgi-rpc-go](https://github.com/Query-farm/vgi-rpc-go): Go implementation
+- [vgi-rpc-cpp](https://github.com/Query-farm/vgi-rpc-cpp): C++ implementation
+
+## Key Concepts
+
+VGI-RPC uses Apache Arrow IPC as its serialization format, giving callers zero-copy access to columnar data without schema negotiation or code generation. Clients create typed proxy objects that mirror the server's service interface; method calls are dispatched over a pluggable transport layer.
+
+**Transports:** pipe, subprocess, Unix socket, shared memory, HTTP, and worker pool. Each transport implements the same framing protocol so services are portable across deployment topologies.
+
+**RPC Patterns:** unary (single request/response), unary void (fire-and-forget), producer (server-streaming with optional header), and exchange (bidirectional streaming with optional header).
+
+**Arrow IPC Serialization:** Arguments and return values are encoded as Arrow record batches. Complex types, optional types, and dataclass/struct types are mapped automatically from each language's native type system.
+
+**Typed Proxies:** Client code calls methods on a proxy object that mirrors the server interface. The proxy handles serialization, transport framing, and deserialization transparently.
+
+## Capabilities
+
+### Python (v0.1.2)
+- **Transports:** pipe, subprocess, Unix socket, shared memory, HTTP, worker pool
+- **Patterns:** unary, unary void, producer (with header), exchange (with header)
+- **Features:** introspection, client logging, error propagation, complex types, optional types, dataclass types, annotated types, authentication, external storage, OpenTelemetry
+- **Package:** [PyPI](https://pypi.org/project/vgi-rpc/)
+
+### TypeScript (v0.1.0)
+- **Transports:** subprocess
+- **Patterns:** unary, unary void, producer (with header), exchange (with header)
+- **Features:** introspection, client logging, error propagation, complex types, optional types, dataclass types
+
+### Go (v0.1.0)
+- **Transports:** subprocess
+- **Patterns:** unary, unary void, producer (with header), exchange (with header)
+- **Features:** introspection, client logging, error propagation, complex types, optional types, dataclass types
+
+### C++ (v0.1.0)
+- **Transports:** pipe, subprocess
+- **Patterns:** unary, unary void, producer (with header), exchange (with header)
+- **Features:** introspection, client logging, error propagation, complex types, optional types, dataclass types, annotated types
+
+## Optional
+
+- [PyPI Package](https://pypi.org/project/vgi-rpc/): Install Python implementation via pip
+- [Benchmarks](https://vgi-rpc.query.farm/benchmarks): Transport and serialization performance data
+- [VGI-RPC Website](https://vgi-rpc.query.farm): Project homepage with feature comparison
