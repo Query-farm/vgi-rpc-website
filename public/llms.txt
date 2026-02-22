@@ -13,7 +13,7 @@
 ## Repositories
 
 - [vgi-rpc-python](https://github.com/Query-farm/vgi-rpc-python): Python implementation
-- [vgi-rpc-ts](https://github.com/Query-farm/vgi-rpc-ts): TypeScript implementation
+- [vgi-rpc-typescript](https://github.com/Query-farm/vgi-rpc-typescript): TypeScript implementation
 - [vgi-rpc-go](https://github.com/Query-farm/vgi-rpc-go): Go implementation
 - [vgi-rpc-cpp](https://github.com/Query-farm/vgi-rpc-cpp): C++ implementation
 
