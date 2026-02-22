@@ -14,6 +14,9 @@ const {
   description = 'Transport-agnostic RPC built on Apache Arrow IPC serialization. Multi-language: Python, TypeScript, Go, C++.',
   currentPage = '/',
 } = Astro.props;
+
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site).href;
+const ogImage = new URL('/logo-hero.png', Astro.site).href;
 ---
 
 <!doctype html>
@@ -24,12 +27,46 @@ const {
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
 
+    <link rel="canonical" href={canonicalUrl} />
+
     <!-- Open Graph -->
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://vgi-rpc.query.farm" />
-    <meta property="og:image" content="https://vgi-rpc.query.farm/logo-hero.png" />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="512" />
+    <meta property="og:image:height" content="512" />
+    <meta property="og:site_name" content="VGI-RPC" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "name": "Query.Farm",
+          "url": "https://query.farm",
+          "logo": ogImage
+        },
+        {
+          "@type": "WebSite",
+          "name": "VGI-RPC",
+          "url": Astro.site?.href,
+          "description": "Transport-agnostic RPC built on Apache Arrow IPC serialization. Multi-language: Python, TypeScript, Go, C++.",
+          "publisher": {
+            "@type": "Organization",
+            "name": "Query.Farm"
+          }
+        }
+      ]
+    })} />
 
     <link rel="icon" type="image/png" href="/logo-hero.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
