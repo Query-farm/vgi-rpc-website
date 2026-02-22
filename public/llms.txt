@@ -43,7 +43,7 @@ VGI-RPC uses Apache Arrow IPC as its serialization format, giving callers zero-c
 - **Features:** introspection, client logging, error propagation, complex types, optional types, dataclass types
 
 ### Go (v0.1.0)
-- **Transports:** subprocess
+- **Transports:** subprocess, HTTP
 - **Patterns:** unary, unary void, producer (with header), exchange (with header)
 - **Features:** introspection, client logging, error propagation, complex types, optional types, dataclass types
 
