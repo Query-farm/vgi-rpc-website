@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-02-22T00:00:00Z",
+  "generated_at": "2026-02-23T07:00:58.636387+00:00",
   "languages": {
     "python": {
-      "version": "0.1.2",
+      "version": null,
       "repo": "https://github.com/Query-farm/vgi-rpc-python",
       "docs": "https://vgi-rpc-python.query.farm",
       "package_url": "https://pypi.org/project/vgi-rpc/",
@@ -15,54 +15,54 @@
         "worker_pool": true
       },
       "patterns": {
-        "unary": true,
-        "unary_void": true,
-        "producer": true,
-        "producer_with_header": true,
-        "exchange": true,
-        "exchange_with_header": true
+        "unary": false,
+        "unary_void": false,
+        "producer": false,
+        "producer_with_header": false,
+        "exchange": false,
+        "exchange_with_header": false
       },
       "features": {
-        "introspection": true,
-        "client_logging": true,
-        "error_propagation": true,
-        "complex_types": true,
-        "optional_types": true,
-        "dataclass_types": true,
-        "annotated_types": true,
-        "authentication": true,
-        "external_storage": true,
-        "opentelemetry": true
+        "introspection": false,
+        "client_logging": false,
+        "error_propagation": false,
+        "complex_types": false,
+        "optional_types": false,
+        "dataclass_types": false,
+        "annotated_types": false,
+        "authentication": false,
+        "external_storage": false,
+        "opentelemetry": false
       }
     },
     "typescript": {
-      "version": "0.1.0",
-      "repo": "https://github.com/Query-farm/vgi-rpc-typescript",
-      "docs": "https://vgi-rpc-typescript.query.farm",
+      "version": null,
+      "repo": "https://github.com/Query-farm/vgi-rpc-ts",
+      "docs": null,
       "package_url": null,
       "transports": {
         "pipe": false,
         "subprocess": true,
         "unix_socket": false,
         "shared_memory": false,
-        "http": true,
+        "http": false,
         "worker_pool": false
       },
       "patterns": {
-        "unary": true,
-        "unary_void": true,
-        "producer": true,
-        "producer_with_header": true,
-        "exchange": true,
-        "exchange_with_header": true
+        "unary": false,
+        "unary_void": false,
+        "producer": false,
+        "producer_with_header": false,
+        "exchange": false,
+        "exchange_with_header": false
       },
       "features": {
-        "introspection": true,
-        "client_logging": true,
-        "error_propagation": true,
-        "complex_types": true,
-        "optional_types": true,
-        "dataclass_types": true,
+        "introspection": false,
+        "client_logging": false,
+        "error_propagation": false,
+        "complex_types": false,
+        "optional_types": false,
+        "dataclass_types": false,
         "annotated_types": false,
         "authentication": false,
         "external_storage": false,
@@ -70,7 +70,7 @@
       }
     },
     "go": {
-      "version": "0.1.0",
+      "version": null,
       "repo": "https://github.com/Query-farm/vgi-rpc-go",
       "docs": null,
       "package_url": null,
@@ -79,24 +79,24 @@
         "subprocess": true,
         "unix_socket": false,
         "shared_memory": false,
-        "http": true,
+        "http": false,
         "worker_pool": false
       },
       "patterns": {
-        "unary": true,
-        "unary_void": true,
-        "producer": true,
-        "producer_with_header": true,
-        "exchange": true,
-        "exchange_with_header": true
+        "unary": false,
+        "unary_void": false,
+        "producer": false,
+        "producer_with_header": false,
+        "exchange": false,
+        "exchange_with_header": false
       },
       "features": {
-        "introspection": true,
-        "client_logging": true,
-        "error_propagation": true,
-        "complex_types": true,
-        "optional_types": true,
-        "dataclass_types": true,
+        "introspection": false,
+        "client_logging": false,
+        "error_propagation": false,
+        "complex_types": false,
+        "optional_types": false,
+        "dataclass_types": false,
         "annotated_types": false,
         "authentication": false,
         "external_storage": false,
@@ -104,34 +104,34 @@
       }
     },
     "cpp": {
-      "version": "0.1.0",
+      "version": null,
       "repo": "https://github.com/Query-farm/vgi-rpc-cpp",
-      "docs": "https://vgi-rpc-cpp.query.farm",
+      "docs": null,
       "package_url": null,
       "transports": {
-        "pipe": true,
-        "subprocess": true,
+        "pipe": false,
+        "subprocess": false,
         "unix_socket": false,
         "shared_memory": false,
         "http": false,
         "worker_pool": false
       },
       "patterns": {
-        "unary": true,
-        "unary_void": true,
-        "producer": true,
-        "producer_with_header": true,
-        "exchange": true,
-        "exchange_with_header": true
+        "unary": false,
+        "unary_void": false,
+        "producer": false,
+        "producer_with_header": false,
+        "exchange": false,
+        "exchange_with_header": false
       },
       "features": {
-        "introspection": true,
-        "client_logging": true,
-        "error_propagation": true,
-        "complex_types": true,
-        "optional_types": true,
-        "dataclass_types": true,
-        "annotated_types": true,
+        "introspection": false,
+        "client_logging": false,
+        "error_propagation": false,
+        "complex_types": false,
+        "optional_types": false,
+        "dataclass_types": false,
+        "annotated_types": false,
         "authentication": false,
         "external_storage": false,
         "opentelemetry": false
