@@ -37,22 +37,5 @@
         error propagation, logging, introspection, and OpenTelemetry tracing.
       </p>
     </div>
-
-    <!-- Quick code example -->
-    <div class="mt-10 rounded-xl overflow-hidden border border-farm-cream-dark dark:border-farm-dark-border">
-      <div class="px-4 py-2 bg-farm-cream-dark dark:bg-farm-dark-card text-sm font-medium
-        text-farm-text-muted dark:text-farm-text-light-muted">
-        Define a service — no code generation needed
-      </div>
-      <pre class="p-4 bg-white dark:bg-farm-dark overflow-x-auto"><code class="text-farm-text dark:text-farm-text-light"><span class="text-farm-green-field">from</span> typing <span class="text-farm-green-field">import</span> Protocol
-
-<span class="text-farm-green-field">class</span> <span class="text-farm-gold">MathService</span>(Protocol):
-    <span class="text-farm-green-field">def</span> <span class="text-farm-gold">add</span>(self, a: <span class="text-farm-brown">float</span>, b: <span class="text-farm-brown">float</span>) -> <span class="text-farm-brown">float</span>: ...
-    <span class="text-farm-green-field">def</span> <span class="text-farm-gold">multiply</span>(self, a: <span class="text-farm-brown">float</span>, b: <span class="text-farm-brown">float</span>) -> <span class="text-farm-brown">float</span>: ...
-
-<span class="text-farm-text-muted dark:text-farm-text-light-muted"># Use it over any transport</span>
-<span class="text-farm-green-field">with</span> connect(MathService, [<span class="text-farm-gold">"python"</span>, <span class="text-farm-gold">"worker.py"</span>]) <span class="text-farm-green-field">as</span> proxy:
-    result = proxy.add(a=<span class="text-farm-brown">1.0</span>, b=<span class="text-farm-brown">2.0</span>)  <span class="text-farm-text-muted dark:text-farm-text-light-muted"># Fully typed!</span></code></pre>
-    </div>
   </div>
 </section>

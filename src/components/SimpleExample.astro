@@ -1,0 +1,67 @@
+---
+---
+
+<section id="example" class="py-20 border-t border-farm-cream-dark dark:border-farm-dark-border">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 class="text-3xl md:text-4xl font-bold text-center
+      text-farm-green-deep dark:text-farm-cream">
+      Three Files, That's It
+    </h2>
+    <p class="mt-3 text-center text-lg text-farm-text-muted dark:text-farm-text-light-muted max-w-2xl mx-auto">
+      One interface, one server, one client. No boilerplate, no build step, no drama.
+    </p>
+
+    <div class="mt-10 space-y-4">
+      <!-- Protocol: protocol.py -->
+      <div class="rounded-xl overflow-hidden border border-farm-cream-dark dark:border-farm-dark-border">
+        <div class="px-4 py-2 bg-farm-cream-dark dark:bg-farm-dark-card text-sm font-medium
+          text-farm-text-muted dark:text-farm-text-light-muted flex items-center gap-2">
+          <img src="/logos/python.svg" alt="Python" class="w-4 h-4" />
+          protocol.py — define the interface
+        </div>
+        <pre class="p-4 bg-white dark:bg-farm-dark overflow-x-auto text-sm"><code class="text-farm-text dark:text-farm-text-light"><span class="text-farm-green-field">from</span> typing <span class="text-farm-green-field">import</span> Protocol
+
+<span class="text-farm-green-field">class</span> <span class="text-farm-gold">Calculator</span>(Protocol):
+    <span class="text-farm-green-field">def</span> <span class="text-farm-gold">add</span>(self, a: <span class="text-farm-brown">float</span>, b: <span class="text-farm-brown">float</span>) -> <span class="text-farm-brown">float</span>: ...
+    <span class="text-farm-green-field">def</span> <span class="text-farm-gold">greet</span>(self, name: <span class="text-farm-brown">str</span>) -> <span class="text-farm-brown">str</span>: ...</code></pre>
+      </div>
+
+      <!-- Server: worker.py -->
+      <div class="rounded-xl overflow-hidden border border-farm-cream-dark dark:border-farm-dark-border">
+        <div class="px-4 py-2 bg-farm-green-field/10 text-sm font-medium text-farm-green-field flex items-center gap-2">
+          <img src="/logos/python.svg" alt="Python" class="w-4 h-4" />
+          worker.py — implement and serve
+        </div>
+        <pre class="p-4 bg-white dark:bg-farm-dark overflow-x-auto text-sm"><code class="text-farm-text dark:text-farm-text-light"><span class="text-farm-green-field">from</span> protocol <span class="text-farm-green-field">import</span> Calculator
+<span class="text-farm-green-field">from</span> vgi_rpc <span class="text-farm-green-field">import</span> run_server
+
+<span class="text-farm-green-field">class</span> <span class="text-farm-gold">CalculatorImpl</span>:
+    <span class="text-farm-green-field">def</span> <span class="text-farm-gold">add</span>(self, a: <span class="text-farm-brown">float</span>, b: <span class="text-farm-brown">float</span>) -> <span class="text-farm-brown">float</span>:
+        <span class="text-farm-green-field">return</span> a + b
+    <span class="text-farm-green-field">def</span> <span class="text-farm-gold">greet</span>(self, name: <span class="text-farm-brown">str</span>) -> <span class="text-farm-brown">str</span>:
+        <span class="text-farm-green-field">return</span> <span class="text-farm-gold">f"Hello, {'{'}name{'}'}!"</span>
+
+run_server(Calculator, CalculatorImpl())</code></pre>
+      </div>
+
+      <!-- Client: client.py -->
+      <div class="rounded-xl overflow-hidden border border-farm-cream-dark dark:border-farm-dark-border">
+        <div class="px-4 py-2 bg-farm-gold/10 text-sm font-medium text-farm-gold flex items-center gap-2">
+          <img src="/logos/python.svg" alt="Python" class="w-4 h-4" />
+          client.py — connect over subprocess or HTTP
+        </div>
+        <pre class="p-4 bg-white dark:bg-farm-dark overflow-x-auto text-sm"><code class="text-farm-text dark:text-farm-text-light"><span class="text-farm-green-field">from</span> protocol <span class="text-farm-green-field">import</span> Calculator
+<span class="text-farm-green-field">from</span> vgi_rpc <span class="text-farm-green-field">import</span> connect
+
+<span class="text-farm-text-muted dark:text-farm-text-light-muted"># Subprocess — launches worker.py automatically</span>
+<span class="text-farm-green-field">with</span> connect(Calculator, [<span class="text-farm-gold">"python"</span>, <span class="text-farm-gold">"worker.py"</span>]) <span class="text-farm-green-field">as</span> calc:
+    print(calc.add(a=<span class="text-farm-brown">2.0</span>, b=<span class="text-farm-brown">3.0</span>))    <span class="text-farm-text-muted dark:text-farm-text-light-muted"># 5.0</span>
+    print(calc.greet(name=<span class="text-farm-gold">"World"</span>))  <span class="text-farm-text-muted dark:text-farm-text-light-muted"># Hello, World!</span>
+
+<span class="text-farm-text-muted dark:text-farm-text-light-muted"># HTTP — connect to a running server</span>
+<span class="text-farm-green-field">with</span> connect(Calculator, <span class="text-farm-gold">"https://localhost:8000"</span>) <span class="text-farm-green-field">as</span> calc:
+    print(calc.add(a=<span class="text-farm-brown">2.0</span>, b=<span class="text-farm-brown">3.0</span>))    <span class="text-farm-text-muted dark:text-farm-text-light-muted"># 5.0</span></code></pre>
+      </div>
+    </div>
+  </div>
+</section>
