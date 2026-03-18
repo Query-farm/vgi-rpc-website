@@ -1,15 +1,12 @@
-name: Update Capabilities & Deploy
+name: Deploy
 
 on:
-  schedule:
-    # Weekly on Monday at 06:00 UTC
-    - cron: '0 6 * * 1'
   workflow_dispatch:
   push:
     branches: [main]
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: "deploy"
