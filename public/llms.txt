@@ -1,11 +1,13 @@
 # vgi-rpc
 
-> Transport-agnostic RPC framework built on Apache Arrow IPC serialization. Multi-language (Python, TypeScript, Go, C++), no code generation required.
+> Transport-agnostic RPC framework built on Apache Arrow IPC serialization. Multi-language (Python, TypeScript, Go, Rust, Java, C++), no code generation required.
 
 ## Docs
 
 - [Python Documentation](https://vgi-rpc-python.query.farm): Full Python API reference and guides
 - [TypeScript Documentation](https://vgi-rpc-typescript.query.farm): TypeScript API reference and guides
+- [Rust API Documentation](https://docs.rs/vgi-rpc): Rust server API reference
+- [Java API Documentation](https://javadoc.io/doc/farm.query/vgirpc): Java API reference
 - [C++ Documentation](https://vgi-rpc-cpp.query.farm): C++ API reference and guides
 - [Wire Protocol](https://vgi-rpc.query.farm/wire-protocol): Binary framing and message format specification
 - [Benchmarks](https://vgi-rpc.query.farm/benchmarks): Performance benchmarks across transports and languages
@@ -15,6 +17,8 @@
 - [vgi-rpc-python](https://github.com/Query-farm/vgi-rpc-python): Python implementation
 - [vgi-rpc-typescript](https://github.com/Query-farm/vgi-rpc-typescript): TypeScript implementation
 - [vgi-rpc-go](https://github.com/Query-farm/vgi-rpc-go): Go implementation
+- [vgi-rpc-rust](https://github.com/Query-farm/vgi-rpc-rust): Rust implementation
+- [vgi-rpc-java](https://github.com/Query-farm/vgi-rpc-java): Java implementation
 - [vgi-rpc-cpp](https://github.com/Query-farm/vgi-rpc-cpp): C++ implementation
 
 ## Key Concepts
@@ -31,26 +35,38 @@ vgi-rpc uses Apache Arrow IPC as its serialization format, giving callers zero-c
 
 ## Capabilities
 
-### Python (v0.1.2)
+### Python (v0.43.0)
 - **Transports:** pipe, subprocess, Unix socket, shared memory, HTTP, worker pool
 - **Patterns:** unary, unary void, producer (with header), exchange (with header)
 - **Features:** introspection, client logging, error propagation, complex types, optional types, dataclass types, annotated types, authentication, external storage, OpenTelemetry
 - **Package:** [PyPI](https://pypi.org/project/vgi-rpc/)
 
-### TypeScript (v0.1.0)
-- **Transports:** subprocess, HTTP
+### TypeScript (v0.22.0)
+- **Transports:** pipe, subprocess, Unix socket, TCP, HTTP
 - **Patterns:** unary, unary void, producer (with header), exchange (with header)
-- **Features:** introspection, client logging, error propagation, complex types, optional types, dataclass types
+- **Features:** introspection, client logging, error propagation, complex and optional types, authentication, external storage, OpenTelemetry
 
-### Go (v0.1.0)
-- **Transports:** subprocess, HTTP
+### Go (v0.26.0)
+- **Transports:** pipe, subprocess, Unix socket, TCP, HTTP, shared-memory side channel
 - **Patterns:** unary, unary void, producer (with header), exchange (with header)
-- **Features:** introspection, client logging, error propagation, complex types, optional types, dataclass types
+- **Features:** introspection, client logging, error propagation, complex and optional types, authentication, external storage, OpenTelemetry
 
-### C++ (v0.1.0)
-- **Transports:** pipe, subprocess
+### Rust (v0.23.0)
+- **Transports:** pipe, subprocess, Unix socket, TCP, HTTP, shared-memory side channel
 - **Patterns:** unary, unary void, producer (with header), exchange (with header)
-- **Features:** introspection, client logging, error propagation, complex types, optional types, dataclass types, annotated types
+- **Features:** native clients and servers, derive macros, introspection v4, client logging, error propagation, complex/optional/annotated types, authentication, OpenTelemetry, sticky sessions, S3/GCS external storage
+- **Package:** [crates.io](https://crates.io/crates/vgi-rpc)
+
+### Java (v0.23.0)
+- **Transports:** pipe, subprocess, Unix socket, TCP, HTTP, shared-memory side channel on JDK 22+
+- **Patterns:** unary, unary void, producer (with header), exchange (with header)
+- **Features:** typed interface proxies, introspection v4, client logging, error propagation, complex/optional/annotated types, authentication, OpenTelemetry correlation, sticky sessions, S3/GCS external storage
+- **Package:** [Maven Central](https://central.sonatype.com/artifact/farm.query/vgirpc)
+
+### C++ (v0.1.3)
+- **Transports:** pipe, subprocess, Unix socket, TCP, HTTP, shared-memory side channel
+- **Patterns:** unary, unary void, producer (with header), exchange (with header)
+- **Features:** native clients and servers, introspection v4, client logging, error propagation, complex/optional/annotated types, authentication, compression, sticky sessions, external storage
 
 ## Optional
 

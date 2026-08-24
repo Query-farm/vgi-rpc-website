@@ -7,12 +7,18 @@
     "dev": "npm run diagrams && astro dev",
     "build": "npm run diagrams && astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "test": "python3 -m unittest discover -s benchmarks/tests -p 'test_*.py' && python3 benchmarks/run.py validate",
+    "benchmark:verify": "python3 benchmarks/run.py verify",
+    "benchmark:quick": "python3 benchmarks/run.py quick",
+    "benchmark:full": "python3 benchmarks/run.py full",
+    "benchmark:publish": "python3 benchmarks/run.py publish"
   },
   "dependencies": {
-    "@astrojs/sitemap": "^3.7.0",
-    "@tailwindcss/vite": "^4.2.0",
-    "astro": "^5.17.1",
-    "tailwindcss": "^4.2.0"
+    "@astrojs/sitemap": "^3.7.3",
+    "@iconify-json/simple-icons": "^1.2.93",
+    "@tailwindcss/vite": "^4.3.3",
+    "astro": "^7.2.6",
+    "tailwindcss": "^4.3.3"
   }
 }

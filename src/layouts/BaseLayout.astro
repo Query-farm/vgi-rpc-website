@@ -11,7 +11,7 @@ interface Props {
 
 const {
   title,
-  description = 'Transport-agnostic RPC built on Apache Arrow IPC serialization. Multi-language: Python, TypeScript, Go, C++.',
+  description = 'Transport-agnostic RPC built on Apache Arrow IPC serialization. Multi-language: Python, TypeScript, Go, Rust, Java, C++.',
   currentPage = '/',
 } = Astro.props;
 
@@ -59,7 +59,7 @@ const ogImage = new URL('/logo-hero.png', Astro.site).href;
           "@type": "WebSite",
           "name": "vgi-rpc",
           "url": Astro.site?.href,
-          "description": "Transport-agnostic RPC built on Apache Arrow IPC serialization. Multi-language: Python, TypeScript, Go, C++.",
+          "description": "Transport-agnostic RPC built on Apache Arrow IPC serialization. Multi-language: Python, TypeScript, Go, Rust, Java, C++.",
           "publisher": {
             "@type": "Organization",
             "name": "Query.Farm"

@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import subprocess
 import sys
 import tempfile
@@ -43,15 +44,26 @@ LANGUAGES: dict[str, dict[str, Any]] = {
             "pipe": True,
             "subprocess": True,
             "unix_socket": True,
+            "tcp": True,
             "shared_memory": True,
             "http": True,
             "worker_pool": True,
         },
+        "known_patterns": {pattern: True for pattern in [
+            "unary", "unary_void", "producer", "producer_with_header",
+            "exchange", "exchange_with_header",
+        ]},
+        "known_features": {feature: True for feature in [
+            "introspection", "client_logging", "error_propagation",
+            "complex_types", "optional_types", "dataclass_types",
+            "annotated_types", "authentication", "external_storage",
+            "opentelemetry",
+        ]},
     },
     "typescript": {
-        "repo": "https://github.com/Query-farm/vgi-rpc-ts",
-        "docs": None,
-        "package_url": None,
+        "repo": "https://github.com/Query-farm/vgi-rpc-typescript",
+        "docs": "https://vgi-rpc-typescript.query.farm",
+        "package_url": "https://www.npmjs.com/package/@query-farm/vgi-rpc",
         "build_cmd": ["bun", "install"],
         "worker_cmd": ["bun", "run", "src/conformance/worker.ts"],
         "version_cmd": [
@@ -61,44 +73,135 @@ LANGUAGES: dict[str, dict[str, Any]] = {
             "const pkg = require('./package.json'); console.log(pkg.version)",
         ],
         "known_transports": {
-            "pipe": False,
+            "pipe": True,
             "subprocess": True,
-            "unix_socket": False,
+            "unix_socket": True,
+            "tcp": True,
             "shared_memory": False,
-            "http": False,
+            "http": True,
             "worker_pool": False,
         },
+        "known_patterns": {pattern: True for pattern in [
+            "unary", "unary_void", "producer", "producer_with_header",
+            "exchange", "exchange_with_header",
+        ]},
+        "known_features": {feature: True for feature in [
+            "introspection", "client_logging", "error_propagation",
+            "complex_types", "optional_types", "dataclass_types",
+            "authentication", "external_storage", "opentelemetry",
+        ]},
     },
     "go": {
         "repo": "https://github.com/Query-farm/vgi-rpc-go",
-        "docs": None,
-        "package_url": None,
+        "docs": "https://vgi-rpc-go.query.farm",
+        "package_url": "https://pkg.go.dev/github.com/Query-farm/vgi-rpc-go/vgirpc",
         "build_cmd": ["go", "build", "./..."],
         "worker_cmd": ["go", "run", "./cmd/conformance-worker"],
         "version_cmd": None,
         "known_transports": {
-            "pipe": False,
+            "pipe": True,
             "subprocess": True,
-            "unix_socket": False,
-            "shared_memory": False,
-            "http": False,
+            "unix_socket": True,
+            "tcp": True,
+            "shared_memory": True,
+            "http": True,
             "worker_pool": False,
         },
+        "known_patterns": {pattern: True for pattern in [
+            "unary", "unary_void", "producer", "producer_with_header",
+            "exchange", "exchange_with_header",
+        ]},
+        "known_features": {feature: True for feature in [
+            "introspection", "client_logging", "error_propagation",
+            "complex_types", "optional_types", "dataclass_types",
+            "authentication", "external_storage", "opentelemetry",
+        ]},
+    },
+    "rust": {
+        "repo": "https://github.com/Query-farm/vgi-rpc-rust",
+        "docs": "https://docs.rs/vgi-rpc",
+        "package_url": "https://crates.io/crates/vgi-rpc",
+        "build_cmd": ["cargo", "build", "--release", "-p", "conformance-worker"],
+        "worker_cmd": ["./target/release/vgi-rpc-conformance-rust"],
+        "version_cmd": None,
+        "known_transports": {
+            "pipe": True,
+            "subprocess": True,
+            "unix_socket": True,
+            "tcp": True,
+            "shared_memory": True,
+            "http": True,
+            "worker_pool": False,
+        },
+        "known_patterns": {pattern: True for pattern in [
+            "unary", "unary_void", "producer", "producer_with_header",
+            "exchange", "exchange_with_header",
+        ]},
+        "known_features": {feature: True for feature in [
+            "introspection", "client_logging", "error_propagation",
+            "complex_types", "optional_types", "dataclass_types",
+            "annotated_types", "authentication", "external_storage",
+            "opentelemetry",
+        ]},
+    },
+    "java": {
+        "repo": "https://github.com/Query-farm/vgi-rpc-java",
+        "docs": "https://javadoc.io/doc/farm.query/vgirpc",
+        "package_url": "https://central.sonatype.com/artifact/farm.query/vgirpc",
+        "build_cmd": ["./gradlew", "--no-daemon", ":conformance-worker:installDist"],
+        "worker_cmd": ["./conformance-worker/build/install/conformance-worker/bin/conformance-worker"],
+        "version_cmd": None,
+        "known_transports": {
+            "pipe": True,
+            "subprocess": True,
+            "unix_socket": True,
+            "tcp": True,
+            "shared_memory": True,
+            "http": True,
+            "worker_pool": False,
+        },
+        "known_patterns": {pattern: True for pattern in [
+            "unary", "unary_void", "producer", "producer_with_header",
+            "exchange", "exchange_with_header",
+        ]},
+        "known_features": {feature: True for feature in [
+            "introspection", "client_logging", "error_propagation",
+            "complex_types", "optional_types", "dataclass_types",
+            "annotated_types", "authentication", "external_storage",
+            "opentelemetry",
+        ]},
     },
     "cpp": {
         "repo": "https://github.com/Query-farm/vgi-rpc-cpp",
-        "docs": None,
+        "docs": "https://vgi-rpc-cpp.query.farm",
         "package_url": None,
         "build_cmd": None,
         "worker_cmd": None,
         "version_cmd": None,
         "known_transports": {
-            "pipe": False,
-            "subprocess": False,
-            "unix_socket": False,
-            "shared_memory": False,
-            "http": False,
+            "pipe": True,
+            "subprocess": True,
+            "unix_socket": True,
+            "tcp": True,
+            "shared_memory": True,
+            "http": True,
             "worker_pool": False,
+        },
+        "known_patterns": {pattern: True for pattern in [
+            "unary", "unary_void", "producer", "producer_with_header",
+            "exchange", "exchange_with_header",
+        ]},
+        "known_features": {
+            "introspection": True,
+            "client_logging": True,
+            "error_propagation": True,
+            "complex_types": True,
+            "optional_types": True,
+            "dataclass_types": True,
+            "annotated_types": True,
+            "authentication": True,
+            "external_storage": True,
+            "opentelemetry": False,
         },
     },
 }
@@ -152,6 +255,38 @@ def get_version(lang_config: dict[str, Any], repo_dir: Path) -> str | None:
     """Get version string for a language implementation."""
     version_cmd = lang_config.get("version_cmd")
     if not version_cmd:
+        try:
+            cargo_file = repo_dir / "Cargo.toml"
+            if cargo_file.exists():
+                match = re.search(
+                    r"\[workspace\.package\][^\[]*?^version\s*=\s*\"([^\"]+)\"",
+                    cargo_file.read_text(),
+                    re.MULTILINE | re.DOTALL,
+                )
+                if match:
+                    return match.group(1)
+
+            result = subprocess.run(
+                ["git", "describe", "--tags", "--abbrev=0"],
+                cwd=repo_dir,
+                capture_output=True,
+                text=True,
+                timeout=30,
+            )
+            if result.returncode == 0:
+                return result.stdout.strip().removeprefix("v")
+
+            cmake_file = repo_dir / "CMakeLists.txt"
+            if cmake_file.exists():
+                match = re.search(
+                    r"project\([^)]*\bVERSION\s+([0-9]+(?:\.[0-9]+){1,2})",
+                    cmake_file.read_text(),
+                    re.IGNORECASE | re.DOTALL,
+                )
+                if match:
+                    return match.group(1)
+        except (subprocess.TimeoutExpired, OSError):
+            pass
         return None
     try:
         result = subprocess.run(
@@ -179,7 +314,7 @@ def build_worker(lang_config: dict[str, Any], repo_dir: Path) -> bool:
             cwd=repo_dir,
             capture_output=True,
             text=True,
-            timeout=120,
+            timeout=600,
         )
         return result.returncode == 0
     except (subprocess.TimeoutExpired, FileNotFoundError):
@@ -189,13 +324,17 @@ def build_worker(lang_config: dict[str, Any], repo_dir: Path) -> bool:
 def probe_capabilities(
     worker_cmd: list[str],
     repo_dir: Path,
+    known_patterns: dict[str, bool] | None = None,
+    known_features: dict[str, bool] | None = None,
 ) -> tuple[dict[str, bool], dict[str, bool]]:
     """Probe a worker's capabilities via the Python conformance test infrastructure.
 
     Returns (patterns, features) dicts.
     """
-    patterns: dict[str, bool] = {p: False for p in PATTERNS}
-    features: dict[str, bool] = {f: False for f in FEATURES}
+    known_patterns = known_patterns or {}
+    known_features = known_features or {}
+    patterns: dict[str, bool] = {p: known_patterns.get(p, False) for p in PATTERNS}
+    features: dict[str, bool] = {f: known_features.get(f, False) for f in FEATURES}
 
     if not worker_cmd:
         return patterns, features
@@ -335,7 +474,22 @@ def test_all_capabilities(repos_dir: Path) -> dict[str, Any]:
                 worker_cmd = None
 
         # Probe capabilities
-        patterns, features = probe_capabilities(worker_cmd, repo_dir)
+        if worker_cmd:
+            patterns, features = probe_capabilities(
+                worker_cmd,
+                repo_dir,
+                config.get("known_patterns"),
+                config.get("known_features"),
+            )
+        else:
+            patterns = {
+                pattern: config.get("known_patterns", {}).get(pattern, False)
+                for pattern in PATTERNS
+            }
+            features = {
+                feature: config.get("known_features", {}).get(feature, False)
+                for feature in FEATURES
+            }
 
         result["languages"][lang_name] = {
             "version": version,

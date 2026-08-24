@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://vgi-rpc.query.farm/benchmarks/schema/v1.json",
+  "title": "vgi-rpc benchmark-dataset/v1",
+  "type": "object",
+  "required": ["schema_version", "status", "generated_at", "host", "implementations", "results"],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "status": { "enum": ["awaiting_run", "candidate", "published"] },
+    "run_mode": { "enum": ["quick", "full"] },
+    "generated_at": { "type": ["string", "null"] },
+    "preflight": { "type": ["object", "null"] },
+    "host": {
+      "type": "object",
+      "required": ["model", "chip", "cores", "memory_gb", "os", "arch"]
+    },
+    "implementations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "version", "release", "sha", "release_status"]
+      }
+    },
+    "results": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["layer", "client", "server", "transport", "workload", "status"]
+      }
+    }
+  }
+}

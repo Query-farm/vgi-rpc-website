@@ -1,0 +1,362 @@
+---
+import benchmarkData from '../data/benchmarks.json';
+import LanguageIcon from './LanguageIcon.astro';
+
+type Result = {
+  layer: string;
+  server: string;
+  transport: string;
+  workload: string;
+  concurrency?: number;
+  status: string;
+  mean_ns?: number;
+  operations_per_second?: number;
+  payload_bytes_per_second?: number;
+};
+
+const measured = (benchmarkData.results as Result[]).filter(result =>
+  result.layer === 'controlled' && (result.status === 'complete' || result.status === 'noisy')
+);
+const implementationNames = new Map(benchmarkData.implementations.map(item => [item.id, item.name]));
+const implementationOrder = benchmarkData.implementations.map(item => item.id);
+const transportOrder = ['stdio', 'stdio_shm', 'unix', 'tcp', 'http_identity', 'http_zstd'];
+const directTransportOrder = ['stdio', 'stdio_shm', 'unix', 'tcp'];
+const httpTransportOrder = ['http_identity', 'http_zstd'];
+const transportNames: Record<string, string> = {
+  stdio: 'Subprocess / stdio',
+  stdio_shm: 'Stdio + shared memory',
+  unix: 'Unix socket',
+  tcp: 'TCP loopback',
+  http_identity: 'HTTP identity',
+  http_zstd: 'HTTP zstd',
+};
+const transportColors: Record<string, string> = {
+  stdio: '#7857a4',
+  stdio_shm: '#d86624',
+  unix: '#2f855a',
+  tcp: '#3776ab',
+  http_identity: '#c58a16',
+  http_zstd: '#c8467a',
+};
+const loadWorkloads = [
+  { id: 'add_floats_load', name: 'Small unary calls' },
+  { id: 'echo_binary_1048576_load', name: '1 MiB round trips' },
+];
+const scalingSegments = [
+  { name: 'Socket transports', transports: ['unix', 'tcp'] },
+  { name: 'HTTP transports', transports: httpTransportOrder },
+];
+const singleCoreServers = implementationOrder.filter(server => server === 'python' || server === 'typescript');
+const multiCoreServers = implementationOrder.filter(server => !singleCoreServers.includes(server));
+const scalingImplementationGroups = [
+  {
+    name: 'Multi-core implementations',
+    detail: 'These servers can dispatch independent connections across multiple CPU cores.',
+    servers: multiCoreServers,
+  },
+  {
+    name: 'Single-process, one-core implementations',
+    detail: 'Python and TypeScript raw socket servers are bounded by one process core, so their client-count curves are shown separately. Python HTTP uses 16 Granian worker processes.',
+    servers: singleCoreServers,
+  },
+];
+
+const concurrencies = [1, 2, 4, 8, 16];
+
+function compactRate(value: number): string {
+  return new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 1 }).format(value);
+}
+function latency(value: number): string {
+  return value < 1_000_000 ? `${(value / 1_000).toFixed(1)} μs` : `${(value / 1_000_000).toFixed(1)} ms`;
+}
+function bandwidth(value: number): string {
+  const gib = value / (1024 ** 3);
+  return gib >= 1 ? `${gib.toFixed(2)} GiB/s` : `${(value / (1024 ** 2)).toFixed(0)} MiB/s`;
+}
+function latencyResult(server: string, transport: string): Result | undefined {
+  return measured.find(result =>
+    result.server === server &&
+    result.workload === 'add_floats' &&
+    result.transport === transport &&
+    (result.concurrency ?? 1) === 1 &&
+    result.mean_ns
+  );
+}
+const fastestLatency = new Map(transportOrder.map(transport => [
+  transport,
+  Math.min(...implementationOrder
+    .map(server => latencyResult(server, transport)?.mean_ns)
+    .filter((value): value is number => value !== undefined)),
+]));
+function latencyTone(row: Result, transport: string): string {
+  const fastest = fastestLatency.get(transport) ?? row.mean_ns ?? 1;
+  const ratio = (row.mean_ns ?? fastest) / fastest;
+  if (ratio <= 1.1) return 'bg-emerald-100 text-emerald-900 dark:bg-emerald-950/60 dark:text-emerald-200';
+  if (ratio <= 1.5) return 'bg-emerald-50 text-emerald-800 dark:bg-emerald-950/30 dark:text-emerald-300';
+  if (ratio <= 2.5) return 'bg-amber-50 text-amber-900 dark:bg-amber-950/35 dark:text-amber-200';
+  return 'bg-rose-50 text-rose-900 dark:bg-rose-950/35 dark:text-rose-200';
+}
+function bandwidthResult(server: string, transport: string): Result | undefined {
+  return measured.find(result =>
+    result.server === server &&
+    result.workload === 'echo_binary_16777216' &&
+    result.transport === transport &&
+    (result.concurrency ?? 1) === 1 &&
+    result.payload_bytes_per_second
+  );
+}
+const fastestBandwidth = new Map(transportOrder.map(transport => [
+  transport,
+  Math.max(...implementationOrder
+    .map(server => bandwidthResult(server, transport)?.payload_bytes_per_second)
+    .filter((value): value is number => value !== undefined)),
+]));
+function bandwidthTone(row: Result, transport: string): string {
+  const fastest = fastestBandwidth.get(transport) ?? row.payload_bytes_per_second ?? 1;
+  const ratio = (row.payload_bytes_per_second ?? 0) / fastest;
+  if (ratio >= 0.9) return 'bg-emerald-100 text-emerald-900 dark:bg-emerald-950/60 dark:text-emerald-200';
+  if (ratio >= 0.65) return 'bg-emerald-50 text-emerald-800 dark:bg-emerald-950/30 dark:text-emerald-300';
+  if (ratio >= 0.35) return 'bg-amber-50 text-amber-900 dark:bg-amber-950/35 dark:text-amber-200';
+  return 'bg-rose-50 text-rose-900 dark:bg-rose-950/35 dark:text-rose-200';
+}
+function scalingRows(server: string, workload: string, transports: string[]): Result[] {
+  return measured.filter(result =>
+    result.server === server &&
+    result.workload === workload &&
+    transports.includes(result.transport) &&
+    result.operations_per_second
+  );
+}
+function scalingResult(rows: Result[], transport: string, concurrency: number): Result | undefined {
+  return rows.find(row => row.transport === transport && (row.concurrency ?? 1) === concurrency);
+}
+function scalingGain(row: Result, baseline: Result): number {
+  return (row.operations_per_second ?? 0) / Math.max(1, baseline.operations_per_second ?? 0);
+}
+function scalingTone(row: Result, baseline: Result): string {
+  const concurrency = row.concurrency ?? 1;
+  if (concurrency === 1) return 'bg-farm-cream/30 dark:bg-farm-dark/50';
+  const efficiency = scalingGain(row, baseline) / concurrency;
+  if (efficiency >= 0.8) return 'bg-emerald-50 text-emerald-800 dark:bg-emerald-950/30 dark:text-emerald-300';
+  if (efficiency >= 0.4) return 'bg-amber-50 text-amber-800 dark:bg-amber-950/30 dark:text-amber-300';
+  return 'bg-red-50 text-red-800 dark:bg-red-950/30 dark:text-red-300';
+}
+---
+
+<section class="mt-12" aria-labelledby="visual-results-heading">
+  <div>
+    <h2 id="visual-results-heading" class="text-2xl font-bold text-farm-green-deep dark:text-farm-cream">Performance at a glance</h2>
+    <p class="mt-2 max-w-3xl text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+      Every panel is shown up front. Lower is better for latency; higher is better for call rate and payload bandwidth.
+    </p>
+  </div>
+
+  <div class="mt-8">
+    <h3 class="text-xl font-bold text-farm-green-deep dark:text-farm-cream">Single-call latency by language</h3>
+    <p class="mt-1 text-sm text-farm-text-muted dark:text-farm-text-light-muted">Mean latency for a tiny unary call with one client. Color compares languages within each transport, so HTTP remains useful without flattening the faster local transports.</p>
+    <div class="mt-4 overflow-x-auto rounded-xl border border-farm-cream-dark bg-white dark:border-farm-dark-border dark:bg-farm-dark-card">
+      <table class="w-full min-w-[900px] table-fixed text-sm">
+        <thead class="text-farm-text-muted dark:text-farm-text-light-muted">
+          <tr class="border-b border-farm-cream-dark bg-farm-cream/40 text-xs uppercase tracking-wide dark:border-farm-dark-border dark:bg-farm-dark/70">
+            <th class="w-44 px-4 py-2 text-left" rowspan="2">Language</th>
+            <th class="border-l border-farm-cream-dark px-3 py-2 text-center dark:border-farm-dark-border" colspan={directTransportOrder.length}>Direct transports</th>
+            <th class="border-l-2 border-farm-cream-dark px-3 py-2 text-center dark:border-farm-dark-border" colspan={httpTransportOrder.length}>HTTP</th>
+          </tr>
+          <tr class="border-b border-farm-cream-dark bg-farm-cream/60 text-xs dark:border-farm-dark-border dark:bg-farm-dark">
+            {transportOrder.map((transport, index) => (
+              <th class:list={['px-3 py-3 text-right font-semibold', index === 0 ? 'border-l border-farm-cream-dark dark:border-farm-dark-border' : '', index === directTransportOrder.length ? 'border-l-2 border-farm-cream-dark dark:border-farm-dark-border' : '']}>
+                {transportNames[transport]}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-farm-cream-dark dark:divide-farm-dark-border">
+          {implementationOrder.map(server => (
+            <tr>
+              <th class="px-4 py-3 text-left font-semibold text-farm-text dark:text-farm-text-light">
+                <span class="inline-flex items-center gap-3">
+                  <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-farm-cream text-farm-text-muted dark:bg-farm-dark dark:text-farm-text-light-muted">
+                    <LanguageIcon language={server} class="h-5 w-5" />
+                  </span>
+                  {implementationNames.get(server)}
+                </span>
+              </th>
+              {transportOrder.map((transport, index) => {
+                const row = latencyResult(server, transport);
+                const fastest = fastestLatency.get(transport);
+                const ratio = row && fastest ? (row.mean_ns ?? 0) / fastest : undefined;
+                return (
+                  <td
+                    class:list={[
+                      'px-3 py-4 text-right align-middle',
+                      row ? latencyTone(row, transport) : 'bg-slate-50 text-slate-400 dark:bg-slate-900/30 dark:text-slate-500',
+                      index === 0 ? 'border-l border-farm-cream-dark dark:border-farm-dark-border' : '',
+                      index === directTransportOrder.length ? 'border-l-2 border-farm-cream-dark dark:border-farm-dark-border' : '',
+                    ]}
+                    title={row && ratio ? `${ratio.toFixed(2)}× the fastest ${transportNames[transport]} result${row.status === 'noisy' ? ' (noisy result)' : ''}` : 'Not supported'}
+                  >
+                    {row ? <span class="whitespace-nowrap font-mono font-bold">{latency(row.mean_ns ?? 0)}</span> : <span aria-label="Not supported">—</span>}
+                  </td>
+                );
+              })}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <div class="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-farm-text-muted dark:text-farm-text-light-muted" aria-label="Latency color key">
+      <span class="font-semibold text-farm-text dark:text-farm-text-light">Within each column:</span>
+      <span class="inline-flex items-center gap-1.5"><span class="h-3 w-3 rounded-sm bg-emerald-100 ring-1 ring-emerald-200 dark:bg-emerald-950/60 dark:ring-emerald-800"></span>Fastest</span>
+      <span class="inline-flex items-center gap-1.5"><span class="h-3 w-3 rounded-sm bg-emerald-50 ring-1 ring-emerald-100 dark:bg-emerald-950/30 dark:ring-emerald-900"></span>Within 1.5×</span>
+      <span class="inline-flex items-center gap-1.5"><span class="h-3 w-3 rounded-sm bg-amber-50 ring-1 ring-amber-100 dark:bg-amber-950/35 dark:ring-amber-900"></span>Within 2.5×</span>
+      <span class="inline-flex items-center gap-1.5"><span class="h-3 w-3 rounded-sm bg-rose-50 ring-1 ring-rose-100 dark:bg-rose-950/35 dark:ring-rose-900"></span>Over 2.5×</span>
+    </div>
+  </div>
+
+  <div class="mt-12">
+    <h3 class="text-xl font-bold text-farm-green-deep dark:text-farm-cream">Scaling relative to one client</h3>
+    <p class="mt-1 text-sm text-farm-text-muted dark:text-farm-text-light-muted">One client shows request rate; 2–16 clients show throughput relative to that baseline. Green is close to linear scaling; red indicates saturation.</p>
+    <div class="mt-5 space-y-8">
+      {scalingImplementationGroups.map(group => (
+        <section aria-labelledby={`scaling-${group.name.toLowerCase().replaceAll(/[^a-z]+/g, '-')}`}>
+          <header>
+            <h4 id={`scaling-${group.name.toLowerCase().replaceAll(/[^a-z]+/g, '-')}`} class="font-bold text-farm-text dark:text-farm-text-light">{group.name}</h4>
+            <p class="mt-1 max-w-4xl text-xs text-farm-text-muted dark:text-farm-text-light-muted">{group.detail}</p>
+          </header>
+          <div class="mt-3 space-y-3">
+            {group.servers.map(server => (
+              <details class="group overflow-hidden rounded-2xl border border-farm-cream-dark bg-farm-cream/30 dark:border-farm-dark-border dark:bg-farm-dark-card/40">
+                <summary class="flex cursor-pointer list-none items-center gap-3 px-4 py-4 marker:content-none sm:px-6 [&::-webkit-details-marker]:hidden">
+                  <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white text-farm-text-muted shadow-sm dark:bg-farm-dark-card dark:text-farm-text-light-muted">
+                    <LanguageIcon language={server} class="h-6 w-6" />
+                  </span>
+                  <span class="min-w-0 flex-1">
+                    <span class="block font-bold text-farm-text dark:text-farm-text-light">{implementationNames.get(server)}</span>
+                    {(server === 'python' || server === 'typescript') && <span class="mt-0.5 block text-xs text-farm-text-muted dark:text-farm-text-light-muted">Raw socket server: single process, one CPU core{server === 'python' ? '; HTTP: 16 Granian workers' : ''}.</span>}
+                  </span>
+                  <span class="text-2xl leading-none text-farm-text-muted transition-transform group-open:rotate-90 dark:text-farm-text-light-muted" aria-hidden="true">›</span>
+                </summary>
+                <div class="space-y-7 border-t border-farm-cream-dark px-4 py-5 sm:px-6 dark:border-farm-dark-border">
+            {loadWorkloads.map(workload => (
+              <section>
+                <h5 class="font-semibold text-farm-text dark:text-farm-text-light">{workload.name}</h5>
+                <div class="mt-3 grid items-start gap-4 xl:grid-cols-2">
+                  {scalingSegments.map(segment => {
+                    const rows = scalingRows(server, workload.id, segment.transports);
+                    const transports = segment.transports.filter(transport => rows.some(row => row.transport === transport));
+                    return (
+                      <section class="overflow-hidden rounded-xl border border-farm-cream-dark bg-white dark:border-farm-dark-border dark:bg-farm-dark-card" aria-label={`${implementationNames.get(server)} ${workload.name} ${segment.name} scaling`}>
+                        <header class="border-b border-farm-cream-dark px-4 py-3 dark:border-farm-dark-border">
+                          <h6 class="text-sm font-semibold text-farm-text dark:text-farm-text-light">{segment.name}</h6>
+                        </header>
+                        {rows.length > 0 ? (
+                          <div class="overflow-x-auto">
+                            <table class="w-full min-w-[500px] table-fixed text-xs">
+                              <thead class="bg-farm-cream/60 text-farm-text-muted dark:bg-farm-dark dark:text-farm-text-light-muted">
+                                <tr>
+                                  <th class="w-36 px-4 py-2.5 text-left font-semibold">Transport</th>
+                                  {concurrencies.map(concurrency => <th class="px-2 py-2.5 text-right font-semibold">{concurrency === 1 ? <><span class="block">1 client</span><span class="block text-[9px] font-medium">req/s</span></> : `${concurrency} clients`}</th>)}
+                                </tr>
+                              </thead>
+                              <tbody class="divide-y divide-farm-cream-dark dark:divide-farm-dark-border">
+                                {transports.map(transport => {
+                                  const baseline = scalingResult(rows, transport, 1);
+                                  return (
+                                    <tr>
+                                      <th class="px-4 py-3 text-left font-semibold text-farm-text dark:text-farm-text-light">
+                                        <span class="inline-flex items-center gap-2"><span class="h-2.5 w-2.5 rounded-full" style={`background:${transportColors[transport]}`}></span>{transportNames[transport]}</span>
+                                      </th>
+                                      {concurrencies.map(concurrency => {
+                                        const row = scalingResult(rows, transport, concurrency);
+                                        return (
+                                          <td class:list={['px-2 py-4 text-right align-middle', row && baseline ? scalingTone(row, baseline) : '']} title={row && baseline ? `${concurrency === 1 ? `${compactRate(row.operations_per_second ?? 0)} requests per second` : `${scalingGain(row, baseline).toFixed(2)} times the one-client throughput`}${row.status === 'noisy' ? ' (noisy result)' : ''}` : undefined}>
+                                            {row && baseline ? (
+                                              <span class="whitespace-nowrap font-mono text-sm font-bold">{concurrency === 1 ? compactRate(row.operations_per_second ?? 0) : `${scalingGain(row, baseline).toFixed(2)}×`}</span>
+                                            ) : <span class="text-farm-text-muted dark:text-farm-text-light-muted">—</span>}
+                                          </td>
+                                        );
+                                      })}
+                                    </tr>
+                                  );
+                                })}
+                              </tbody>
+                            </table>
+                          </div>
+                        ) : <p class="p-4 text-center text-xs text-farm-text-muted dark:text-farm-text-light-muted">No supported measurements.</p>}
+                      </section>
+                    );
+                  })}
+                </div>
+              </section>
+            ))}
+                </div>
+              </details>
+            ))}
+          </div>
+        </section>
+      ))}
+    </div>
+  </div>
+
+  <div class="mt-12">
+    <h3 class="text-xl font-bold text-farm-green-deep dark:text-farm-cream">Single-client large-payload bandwidth by transport</h3>
+    <p class="mt-1 text-sm text-farm-text-muted dark:text-farm-text-light-muted">16 MiB echo throughput with one outstanding call, counting bytes in both directions. Client and server are not CPU-pinned, so these are single-client rather than single-core results. Color compares languages within each transport; higher is better.</p>
+    <div class="mt-4 overflow-x-auto rounded-xl border border-farm-cream-dark bg-white dark:border-farm-dark-border dark:bg-farm-dark-card">
+      <table class="w-full min-w-[900px] table-fixed text-sm">
+        <thead class="text-farm-text-muted dark:text-farm-text-light-muted">
+          <tr class="border-b border-farm-cream-dark bg-farm-cream/40 text-xs uppercase tracking-wide dark:border-farm-dark-border dark:bg-farm-dark/70">
+            <th class="w-44 px-4 py-2 text-left" rowspan="2">Language</th>
+            <th class="border-l border-farm-cream-dark px-3 py-2 text-center dark:border-farm-dark-border" colspan={directTransportOrder.length}>Direct transports</th>
+            <th class="border-l-2 border-farm-cream-dark px-3 py-2 text-center dark:border-farm-dark-border" colspan={httpTransportOrder.length}>HTTP</th>
+          </tr>
+          <tr class="border-b border-farm-cream-dark bg-farm-cream/60 text-xs dark:border-farm-dark-border dark:bg-farm-dark">
+            {transportOrder.map((transport, index) => (
+              <th class:list={['px-3 py-3 text-right font-semibold', index === 0 ? 'border-l border-farm-cream-dark dark:border-farm-dark-border' : '', index === directTransportOrder.length ? 'border-l-2 border-farm-cream-dark dark:border-farm-dark-border' : '']}>
+                {transportNames[transport]}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-farm-cream-dark dark:divide-farm-dark-border">
+          {implementationOrder.map(server => (
+            <tr>
+              <th class="px-4 py-3 text-left font-semibold text-farm-text dark:text-farm-text-light">
+                <span class="inline-flex items-center gap-3">
+                  <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-farm-cream text-farm-text-muted dark:bg-farm-dark dark:text-farm-text-light-muted">
+                    <LanguageIcon language={server} class="h-5 w-5" />
+                  </span>
+                  {implementationNames.get(server)}
+                </span>
+              </th>
+              {transportOrder.map((transport, index) => {
+                const row = bandwidthResult(server, transport);
+                const fastest = fastestBandwidth.get(transport);
+                const ratio = row && fastest ? (row.payload_bytes_per_second ?? 0) / fastest : undefined;
+                return (
+                  <td
+                    class:list={[
+                      'px-3 py-4 text-right align-middle',
+                      row ? bandwidthTone(row, transport) : 'bg-slate-50 text-slate-400 dark:bg-slate-900/30 dark:text-slate-500',
+                      index === 0 ? 'border-l border-farm-cream-dark dark:border-farm-dark-border' : '',
+                      index === directTransportOrder.length ? 'border-l-2 border-farm-cream-dark dark:border-farm-dark-border' : '',
+                    ]}
+                    title={row && ratio ? `${(ratio * 100).toFixed(0)}% of the fastest ${transportNames[transport]} result${row.status === 'noisy' ? ' (noisy result)' : ''}` : 'Not supported'}
+                  >
+                    {row ? <span class="whitespace-nowrap font-mono font-bold">{bandwidth(row.payload_bytes_per_second ?? 0)}</span> : <span aria-label="Not supported">—</span>}
+                  </td>
+                );
+              })}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <div class="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-farm-text-muted dark:text-farm-text-light-muted" aria-label="Bandwidth color key">
+      <span class="font-semibold text-farm-text dark:text-farm-text-light">Within each column:</span>
+      <span class="inline-flex items-center gap-1.5"><span class="h-3 w-3 rounded-sm bg-emerald-100 ring-1 ring-emerald-200 dark:bg-emerald-950/60 dark:ring-emerald-800"></span>Fastest</span>
+      <span class="inline-flex items-center gap-1.5"><span class="h-3 w-3 rounded-sm bg-emerald-50 ring-1 ring-emerald-100 dark:bg-emerald-950/30 dark:ring-emerald-900"></span>At least 65%</span>
+      <span class="inline-flex items-center gap-1.5"><span class="h-3 w-3 rounded-sm bg-amber-50 ring-1 ring-amber-100 dark:bg-amber-950/35 dark:ring-amber-900"></span>At least 35%</span>
+      <span class="inline-flex items-center gap-1.5"><span class="h-3 w-3 rounded-sm bg-rose-50 ring-1 ring-rose-100 dark:bg-rose-950/35 dark:ring-rose-900"></span>Under 35%</span>
+    </div>
+  </div>
+</section>

@@ -3,31 +3,37 @@ const transports = [
   {
     name: 'Pipe',
     description: 'In-process, bidirectional byte stream. Lowest latency — ideal for tests and embedded use.',
-    latency: '~5 μs',
+    scope: 'In-process',
     useCase: 'Testing, demos',
   },
   {
     name: 'Subprocess',
     description: 'Spawn a worker process, communicate over stdin/stdout. Process isolation with low overhead.',
-    latency: '~50 μs',
+    scope: 'Process IPC',
     useCase: 'Isolated workers, CLI tools',
   },
   {
     name: 'Unix Socket',
     description: 'Kernel-mediated local IPC. Long-lived connections with per-client threading support.',
-    latency: '~30 μs',
+    scope: 'Local IPC',
     useCase: 'Local services, daemons',
+  },
+  {
+    name: 'TCP',
+    description: 'Lean Arrow IPC framing over a persistent socket. Intended for trusted networks; use HTTP when authentication or TLS is required.',
+    scope: 'Network',
+    useCase: 'Trusted network services',
   },
   {
     name: 'Shared Memory',
     description: 'Zero-copy Arrow batch transfer via memory-mapped segments. Only pointers cross the pipe.',
-    latency: '~5 μs',
+    scope: 'Zero-copy side channel',
     useCase: 'Large batches, co-located',
   },
   {
     name: 'HTTP',
-    description: 'Stateless HTTP transport with signed state tokens for streaming. Works with any WSGI server.',
-    latency: '~500 μs',
+    description: 'HTTP transport with authenticated stream state, compression, capability discovery, external payloads, and optional sticky sessions.',
+    scope: 'Network + HTTP',
     useCase: 'Network services, browsers',
   },
 ];
@@ -37,7 +43,7 @@ const transports = [
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <h2 class="text-3xl md:text-4xl font-bold text-center
       text-farm-green-deep dark:text-farm-cream">
-      Five Transports, One Interface
+      Transports and Side Channels
     </h2>
     <p class="mt-3 text-center text-lg text-farm-text-muted dark:text-farm-text-light-muted max-w-2xl mx-auto">
       Your service code stays the same. Only the transport setup changes.
@@ -57,7 +63,7 @@ const transports = [
             <span class="inline-block mt-1 px-2 py-0.5 text-xs font-mono rounded
               bg-farm-cream-dark dark:bg-farm-dark
               text-farm-text-muted dark:text-farm-text-light-muted">
-              {transport.latency}
+              {transport.scope}
             </span>
           </div>
           <p class="flex-1 text-sm text-farm-text-muted dark:text-farm-text-light-muted">

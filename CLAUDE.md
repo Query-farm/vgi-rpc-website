@@ -2,7 +2,7 @@
 
 ## Project overview
 
-Documentation/marketing website for the vgi-rpc framework. Built with **Astro 5 + Tailwind CSS 4**, deployed to **Cloudflare Pages**.
+Documentation/marketing website for the vgi-rpc framework. Built with **Astro 7 + Tailwind CSS 4**, deployed to **Cloudflare Pages**.
 
 Live site: https://vgi-rpc.query.farm
 
@@ -40,7 +40,7 @@ scripts/           # test-capabilities.py — CI script that probes language imp
 
 ## Data flow
 
-- `scripts/test-capabilities.py` probes language repos (Python, TypeScript, Go, C++) for transport/pattern/feature support.
+- `scripts/test-capabilities.py` probes language repos (Python, TypeScript, Go, Rust, Java, C++) for transport/pattern/feature support.
 - Output goes to `src/data/capabilities.json` — consumed by `CapabilityMatrix.astro`.
 - This runs weekly via GitHub Actions and auto-commits changes.
 

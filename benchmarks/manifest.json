@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "canonical_client": {
+    "implementation": "rust",
+    "version": "0.23.2",
+    "ref": "v0.23.2",
+    "sha": "eaba89b5d60e46ff313b563e7d06ea19adcca72f"
+  },
+  "implementations": {
+    "python": {
+      "name": "Python",
+      "repository": "https://github.com/Query-farm/vgi-rpc-python.git",
+      "release": "v0.43.0",
+      "version": "0.43.0",
+      "sha": "1da388f7bf588337f1a8f9eb31800d3dd27cc90c",
+      "release_status": "published",
+      "benchmark_runtime": {
+        "http_server": "granian",
+        "version": "2.8.1",
+        "workers": 16,
+        "blocking_threads_per_worker": 1
+      },
+      "build": [
+        ["uv", "sync", "--frozen", "--extra", "conformance", "--extra", "http"],
+        ["uv", "pip", "install", "--python", "{repo}/.venv/bin/python", "granian==2.8.1"]
+      ],
+      "commands": {
+        "stdio": ["uv", "run", "--directory", "{repo}", "--frozen", "vgi-rpc-conformance"],
+        "unix": ["uv", "run", "--directory", "{repo}", "--frozen", "vgi-rpc-conformance", "--unix", "{socket}", "--threaded", "--max-connections", "64"],
+        "tcp": ["uv", "run", "--directory", "{repo}", "--frozen", "vgi-rpc-conformance", "--tcp", "127.0.0.1:0", "--threaded", "--max-connections", "64"],
+        "http_identity": ["{repo}/.venv/bin/python", "{root}/benchmarks/adapters/python_granian.py"],
+        "http_zstd": ["{repo}/.venv/bin/python", "{root}/benchmarks/adapters/python_granian.py"],
+        "stdio_shm": ["uv", "run", "--directory", "{repo}", "--frozen", "vgi-rpc-conformance"]
+      }
+    },
+    "typescript": {
+      "name": "TypeScript",
+      "repository": "https://github.com/Query-farm/vgi-rpc-typescript.git",
+      "release": "v0.22.0",
+      "version": "0.22.0",
+      "sha": "423558fa50c7ea05be167cdcf7881b4436433497",
+      "release_status": "published",
+      "build": [["bun", "install", "--frozen-lockfile"]],
+      "commands": {
+        "stdio": ["bun", "run", "{repo}/examples/conformance.ts"],
+        "unix": ["bun", "run", "{repo}/examples/conformance.ts", "--unix", "{socket}"],
+        "tcp": ["bun", "run", "{repo}/examples/conformance.ts", "--tcp", "127.0.0.1:0"],
+        "http_identity": ["bun", "run", "{repo}/examples/conformance-http.ts"],
+        "http_zstd": ["bun", "run", "{repo}/examples/conformance-http.ts"],
+        "stdio_shm": null
+      }
+    },
+    "go": {
+      "name": "Go",
+      "repository": "https://github.com/Query-farm/vgi-rpc-go.git",
+      "release": "v0.26.1",
+      "version": "0.26.1",
+      "sha": "8e7c49fd0724cbec99ed5c985879ddbd57e50bb9",
+      "release_status": "published",
+      "build": [["go", "build", "-o", "{artifacts}/conformance-worker", "./conformance/cmd/vgi-rpc-conformance-go"]],
+      "commands": {
+        "stdio": ["{artifacts}/conformance-worker"],
+        "unix": ["{artifacts}/conformance-worker", "--unix", "{socket}"],
+        "tcp": ["{artifacts}/conformance-worker", "--tcp", "127.0.0.1:0"],
+        "http_identity": ["{artifacts}/conformance-worker", "--http", "0"],
+        "http_zstd": ["{artifacts}/conformance-worker", "--http", "0"],
+        "stdio_shm": ["{artifacts}/conformance-worker"]
+      }
+    },
+    "rust": {
+      "name": "Rust",
+      "repository": "https://github.com/Query-farm/vgi-rpc-rust.git",
+      "release": "v0.23.2",
+      "version": "0.23.2",
+      "sha": "eaba89b5d60e46ff313b563e7d06ea19adcca72f",
+      "release_status": "published",
+      "build": [["cargo", "build", "--locked", "--release", "-p", "vgi-rpc-conformance-rust"]],
+      "commands": {
+        "stdio": ["{repo}/target/release/vgi-rpc-conformance-rust"],
+        "unix": ["{repo}/target/release/vgi-rpc-conformance-rust", "--unix", "{socket}"],
+        "tcp": ["{repo}/target/release/vgi-rpc-conformance-rust", "--tcp", "127.0.0.1:0"],
+        "http_identity": ["{repo}/target/release/vgi-rpc-conformance-rust", "--http", "0"],
+        "http_zstd": ["{repo}/target/release/vgi-rpc-conformance-rust", "--http", "0"],
+        "stdio_shm": ["{repo}/target/release/vgi-rpc-conformance-rust"]
+      }
+    },
+    "java": {
+      "name": "Java",
+      "repository": "https://github.com/Query-farm/vgi-rpc-java.git",
+      "release": "v0.23.1",
+      "version": "0.23.1",
+      "sha": "a0309fe28073e75a626ed306eafce70861d7ec83",
+      "release_status": "published",
+      "benchmark_runtime": {
+        "jvm": "Amazon Corretto",
+        "version": "25.0.4"
+      },
+      "build": [["./gradlew", "--no-daemon", ":conformance-worker:installDist"]],
+      "commands": {
+        "stdio": ["{repo}/conformance-worker/build/install/conformance-worker/bin/conformance-worker"],
+        "unix": ["{repo}/conformance-worker/build/install/conformance-worker/bin/conformance-worker", "--unix", "{socket}"],
+        "tcp": ["{repo}/conformance-worker/build/install/conformance-worker/bin/conformance-worker", "--tcp", "127.0.0.1:0"],
+        "http_identity": ["{repo}/conformance-worker/build/install/conformance-worker/bin/conformance-worker", "--http", "--max-request-bytes", "67108864", "--max-response-bytes", "67108864"],
+        "http_zstd": ["{repo}/conformance-worker/build/install/conformance-worker/bin/conformance-worker", "--http", "--max-request-bytes", "67108864", "--max-response-bytes", "67108864"],
+        "stdio_shm": ["{repo}/conformance-worker/build/install/conformance-worker/bin/conformance-worker"]
+      }
+    },
+    "cpp": {
+      "name": "C++",
+      "repository": "https://github.com/Query-farm/vgi-rpc-cpp.git",
+      "release": "v0.1.4",
+      "version": "0.1.4",
+      "sha": "0fe27a2870edcaffc447dd476ab1ddbdee4ca41e",
+      "release_status": "published",
+      "toolchain": { "vcpkg": "05442024c3fda64320bd25d2251cc9807b84fb6f" },
+      "build": [
+        ["cmake", "--preset", "release", "-DVGI_RPC_BUILD_TESTS=ON"],
+        ["cmake", "--build", "--preset", "release", "--target", "conformance_worker"]
+      ],
+      "commands": {
+        "stdio": ["{repo}/build/conformance/conformance_worker"],
+        "unix": ["{repo}/build/conformance/conformance_worker", "--unix", "{socket}"],
+        "tcp": ["{repo}/build/conformance/conformance_worker", "--tcp", "127.0.0.1:0"],
+        "http_identity": ["{repo}/build/conformance/conformance_worker", "--http", "--port", "0"],
+        "http_zstd": ["{repo}/build/conformance/conformance_worker", "--http", "--port", "0"],
+        "stdio_shm": ["{repo}/build/conformance/conformance_worker"]
+      }
+    }
+  },
+  "workloads": {
+    "unary": ["void_noop", "add_floats", "echo_string_11b"],
+    "payload_bytes": [1024, 65536, 1048576, 16777216],
+    "concurrency": [1, 2, 4, 8, 16]
+  }
+}

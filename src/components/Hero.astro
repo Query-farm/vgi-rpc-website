@@ -30,7 +30,7 @@
       <p class="mt-3 text-base md:text-lg max-w-xl mx-auto
         text-farm-text-muted dark:text-farm-text-light-muted">
         Define typed interfaces. No code generation. One protocol across pipes,
-        subprocesses, shared memory, and HTTP.
+        subprocesses, Unix/TCP sockets, shared memory, and HTTP.
       </p>
 
       <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -62,6 +62,8 @@
           { name: 'Python', url: 'https://vgi-rpc-python.query.farm', logo: '/logos/python.svg' },
           { name: 'TypeScript', url: 'https://vgi-rpc-typescript.query.farm', logo: '/logos/typescript.svg' },
           { name: 'Go', url: 'https://vgi-rpc-go.query.farm', logo: '/logos/go.svg' },
+          { name: 'Rust', url: 'https://docs.rs/vgi-rpc', logo: '/logos/rust.svg' },
+          { name: 'Java', url: 'https://javadoc.io/doc/farm.query/vgirpc', logo: '/logos/java.svg' },
           { name: 'C++', url: 'https://vgi-rpc-cpp.query.farm', logo: '/logos/cpp.svg' },
         ].map(lang => (
           <a href={lang.url} target="_blank" rel="noopener noreferrer"
@@ -72,7 +74,7 @@
             hover:border-farm-green-field hover:text-farm-green-deep
             dark:hover:border-farm-green-field dark:hover:text-farm-green-field
             transition-colors">
-            <img src={lang.logo} alt={`${lang.name} logo`} class="w-4 h-4" />
+            <img src={lang.logo} alt={`${lang.name} logo`} class:list={['w-4 h-4', lang.name === 'Rust' && 'dark:invert']} />
             {lang.name}
           </a>
         ))}

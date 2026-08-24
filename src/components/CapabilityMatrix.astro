@@ -1,11 +1,13 @@
 ---
 import capabilities from '../data/capabilities.json';
 
-const languages = ['python', 'typescript', 'go', 'cpp'] as const;
+const languages = ['python', 'typescript', 'go', 'rust', 'java', 'cpp'] as const;
 const langLabels: Record<string, string> = {
   python: 'Python',
   typescript: 'TypeScript',
   go: 'Go',
+  rust: 'Rust',
+  java: 'Java',
   cpp: 'C++',
 };
 
@@ -13,6 +15,7 @@ const transportLabels: Record<string, string> = {
   pipe: 'Pipe',
   subprocess: 'Subprocess',
   unix_socket: 'Unix Socket',
+  tcp: 'TCP Socket',
   shared_memory: 'Shared Memory',
   http: 'HTTP',
   worker_pool: 'Worker Pool',
@@ -51,7 +54,7 @@ type CapLang = typeof capabilities.languages;
       Capability Matrix
     </h2>
     <p class="mt-3 text-center text-lg text-farm-text-muted dark:text-farm-text-light-muted max-w-2xl mx-auto">
-      Feature support across all implementations. Updated automatically via CI.
+      Feature support across the maintained implementations, tracked against the shared conformance suite.
     </p>
 
     <!-- Transports -->

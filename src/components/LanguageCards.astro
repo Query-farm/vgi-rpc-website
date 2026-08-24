@@ -32,15 +32,39 @@ const languages = [
     repo: 'https://github.com/Query-farm/vgi-rpc-go',
     ghSlug: 'Query-farm/vgi-rpc-go',
     docs: 'https://vgi-rpc-go.query.farm',
-    package: 'https://pkg.go.dev/github.com/Query-farm/vgi-rpc/vgirpc',
-    packageLabel: 'go get github.com/Query-farm/vgi-rpc/vgirpc',
+    package: 'https://pkg.go.dev/github.com/Query-farm/vgi-rpc-go/vgirpc',
+    packageLabel: 'go get github.com/Query-farm/vgi-rpc-go/vgirpc',
     logo: '/logos/go.svg',
   },
   {
+    name: 'Rust',
+    status: 'Feature Parity',
+    statusColor: 'text-farm-green-field',
+    description: 'Native Rust clients and servers with service/Arrow derive macros, all RPC patterns, raw socket and HTTP transports, shared memory, authentication, observability, sticky sessions, and S3/GCS external storage.',
+    repo: 'https://github.com/Query-farm/vgi-rpc-rust',
+    ghSlug: 'Query-farm/vgi-rpc-rust',
+    docs: 'https://docs.rs/vgi-rpc',
+    package: 'https://crates.io/crates/vgi-rpc',
+    packageLabel: 'cargo add vgi-rpc',
+    logo: '/logos/rust.svg',
+  },
+  {
+    name: 'Java',
+    status: 'Feature Parity',
+    statusColor: 'text-farm-green-field',
+    description: 'Java 21+ clients and servers with typed interface proxies, every RPC pattern, raw socket and HTTP transports, negotiated shared memory on JDK 22+, authentication, tracing, and S3/GCS external storage.',
+    repo: 'https://github.com/Query-farm/vgi-rpc-java',
+    ghSlug: 'Query-farm/vgi-rpc-java',
+    docs: 'https://javadoc.io/doc/farm.query/vgirpc',
+    package: 'https://central.sonatype.com/artifact/farm.query/vgirpc',
+    packageLabel: 'implementation("farm.query:vgirpc:0.23.0")',
+    logo: '/logos/java.svg',
+  },
+  {
     name: 'C++',
-    status: 'In Development',
-    statusColor: 'text-farm-gold',
-    description: 'C++20 server framework with pipe/subprocess transport. All RPC patterns (unary, producer, exchange), introspection, error propagation, client logging, and stream headers. Conformance-tested against the Python reference.',
+    status: 'Feature Parity',
+    statusColor: 'text-farm-green-field',
+    description: 'Native C++20 server and client APIs with unary, producer, and exchange RPCs over pipes, subprocesses, Unix sockets, TCP, and HTTP. Includes shared memory, compression, authentication, sticky sessions, and external storage, conformance-tested against the Python reference.',
     repo: 'https://github.com/Query-farm/vgi-rpc-cpp',
     ghSlug: 'Query-farm/vgi-rpc-cpp',
     docs: 'https://vgi-rpc-cpp.query.farm',
@@ -70,7 +94,7 @@ const languages = [
           transition-colors">
           <div class="flex items-start justify-between">
             <div class="flex items-center gap-3">
-              <img src={lang.logo} alt={`${lang.name} logo`} class="w-8 h-8" />
+              <img src={lang.logo} alt={`${lang.name} logo`} class:list={['w-8 h-8', lang.name === 'Rust' && 'dark:invert']} />
               <div>
                 <h3 class="text-lg font-bold text-farm-green-deep dark:text-farm-cream">
                   {lang.name}

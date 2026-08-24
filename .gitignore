@@ -5,6 +5,11 @@ dist/
 
 # dependencies
 node_modules/
+.benchmark-cache/
+.benchmark-results/
+benchmarks/driver/target/
+__pycache__/
+.playwright-mcp/
 
 # logs
 npm-debug.log*

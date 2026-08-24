@@ -1,0 +1,37 @@
+---
+import iconSet from '@iconify-json/simple-icons/icons.json';
+
+interface Props {
+  language: string;
+  class?: string;
+}
+
+const { language, class: className = '' } = Astro.props;
+const iconKeys: Record<string, string> = {
+  python: 'python',
+  typescript: 'typescript',
+  go: 'go',
+  rust: 'rust',
+  java: 'openjdk',
+  cpp: 'cplusplus',
+};
+const languageNames: Record<string, string> = {
+  python: 'Python',
+  typescript: 'TypeScript',
+  go: 'Go',
+  rust: 'Rust',
+  java: 'Java',
+  cpp: 'C++',
+};
+const icon = iconSet.icons[iconKeys[language] as keyof typeof iconSet.icons];
+---
+
+{icon && (
+  <svg
+    viewBox={`0 0 ${iconSet.width ?? 24} ${iconSet.height ?? 24}`}
+    class={className}
+    role="img"
+    aria-label={`${languageNames[language] ?? language} logo`}
+    set:html={icon.body}
+  />
+)}

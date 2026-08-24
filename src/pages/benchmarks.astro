@@ -1,76 +1,119 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import BenchmarkVisuals from '../components/BenchmarkVisuals.astro';
+import benchmarkData from '../data/benchmarks.json';
 
-const serializationBenchmarks = [
-  { type: 'Primitive (single float64)', serialize: '0.8 μs', deserialize: '0.6 μs' },
-  { type: 'String parameter', serialize: '1.2 μs', deserialize: '0.9 μs' },
-  { type: 'List[float]  (100 elements)', serialize: '3.5 μs', deserialize: '2.8 μs' },
-  { type: 'Dict[str, int]  (50 keys)', serialize: '8.2 μs', deserialize: '6.1 μs' },
-  { type: 'Nested dataclass', serialize: '12 μs', deserialize: '9.5 μs' },
-  { type: 'Complex (dataclass + lists + enums)', serialize: '18 μs', deserialize: '14 μs' },
-  { type: '1K-row batch (3 columns)', serialize: '25 μs', deserialize: '12 μs' },
-  { type: '100K-row batch (3 columns)', serialize: '1.8 ms', deserialize: '0.9 ms' },
-];
+type BenchmarkResult = {
+  layer: 'controlled' | 'native';
+  client: string;
+  server: string;
+  transport: string;
+  workload: string;
+  concurrency?: number;
+  status: 'complete' | 'unsupported' | 'failed' | 'noisy';
+  error?: string;
+  mean_ns?: number;
+  p50_ns?: number;
+  p95_ns?: number;
+  p99_ns?: number;
+  operations_per_second?: number;
+  payload_bytes_per_second?: number;
+  cpu_utilization_percent?: number;
+  round_cv?: number;
+};
 
-const unaryBenchmarks = [
-  { transport: 'Pipe (in-process)', p50: '5.2 μs', p99: '8.1 μs', throughput: '~190K calls/s' },
-  { transport: 'Shared Memory (100 MB)', p50: '5.8 μs', p99: '9.2 μs', throughput: '~170K calls/s' },
-  { transport: 'Unix Socket', p50: '33 μs', p99: '52 μs', throughput: '~30K calls/s' },
-  { transport: 'Subprocess', p50: '52 μs', p99: '85 μs', throughput: '~19K calls/s' },
-  { transport: 'HTTP (in-process WSGI)', p50: '520 μs', p99: '820 μs', throughput: '~1.9K calls/s' },
-];
+const results = benchmarkData.results as BenchmarkResult[];
+const controlled = results.filter(result => result.layer === 'controlled');
+const measured = controlled.filter(result => result.status === 'complete' || result.status === 'noisy');
+const failures = controlled.filter(result => result.status === 'failed');
+const transports = [...new Set(controlled.map(result => result.transport))];
+const workloads = [...new Set(controlled.map(result => result.workload))];
+const concurrencies = [...new Set(controlled.map(result => result.concurrency ?? 1))].sort((a, b) => a - b);
+const implementations = new Map(benchmarkData.implementations.map(item => [item.id, item]));
+const filterButtonClass = 'rounded-full border border-farm-cream-dark bg-white px-3 py-1.5 text-xs font-medium text-farm-text-muted transition-colors hover:border-farm-green-field hover:text-farm-green-deep aria-pressed:border-farm-green-field aria-pressed:bg-farm-green-deep aria-pressed:text-white disabled:cursor-not-allowed disabled:opacity-40 dark:border-farm-dark-border dark:bg-farm-dark-card dark:text-farm-text-light-muted dark:hover:text-farm-green-field dark:aria-pressed:bg-farm-green-field dark:aria-pressed:text-farm-dark';
 
-const streamingBenchmarks = [
-  { pattern: 'Producer (pipe, 1K-row batches)', throughput: '48,000 batches/s', latency: '21 μs/batch' },
-  { pattern: 'Producer (subprocess)', throughput: '12,000 batches/s', latency: '83 μs/batch' },
-  { pattern: 'Exchange (pipe)', throughput: '32,000 round-trips/s', latency: '31 μs/round-trip' },
-  { pattern: 'Exchange (subprocess)', throughput: '8,500 round-trips/s', latency: '118 μs/round-trip' },
-  { pattern: 'SHM Producer (100 MB segment)', throughput: '29 GB/s', latency: '~3.4 μs/batch' },
-];
+const transportNames: Record<string, string> = {
+  stdio: 'Subprocess / stdio', unix: 'Unix socket', tcp: 'TCP loopback',
+  http_identity: 'HTTP identity', http_zstd: 'HTTP zstd', stdio_shm: 'Stdio + shared memory',
+};
+const workloadNames: Record<string, string> = {
+  void_noop: 'Void no-op', add_floats: 'Add two float64 values', echo_string_11b: 'Echo 11-byte string',
+  echo_binary_1024: 'Echo 1 KiB binary', echo_binary_65536: 'Echo 64 KiB binary',
+  echo_binary_1048576: 'Echo 1 MiB binary', echo_binary_16777216: 'Echo 16 MiB binary',
+  add_floats_load: 'Add float64 values under load',
+  echo_binary_1048576_load: 'Echo 1 MiB binary under load',
+};
 
-const crossLanguage = [
-  { scenario: 'Python client → Go server (subprocess)', unary: '~120 μs', producer: '~15K batches/s' },
-  { scenario: 'Python client → TypeScript server (subprocess)', unary: '~140 μs', producer: '~12K batches/s' },
-  { scenario: 'Python client → Python server (subprocess)', unary: '~52 μs', producer: '~12K batches/s' },
-];
+function latency(value?: number): string {
+  if (value === undefined) return '—';
+  if (value < 1_000) return `${value.toFixed(0)} ns`;
+  if (value < 1_000_000) return `${(value / 1_000).toFixed(value < 10_000 ? 2 : 1)} μs`;
+  return `${(value / 1_000_000).toFixed(2)} ms`;
+}
+function rate(value?: number): string {
+  return value === undefined ? '—' : `${new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 2 }).format(value)}/s`;
+}
+function bytes(value?: number): string {
+  if (!value) return '—';
+  const gib = value / (1024 ** 3);
+  return gib >= 1 ? `${gib.toFixed(2)} GiB/s` : `${(value / (1024 ** 2)).toFixed(1)} MiB/s`;
+}
 ---
 
 <BaseLayout
   title="Benchmarks — vgi-rpc"
-  description="vgi-rpc performance benchmarks: serialization, unary latency, streaming throughput, shared memory, and cross-language comparison."
+  description="Reproducible cross-language vgi-rpc benchmarks across subprocess, Unix, TCP, HTTP, and shared-memory transports."
   currentPage="/benchmarks"
 >
-  <article class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-    <h1 class="text-4xl font-bold text-farm-green-deep dark:text-farm-cream">
-      Benchmarks
-    </h1>
-    <p class="mt-2 text-farm-text-muted dark:text-farm-text-light-muted">
-      Performance measurements on Apple M-series, Python 3.13, PyArrow 19.x.
-    </p>
+  <article class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+      <div>
+        <h1 class="text-4xl font-bold text-farm-green-deep dark:text-farm-cream">Benchmarks</h1>
+        <p class="mt-3 max-w-3xl text-farm-text-muted dark:text-farm-text-light-muted">
+          One release-built Rust client measures every server on the same machine and workloads,
+          separating server and transport costs from language-specific client overhead.
+        </p>
+      </div>
+      <div class="flex gap-3 text-sm">
+        <a href="/benchmarks/latest.json" class="text-farm-gold hover:text-farm-gold-light">Download JSON</a>
+        {benchmarkData.status === 'published' && <a href="/benchmarks/latest.csv" class="text-farm-gold hover:text-farm-gold-light">Download CSV</a>}
+      </div>
+    </div>
 
-    <!-- Serialization -->
+    {benchmarkData.status !== 'published' ? (
+      <section class="mt-10 rounded-xl border border-farm-gold/40 bg-farm-gold/5 p-6">
+        <p class="text-xs font-bold uppercase tracking-wider text-farm-gold">Awaiting verified release run</p>
+        <h2 class="mt-2 text-xl font-bold text-farm-green-deep dark:text-farm-cream">Stale figures have been retired</h2>
+        <p class="mt-2 max-w-3xl text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+          The previous numbers primarily measured the Python implementation and in-process shortcuts.
+          They will remain hidden until the latest pinned releases complete the controlled transport matrix on the canonical host.
+        </p>
+      </section>
+    ) : (
+      <p class="mt-6 text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+        Latest run: <time datetime={benchmarkData.generated_at ?? undefined}>{benchmarkData.generated_at}</time>
+        {' · '}{benchmarkData.host.chip}, {benchmarkData.host.cores} cores, {benchmarkData.host.memory_gb} GB
+      </p>
+    )}
+
     <section class="mt-12">
-      <h2 class="text-2xl font-bold text-farm-green-deep dark:text-farm-cream border-b border-farm-cream-dark dark:border-farm-dark-border pb-2">
-        Serialization Performance
-      </h2>
-      <p class="mt-3 text-sm text-farm-text-muted dark:text-farm-text-light-muted">
-        Time to serialize/deserialize a single RPC request or response payload via Arrow IPC.
+      <h2 class="text-2xl font-bold text-farm-green-deep dark:text-farm-cream">Release inputs</h2>
+      <p class="mt-2 text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+        Every run is bound to the full commit ID behind the latest published release tag.
       </p>
       <div class="mt-4 overflow-x-auto rounded-xl border border-farm-cream-dark dark:border-farm-dark-border">
         <table class="w-full text-sm">
-          <thead>
-            <tr class="bg-farm-cream-dark dark:bg-farm-dark-card">
-              <th class="px-4 py-3 text-left font-semibold text-farm-text dark:text-farm-text-light">Payload Type</th>
-              <th class="px-4 py-3 text-right font-semibold text-farm-text dark:text-farm-text-light">Serialize</th>
-              <th class="px-4 py-3 text-right font-semibold text-farm-text dark:text-farm-text-light">Deserialize</th>
-            </tr>
-          </thead>
+          <thead class="bg-farm-cream-dark dark:bg-farm-dark-card"><tr>
+            <th class="px-4 py-3 text-left">Implementation</th><th class="px-4 py-3 text-left">Release</th>
+            <th class="px-4 py-3 text-left">Commit</th><th class="px-4 py-3 text-left">Status</th>
+          </tr></thead>
           <tbody class="divide-y divide-farm-cream-dark dark:divide-farm-dark-border">
-            {serializationBenchmarks.map(b => (
+            {benchmarkData.implementations.map(item => (
               <tr class="bg-white dark:bg-farm-dark">
-                <td class="px-4 py-2 text-farm-text dark:text-farm-text-light">{b.type}</td>
-                <td class="px-4 py-2 text-right font-mono text-farm-gold">{b.serialize}</td>
-                <td class="px-4 py-2 text-right font-mono text-farm-gold">{b.deserialize}</td>
+                <td class="px-4 py-3 font-semibold text-farm-text dark:text-farm-text-light">{item.name}</td>
+                <td class="px-4 py-3 font-mono text-farm-gold">{item.release}</td>
+                <td class="px-4 py-3 font-mono text-xs text-farm-text-muted dark:text-farm-text-light-muted">{item.sha.slice(0, 12)}</td>
+                <td class="px-4 py-3 text-farm-text-muted dark:text-farm-text-light-muted">{item.release_status === 'published' ? 'Published release' : 'Latest main snapshot'}</td>
               </tr>
             ))}
           </tbody>
@@ -78,128 +121,153 @@ const crossLanguage = [
       </div>
     </section>
 
-    <!-- Unary Latency -->
+    {measured.length > 0 && <BenchmarkVisuals />}
+
+    {failures.length > 0 && (
+      <section class="mt-12 rounded-xl border border-amber-500/40 bg-amber-500/5 p-6">
+        <p class="text-xs font-bold uppercase tracking-wider text-amber-700 dark:text-amber-400">Measured compatibility gaps</p>
+        <h2 class="mt-2 text-xl font-bold text-farm-green-deep dark:text-farm-cream">{failures.length} scenarios did not complete</h2>
+        <p class="mt-2 text-sm text-farm-text-muted dark:text-farm-text-light-muted">Failures are part of the reproducible matrix and are published instead of being omitted or converted into performance numbers.</p>
+        <ul class="mt-4 space-y-2 text-sm">
+          {failures.map(result => <li><span class="font-semibold text-farm-text dark:text-farm-text-light">{implementations.get(result.server)?.name ?? result.server}</span>{' · '}{transportNames[result.transport] ?? result.transport}{' · '}{workloadNames[result.workload] ?? result.workload}<span class="block font-mono text-xs text-farm-text-muted dark:text-farm-text-light-muted">{result.error ?? 'Worker failed'}</span></li>)}
+        </ul>
+      </section>
+    )}
+
+    {measured.length > 0 && (
+      <section class="mt-12" data-benchmark-table>
+        <div>
+          <div>
+            <h2 class="text-2xl font-bold text-farm-green-deep dark:text-farm-cream">Detailed results</h2>
+            <p class="mt-2 text-sm text-farm-text-muted dark:text-farm-text-light-muted">Rust client → release server. Choose a workload, transport, and available client count to inspect percentiles, CPU, and quality.</p>
+          </div>
+          <div class="mt-5">
+            <p class="text-xs font-bold uppercase tracking-wider text-farm-text-muted dark:text-farm-text-light-muted">Workload</p>
+            <div class="mt-2 flex flex-wrap gap-2" role="group" aria-label="Benchmark workload">
+              {workloads.map(workload => <button type="button" data-workload-option={workload} aria-pressed="false" class={filterButtonClass}>{workloadNames[workload] ?? workload}</button>)}
+            </div>
+          </div>
+          <div class="mt-4">
+            <p class="text-xs font-bold uppercase tracking-wider text-farm-text-muted dark:text-farm-text-light-muted">Transport</p>
+            <div class="mt-2 flex flex-wrap gap-2" role="group" aria-label="Benchmark transport">
+              {transports.map(transport => <button type="button" data-transport-option={transport} aria-pressed="false" class={filterButtonClass}>{transportNames[transport] ?? transport}</button>)}
+            </div>
+          </div>
+          <div class="mt-4">
+            <p class="text-xs font-bold uppercase tracking-wider text-farm-text-muted dark:text-farm-text-light-muted">Clients</p>
+            <div class="mt-2 flex flex-wrap gap-2" role="group" aria-label="Concurrent benchmark clients">
+              {concurrencies.map(concurrency => <button type="button" data-concurrency-option={concurrency} aria-pressed="false" class={filterButtonClass}>{concurrency}</button>)}
+            </div>
+            <p class="mt-2 text-[11px] text-farm-text-muted dark:text-farm-text-light-muted">Single-call workloads have one client; load workloads expose 1, 2, 4, 8, and 16.</p>
+          </div>
+        </div>
+        <div class="mt-5 overflow-x-auto rounded-xl border border-farm-cream-dark dark:border-farm-dark-border">
+          <table class="w-full text-sm">
+            <thead class="bg-farm-cream-dark dark:bg-farm-dark-card"><tr>
+              <th class="px-4 py-3 text-left">Server</th><th class="px-4 py-3 text-right">Clients</th><th class="px-4 py-3 text-right">Mean</th><th class="px-4 py-3 text-right">P50</th>
+              <th class="px-4 py-3 text-right">P95</th><th class="px-4 py-3 text-right">P99</th>
+              <th class="px-4 py-3 text-right">Calls</th><th class="px-4 py-3 text-right">Payload</th><th class="px-4 py-3 text-right">Host CPU</th><th class="px-4 py-3 text-right">Quality</th>
+            </tr></thead>
+            <tbody class="divide-y divide-farm-cream-dark dark:divide-farm-dark-border">
+              {controlled.map(result => (
+                <tr class="hidden bg-white dark:bg-farm-dark" data-row data-workload={result.workload} data-transport={result.transport} data-concurrency={result.concurrency ?? 1}>
+                  <td class="px-4 py-3 font-semibold text-farm-text dark:text-farm-text-light">{implementations.get(result.server)?.name ?? result.server}</td>
+                  <td class="px-4 py-3 text-right font-mono">{result.concurrency ?? 1}</td>
+                  <td class="px-4 py-3 text-right font-mono text-farm-gold">{latency(result.mean_ns)}</td>
+                  <td class="px-4 py-3 text-right font-mono">{latency(result.p50_ns)}</td>
+                  <td class="px-4 py-3 text-right font-mono">{latency(result.p95_ns)}</td><td class="px-4 py-3 text-right font-mono">{latency(result.p99_ns)}</td>
+                  <td class="px-4 py-3 text-right font-mono">{rate(result.operations_per_second)}</td><td class="px-4 py-3 text-right font-mono">{bytes(result.payload_bytes_per_second)}</td>
+                  <td class="px-4 py-3 text-right font-mono">{result.cpu_utilization_percent === undefined ? '—' : `${result.cpu_utilization_percent.toFixed(1)}%`}</td>
+                  <td class:list={['px-4 py-3 text-right', result.status === 'noisy' ? 'text-amber-600' : 'text-farm-text-muted dark:text-farm-text-light-muted']}>
+                    {result.status === 'noisy' ? `Noisy (${((result.round_cv ?? 0) * 100).toFixed(1)}% CV)` : result.status}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    )}
+
     <section class="mt-12">
-      <h2 class="text-2xl font-bold text-farm-green-deep dark:text-farm-cream border-b border-farm-cream-dark dark:border-farm-dark-border pb-2">
-        End-to-End Unary Latency
-      </h2>
-      <p class="mt-3 text-sm text-farm-text-muted dark:text-farm-text-light-muted">
-        Full round-trip time for a simple unary call (add(a=1.0, b=2.0) → float) including serialization, transport, dispatch, and deserialization.
-      </p>
-      <div class="mt-4 overflow-x-auto rounded-xl border border-farm-cream-dark dark:border-farm-dark-border">
-        <table class="w-full text-sm">
-          <thead>
-            <tr class="bg-farm-cream-dark dark:bg-farm-dark-card">
-              <th class="px-4 py-3 text-left font-semibold text-farm-text dark:text-farm-text-light">Transport</th>
-              <th class="px-4 py-3 text-right font-semibold text-farm-text dark:text-farm-text-light">P50</th>
-              <th class="px-4 py-3 text-right font-semibold text-farm-text dark:text-farm-text-light">P99</th>
-              <th class="px-4 py-3 text-right font-semibold text-farm-text dark:text-farm-text-light">Throughput</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-farm-cream-dark dark:divide-farm-dark-border">
-            {unaryBenchmarks.map(b => (
-              <tr class="bg-white dark:bg-farm-dark">
-                <td class="px-4 py-2 font-medium text-farm-text dark:text-farm-text-light">{b.transport}</td>
-                <td class="px-4 py-2 text-right font-mono text-farm-gold">{b.p50}</td>
-                <td class="px-4 py-2 text-right font-mono text-farm-text-muted dark:text-farm-text-light-muted">{b.p99}</td>
-                <td class="px-4 py-2 text-right font-mono text-farm-text-muted dark:text-farm-text-light-muted">{b.throughput}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <div class="rounded-xl border border-farm-cream-dark p-6 dark:border-farm-dark-border">
+        <h2 class="text-xl font-bold text-farm-green-deep dark:text-farm-cream">What is excluded</h2>
+        <p class="mt-2 text-sm text-farm-text-muted dark:text-farm-text-light-muted">In-process pipes, WSGI test clients, debug builds, unpinned working trees, first-call startup time, and results from shared CI hosts are not used for cross-language claims.</p>
       </div>
     </section>
 
-    <!-- Streaming -->
-    <section class="mt-12">
-      <h2 class="text-2xl font-bold text-farm-green-deep dark:text-farm-cream border-b border-farm-cream-dark dark:border-farm-dark-border pb-2">
-        Streaming Throughput
-      </h2>
-      <p class="mt-3 text-sm text-farm-text-muted dark:text-farm-text-light-muted">
-        Sustained streaming performance for producer and exchange patterns.
-      </p>
-      <div class="mt-4 overflow-x-auto rounded-xl border border-farm-cream-dark dark:border-farm-dark-border">
-        <table class="w-full text-sm">
-          <thead>
-            <tr class="bg-farm-cream-dark dark:bg-farm-dark-card">
-              <th class="px-4 py-3 text-left font-semibold text-farm-text dark:text-farm-text-light">Pattern</th>
-              <th class="px-4 py-3 text-right font-semibold text-farm-text dark:text-farm-text-light">Throughput</th>
-              <th class="px-4 py-3 text-right font-semibold text-farm-text dark:text-farm-text-light">Latency</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-farm-cream-dark dark:divide-farm-dark-border">
-            {streamingBenchmarks.map(b => (
-              <tr class:list={[
-                'bg-white dark:bg-farm-dark',
-                b.pattern.includes('SHM') && 'bg-farm-green-deep/5 dark:bg-farm-green-field/10'
-              ]}>
-                <td class="px-4 py-2 text-farm-text dark:text-farm-text-light">{b.pattern}</td>
-                <td class="px-4 py-2 text-right font-mono text-farm-gold font-bold">{b.throughput}</td>
-                <td class="px-4 py-2 text-right font-mono text-farm-text-muted dark:text-farm-text-light-muted">{b.latency}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <p class="mt-3 text-sm text-farm-text-muted dark:text-farm-text-light-muted">
-        The shared memory transport achieves <strong class="text-farm-gold">29 GB/s</strong> by writing
-        Arrow IPC batches directly to a memory-mapped segment and sending only a pointer (offset + length) over the pipe.
-      </p>
-    </section>
-
-    <!-- Cross-language -->
-    <section class="mt-12">
-      <h2 class="text-2xl font-bold text-farm-green-deep dark:text-farm-cream border-b border-farm-cream-dark dark:border-farm-dark-border pb-2">
-        Cross-Language Performance
-      </h2>
-      <p class="mt-3 text-sm text-farm-text-muted dark:text-farm-text-light-muted">
-        Performance of cross-language RPC via subprocess transport. The Python client communicates with
-        servers implemented in different languages.
-      </p>
-      <div class="mt-4 overflow-x-auto rounded-xl border border-farm-cream-dark dark:border-farm-dark-border">
-        <table class="w-full text-sm">
-          <thead>
-            <tr class="bg-farm-cream-dark dark:bg-farm-dark-card">
-              <th class="px-4 py-3 text-left font-semibold text-farm-text dark:text-farm-text-light">Scenario</th>
-              <th class="px-4 py-3 text-right font-semibold text-farm-text dark:text-farm-text-light">Unary Latency</th>
-              <th class="px-4 py-3 text-right font-semibold text-farm-text dark:text-farm-text-light">Producer</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-farm-cream-dark dark:divide-farm-dark-border">
-            {crossLanguage.map(b => (
-              <tr class="bg-white dark:bg-farm-dark">
-                <td class="px-4 py-2 text-farm-text dark:text-farm-text-light">{b.scenario}</td>
-                <td class="px-4 py-2 text-right font-mono text-farm-gold">{b.unary}</td>
-                <td class="px-4 py-2 text-right font-mono text-farm-text-muted dark:text-farm-text-light-muted">{b.producer}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <!-- Methodology -->
-    <section class="mt-12 p-6 rounded-xl bg-farm-cream-dark/50 dark:bg-farm-dark-card/50
-      border border-farm-cream-dark dark:border-farm-dark-border">
-      <h2 class="text-lg font-bold text-farm-green-deep dark:text-farm-cream">
-        Methodology
-      </h2>
-      <ul class="mt-3 space-y-2 text-sm text-farm-text-muted dark:text-farm-text-light-muted">
-        <li>All benchmarks run with 1,000+ warm-up iterations followed by 10,000 measured iterations</li>
-        <li>P50 and P99 are wall-clock time including all framework overhead</li>
-        <li>Schema generation is cached (first-call overhead ~50 μs, subsequent calls use cached schema)</li>
-        <li>Shared memory benchmarks use pre-allocated 100 MB segments</li>
-        <li>HTTP benchmarks use in-process WSGI (no network round-trip)</li>
-        <li>Cross-language benchmarks include subprocess spawn overhead in first-call measurements (amortized in throughput numbers)</li>
+    <section class="mt-12 rounded-xl border border-farm-cream-dark bg-farm-cream-dark/30 p-6 dark:border-farm-dark-border dark:bg-farm-dark-card/50">
+      <h2 class="text-xl font-bold text-farm-green-deep dark:text-farm-cream">Methodology</h2>
+      <ul class="mt-4 grid gap-3 text-sm text-farm-text-muted dark:text-farm-text-light-muted md:grid-cols-2">
+        <li>Release builds from isolated checkouts pinned to the commits above.</li><li>Python HTTP uses pinned Granian 2.8.1 with 16 worker processes and one blocking thread each.</li><li>Java runs on Amazon Corretto 25.0.4 so negotiated shared memory uses the JDK 22+ FFM implementation.</li><li>Latency uses a one-second warm-up and five one-second rounds; unstable cases receive two extension rounds.</li>
+        <li>Mean, P50, P95, and P99 use all steady-state wall-clock samples—not the fastest sample.</li><li>Scaling uses fresh servers at 1, 2, 4, 8, and 16 clients, with three two-second rounds and two extensions when noisy.</li>
+        <li>Scaling records call rate, latency, and whole-host CPU utilization for unary and 1 MiB echo workloads.</li><li>Binary echo throughput counts application payload in both request and response directions.</li>
+        <li>Publishable runs require an approved ARM64 host and a pre-run load average below 2.0.</li><li>Quick and partial matrices are rejected; failed scenarios remain visible with their captured errors.</li>
       </ul>
+      <p class="mt-4 text-xs text-farm-text-muted dark:text-farm-text-light-muted">Results compare only within one snapshot, host, workload, and benchmark layer. They are not universal hardware-independent rankings.</p>
     </section>
 
-    <!-- Back link -->
-    <div class="mt-16 pt-8 border-t border-farm-cream-dark dark:border-farm-dark-border text-center">
-      <a href="/"
-        class="text-sm font-medium text-farm-gold hover:text-farm-gold-light transition-colors">
-        &larr; Back to home
-      </a>
+    <div class="mt-16 border-t border-farm-cream-dark pt-8 text-center dark:border-farm-dark-border">
+      <a href="/" class="text-sm font-medium text-farm-gold hover:text-farm-gold-light">&larr; Back to home</a>
     </div>
   </article>
+
+  <script>
+    document.querySelectorAll<HTMLElement>('[data-benchmark-table]').forEach(table => {
+      const workloadButtons = [...table.querySelectorAll<HTMLButtonElement>('[data-workload-option]')];
+      const transportButtons = [...table.querySelectorAll<HTMLButtonElement>('[data-transport-option]')];
+      const concurrencyButtons = [...table.querySelectorAll<HTMLButtonElement>('[data-concurrency-option]')];
+      const rows = [...table.querySelectorAll<HTMLElement>('[data-row]')];
+      let workload = workloadButtons[0]?.dataset.workloadOption;
+      let transport = transportButtons[0]?.dataset.transportOption;
+      let concurrency = concurrencyButtons[0]?.dataset.concurrencyOption;
+      const update = () => rows.forEach(row => {
+        row.classList.toggle('hidden', row.dataset.workload !== workload || row.dataset.transport !== transport || row.dataset.concurrency !== concurrency);
+      });
+      const activateValue = (buttons: HTMLButtonElement[], attribute: 'workloadOption' | 'transportOption' | 'concurrencyOption', value?: string) => buttons.forEach(button => {
+        button.setAttribute('aria-pressed', String(button.dataset[attribute] === value));
+      });
+      const syncOptions = () => {
+        const availableTransports = new Set(rows.filter(row => row.dataset.workload === workload).map(row => row.dataset.transport));
+        transportButtons.forEach(button => {
+          const available = availableTransports.has(button.dataset.transportOption);
+          button.hidden = !available;
+          button.disabled = !available;
+        });
+        if (!availableTransports.has(transport)) {
+          transport = transportButtons.find(button => !button.disabled)?.dataset.transportOption;
+        }
+
+        const availableConcurrencies = new Set(rows
+          .filter(row => row.dataset.workload === workload && row.dataset.transport === transport)
+          .map(row => row.dataset.concurrency));
+        concurrencyButtons.forEach(button => {
+          const available = availableConcurrencies.has(button.dataset.concurrencyOption);
+          button.hidden = !available;
+          button.disabled = !available;
+        });
+        if (!availableConcurrencies.has(concurrency)) {
+          concurrency = concurrencyButtons.find(button => !button.disabled)?.dataset.concurrencyOption;
+        }
+
+        activateValue(workloadButtons, 'workloadOption', workload);
+        activateValue(transportButtons, 'transportOption', transport);
+        activateValue(concurrencyButtons, 'concurrencyOption', concurrency);
+        update();
+      };
+      workloadButtons.forEach(button => button.addEventListener('click', () => {
+        workload = button.dataset.workloadOption;
+        syncOptions();
+      }));
+      transportButtons.forEach(button => button.addEventListener('click', () => {
+        transport = button.dataset.transportOption;
+        syncOptions();
+      }));
+      concurrencyButtons.forEach(button => button.addEventListener('click', () => {
+        concurrency = button.dataset.concurrencyOption;
+        syncOptions();
+      }));
+      syncOptions();
+    });
+  </script>
 </BaseLayout>

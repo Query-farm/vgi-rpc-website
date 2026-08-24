@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-03-22T00:00:00Z",
+  "generated_at": "2026-08-24T00:00:00Z",
   "languages": {
     "python": {
-      "version": "0.6.0",
+      "version": "0.43.0",
       "repo": "https://github.com/Query-farm/vgi-rpc-python",
       "docs": "https://vgi-rpc-python.query.farm",
       "package_url": "https://pypi.org/project/vgi-rpc/",
@@ -10,6 +10,7 @@
         "pipe": true,
         "subprocess": true,
         "unix_socket": true,
+        "tcp": true,
         "shared_memory": true,
         "http": true,
         "worker_pool": true
@@ -36,14 +37,15 @@
       }
     },
     "typescript": {
-      "version": "0.6.0",
+      "version": "0.22.0",
       "repo": "https://github.com/Query-farm/vgi-rpc-typescript",
       "docs": "https://vgi-rpc-typescript.query.farm",
       "package_url": "https://www.npmjs.com/package/@query-farm/vgi-rpc",
       "transports": {
         "pipe": true,
         "subprocess": true,
-        "unix_socket": false,
+        "unix_socket": true,
+        "tcp": true,
         "shared_memory": false,
         "http": true,
         "worker_pool": false
@@ -70,15 +72,16 @@
       }
     },
     "go": {
-      "version": "0.6.0",
+      "version": "0.26.0",
       "repo": "https://github.com/Query-farm/vgi-rpc-go",
       "docs": "https://vgi-rpc-go.query.farm",
-      "package_url": "https://pkg.go.dev/github.com/Query-farm/vgi-rpc/vgirpc",
+      "package_url": "https://pkg.go.dev/github.com/Query-farm/vgi-rpc-go/vgirpc",
       "transports": {
         "pipe": true,
         "subprocess": true,
         "unix_socket": true,
-        "shared_memory": false,
+        "tcp": true,
+        "shared_memory": true,
         "http": true,
         "worker_pool": false
       },
@@ -103,17 +106,18 @@
         "opentelemetry": true
       }
     },
-    "cpp": {
-      "version": "0.1.0",
-      "repo": "https://github.com/Query-farm/vgi-rpc-cpp",
-      "docs": "https://vgi-rpc-cpp.query.farm",
-      "package_url": null,
+    "rust": {
+      "version": "0.23.0",
+      "repo": "https://github.com/Query-farm/vgi-rpc-rust",
+      "docs": "https://docs.rs/vgi-rpc",
+      "package_url": "https://crates.io/crates/vgi-rpc",
       "transports": {
         "pipe": true,
         "subprocess": true,
-        "unix_socket": false,
-        "shared_memory": false,
-        "http": false,
+        "unix_socket": true,
+        "tcp": true,
+        "shared_memory": true,
+        "http": true,
         "worker_pool": false
       },
       "patterns": {
@@ -132,8 +136,78 @@
         "optional_types": true,
         "dataclass_types": true,
         "annotated_types": true,
-        "authentication": false,
-        "external_storage": false,
+        "authentication": true,
+        "external_storage": true,
+        "opentelemetry": true
+      }
+    },
+    "java": {
+      "version": "0.23.0",
+      "repo": "https://github.com/Query-farm/vgi-rpc-java",
+      "docs": "https://javadoc.io/doc/farm.query/vgirpc",
+      "package_url": "https://central.sonatype.com/artifact/farm.query/vgirpc",
+      "transports": {
+        "pipe": true,
+        "subprocess": true,
+        "unix_socket": true,
+        "tcp": true,
+        "shared_memory": true,
+        "http": true,
+        "worker_pool": false
+      },
+      "patterns": {
+        "unary": true,
+        "unary_void": true,
+        "producer": true,
+        "producer_with_header": true,
+        "exchange": true,
+        "exchange_with_header": true
+      },
+      "features": {
+        "introspection": true,
+        "client_logging": true,
+        "error_propagation": true,
+        "complex_types": true,
+        "optional_types": true,
+        "dataclass_types": true,
+        "annotated_types": true,
+        "authentication": true,
+        "external_storage": true,
+        "opentelemetry": true
+      }
+    },
+    "cpp": {
+      "version": "0.1.3",
+      "repo": "https://github.com/Query-farm/vgi-rpc-cpp",
+      "docs": "https://vgi-rpc-cpp.query.farm",
+      "package_url": null,
+      "transports": {
+        "pipe": true,
+        "subprocess": true,
+        "unix_socket": true,
+        "tcp": true,
+        "shared_memory": true,
+        "http": true,
+        "worker_pool": false
+      },
+      "patterns": {
+        "unary": true,
+        "unary_void": true,
+        "producer": true,
+        "producer_with_header": true,
+        "exchange": true,
+        "exchange_with_header": true
+      },
+      "features": {
+        "introspection": true,
+        "client_logging": true,
+        "error_propagation": true,
+        "complex_types": true,
+        "optional_types": true,
+        "dataclass_types": true,
+        "annotated_types": true,
+        "authentication": true,
+        "external_storage": true,
         "opentelemetry": false
       }
     }

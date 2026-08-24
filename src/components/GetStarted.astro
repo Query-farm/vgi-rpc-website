@@ -15,8 +15,20 @@ const installs = [
   {
     lang: 'Go',
     logo: '/logos/go.svg',
-    command: 'go get github.com/Query-farm/vgi-rpc-go',
+    command: 'go get github.com/Query-farm/vgi-rpc-go/vgirpc',
     docs: 'https://vgi-rpc-go.query.farm',
+  },
+  {
+    lang: 'Rust',
+    logo: '/logos/rust.svg',
+    command: 'cargo add vgi-rpc',
+    docs: 'https://docs.rs/vgi-rpc',
+  },
+  {
+    lang: 'Java',
+    logo: '/logos/java.svg',
+    command: 'implementation("farm.query:vgirpc:0.23.0")',
+    docs: 'https://javadoc.io/doc/farm.query/vgirpc',
   },
   {
     lang: 'C++',
@@ -44,7 +56,7 @@ const installs = [
           border border-farm-cream-dark dark:border-farm-dark-border">
           <div class="flex items-center justify-between mb-2">
             <span class="flex items-center gap-2 font-semibold text-farm-green-deep dark:text-farm-cream">
-              <img src={install.logo} alt={`${install.lang} logo`} class="w-5 h-5" />
+              <img src={install.logo} alt={`${install.lang} logo`} class:list={['w-5 h-5', install.lang === 'Rust' && 'dark:invert']} />
               {install.lang}
             </span>
             <a href={install.docs} target="_blank" rel="noopener noreferrer"
