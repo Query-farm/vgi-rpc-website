@@ -20,12 +20,45 @@ const sections = [
   { id: 'token-introspection', label: '16. Token Introspection' },
   { id: 'sticky-sessions', label: '17. Sticky Sessions' },
 ];
+
+const description = 'Normative vgi-rpc wire protocol version 1 specification covering Arrow IPC framing, metadata, streaming, HTTP, shared memory, external storage, introspection, and sessions.';
+const jsonLd = {
+  '@type': 'TechArticle',
+  '@id': 'https://vgi-rpc.query.farm/wire-protocol/#specification',
+  headline: 'vgi-rpc Wire Protocol Specification',
+  description,
+  url: 'https://vgi-rpc.query.farm/wire-protocol/',
+  image: 'https://vgi-rpc.query.farm/social-card.png',
+  dateModified: '2026-08-24',
+  version: '1',
+  author: {
+    '@type': 'Organization',
+    name: 'Query.Farm',
+    url: 'https://query.farm',
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'Query.Farm',
+    url: 'https://query.farm',
+    logo: {
+      '@type': 'ImageObject',
+      url: 'https://vgi-rpc.query.farm/logo-hero.png',
+    },
+  },
+  about: ['Remote procedure calls', 'Apache Arrow IPC', 'Shared memory', 'HTTP streaming'],
+};
 ---
 
 <BaseLayout
   title="Wire Protocol — vgi-rpc"
-  description="vgi-rpc wire protocol specification: Arrow IPC framing, metadata keys, request/response format, streaming, HTTP transport, shared memory, and more."
+  description={description}
   currentPage="/wire-protocol"
+  ogType="article"
+  ogImageAlt="vgi-rpc wire protocol version 1 specification for Arrow IPC transports"
+  dateModified="2026-08-24T00:00:00-04:00"
+  articleSection="Technical specification"
+  articleTags={['RPC protocol', 'Apache Arrow IPC', 'Shared memory', 'HTTP streaming']}
+  jsonLd={jsonLd}
 >
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
     <div class="lg:grid lg:grid-cols-[220px_1fr] lg:gap-10">

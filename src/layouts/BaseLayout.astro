@@ -7,18 +7,32 @@ interface Props {
   title: string;
   description?: string;
   currentPage?: string;
+  ogType?: 'website' | 'article';
+  ogImage?: string;
+  ogImageAlt?: string;
+  dateModified?: string;
+  articleSection?: string;
+  articleTags?: string[];
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
 }
 
 const {
   title,
   description = 'Transport-agnostic RPC built on Apache Arrow IPC serialization. Multi-language: Python, TypeScript, Go, Rust, Java, C++.',
   currentPage = '/',
+  ogType = 'website',
+  ogImage = '/social-card.png',
+  ogImageAlt = 'vgi-rpc: transport-agnostic RPC framework built on Apache Arrow',
+  dateModified,
+  articleSection,
+  articleTags = [],
+  jsonLd,
 } = Astro.props;
 
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site).href;
 const brandLogo = new URL('/logo-hero.png', Astro.site).href;
-const socialImage = new URL('/social-card.png', Astro.site).href;
-const socialImageAlt = 'vgi-rpc: transport-agnostic RPC framework built on Apache Arrow';
+const socialImage = new URL(ogImage, Astro.site).href;
+const pageJsonLd = jsonLd === undefined ? [] : (Array.isArray(jsonLd) ? jsonLd : [jsonLd]);
 ---
 
 <!doctype html>
@@ -27,28 +41,36 @@ const socialImageAlt = 'vgi-rpc: transport-agnostic RPC framework built on Apach
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
+    <meta name="title" content={title} />
     <meta name="generator" content={Astro.generator} />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
 
     <link rel="canonical" href={canonicalUrl} />
 
     <!-- Open Graph -->
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
     <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:locale" content="en_US" />
     <meta property="og:image" content={socialImage} />
+    <meta property="og:image:secure_url" content={socialImage} />
     <meta property="og:image:type" content="image/png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content={socialImageAlt} />
+    <meta property="og:image:alt" content={ogImageAlt} />
     <meta property="og:site_name" content="vgi-rpc" />
+    {ogType === 'article' && dateModified && <meta property="article:modified_time" content={dateModified} />}
+    {ogType === 'article' && articleSection && <meta property="article:section" content={articleSection} />}
+    {ogType === 'article' && articleTags.map(tag => <meta property="article:tag" content={tag} />)}
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
+    <meta name="twitter:url" content={canonicalUrl} />
     <meta name="twitter:image" content={socialImage} />
-    <meta name="twitter:image:alt" content={socialImageAlt} />
+    <meta name="twitter:image:alt" content={ogImageAlt} />
 
     <!-- JSON-LD Structured Data -->
     <script type="application/ld+json" set:html={JSON.stringify({
@@ -69,7 +91,8 @@ const socialImageAlt = 'vgi-rpc: transport-agnostic RPC framework built on Apach
             "@type": "Organization",
             "name": "Query.Farm"
           }
-        }
+        },
+        ...pageJsonLd
       ]
     })} />
 

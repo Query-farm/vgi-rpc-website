@@ -58,12 +58,46 @@ function bytes(value?: number): string {
   const gib = value / (1024 ** 3);
   return gib >= 1 ? `${gib.toFixed(2)} GiB/s` : `${(value / (1024 ** 2)).toFixed(1)} MiB/s`;
 }
+
+const description = 'Reproducible cross-language vgi-rpc benchmarks across subprocess, Unix, TCP, HTTP, and shared-memory transports.';
+const jsonLd = {
+  '@type': 'Dataset',
+  '@id': 'https://vgi-rpc.query.farm/benchmarks/#dataset',
+  name: 'vgi-rpc cross-language benchmark results',
+  description,
+  url: 'https://vgi-rpc.query.farm/benchmarks/',
+  dateModified: benchmarkData.generated_at,
+  creator: {
+    '@type': 'Organization',
+    name: 'Query.Farm',
+    url: 'https://query.farm',
+  },
+  measurementTechnique: 'Controlled same-host RPC latency, throughput, payload-bandwidth, and client-scaling workloads',
+  distribution: [
+    {
+      '@type': 'DataDownload',
+      encodingFormat: 'application/json',
+      contentUrl: 'https://vgi-rpc.query.farm/benchmarks/latest.json',
+    },
+    {
+      '@type': 'DataDownload',
+      encodingFormat: 'text/csv',
+      contentUrl: 'https://vgi-rpc.query.farm/benchmarks/latest.csv',
+    },
+  ],
+};
 ---
 
 <BaseLayout
   title="Benchmarks — vgi-rpc"
-  description="Reproducible cross-language vgi-rpc benchmarks across subprocess, Unix, TCP, HTTP, and shared-memory transports."
+  description={description}
   currentPage="/benchmarks"
+  ogType="article"
+  ogImageAlt="vgi-rpc cross-language latency, scaling, and transport benchmark results"
+  dateModified={benchmarkData.generated_at}
+  articleSection="Benchmarks"
+  articleTags={['RPC benchmarks', 'Apache Arrow', 'Transport performance', 'Cross-language performance']}
+  jsonLd={jsonLd}
 >
   <article class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
     <div class="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">

@@ -5,10 +5,11 @@
   "scripts": {
     "diagrams": "mkdir -p public/diagrams && d2 --layout=elk src/diagrams/transport-overview.d2 public/diagrams/transport-overview.svg",
     "dev": "npm run diagrams && astro dev",
-    "build": "npm run diagrams && astro build",
+    "build": "npm run diagrams && astro build && node scripts/test-social-metadata.mjs",
     "preview": "astro preview",
     "astro": "astro",
     "test": "python3 -m unittest discover -s benchmarks/tests -p 'test_*.py' && python3 benchmarks/run.py validate",
+    "test:metadata": "node scripts/test-social-metadata.mjs",
     "benchmark:verify": "python3 benchmarks/run.py verify",
     "benchmark:quick": "python3 benchmarks/run.py quick",
     "benchmark:full": "python3 benchmarks/run.py full",

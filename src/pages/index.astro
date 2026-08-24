@@ -10,9 +10,33 @@ import LanguageCards from '../components/LanguageCards.astro';
 import CapabilityMatrix from '../components/CapabilityMatrix.astro';
 import SimpleExample from '../components/SimpleExample.astro';
 import GetStarted from '../components/GetStarted.astro';
+
+const description = 'Transport-agnostic RPC built on Apache Arrow IPC serialization, with interoperable implementations for Python, TypeScript, Go, Rust, Java, and C++.';
+const jsonLd = {
+  '@type': 'SoftwareApplication',
+  '@id': 'https://vgi-rpc.query.farm/#software',
+  name: 'vgi-rpc',
+  url: 'https://vgi-rpc.query.farm/',
+  image: 'https://vgi-rpc.query.farm/social-card.png',
+  description,
+  applicationCategory: 'DeveloperApplication',
+  operatingSystem: 'Linux, macOS, Windows',
+  softwareVersion: 'Wire protocol 1',
+  featureList: [
+    'Apache Arrow IPC serialization',
+    'Subprocess, Unix socket, TCP, HTTP, and shared-memory transports',
+    'Python, TypeScript, Go, Rust, Java, and C++ implementations',
+    'Unary, producer-stream, and bidirectional exchange calls',
+  ],
+};
 ---
 
-<BaseLayout title="vgi-rpc — Transport-agnostic RPC on Apache Arrow">
+<BaseLayout
+  title="vgi-rpc — Transport-agnostic RPC on Apache Arrow"
+  description={description}
+  ogImageAlt="vgi-rpc connects six programming languages over Apache Arrow and multiple RPC transports"
+  jsonLd={jsonLd}
+>
   <Hero />
   <WhatIs />
   <SimpleExample />
