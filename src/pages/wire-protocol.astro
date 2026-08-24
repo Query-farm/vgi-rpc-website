@@ -85,7 +85,7 @@ const sections = [
             </h2>
             <div class="mt-4 space-y-3 text-farm-text dark:text-farm-text-light leading-relaxed">
               <p>
-                <span class="font-mono">vgi-rpc</span> is an RPC framework where <strong>serialization</strong> uses the
+                <span class="font-mono">vgi-rpc</span> is an RPC framework where <strong>serialization</strong> uses the{' '}
                 <a href="https://arrow.apache.org/docs/format/Columnar.html#ipc-streaming-format" target="_blank" rel="noopener noreferrer"
                   class="text-farm-gold hover:text-farm-gold-light transition-colors">Apache Arrow IPC Streaming Format</a>.
               </p>
@@ -311,12 +311,12 @@ const sections = [
             </h2>
             <div class="mt-4 space-y-3 text-farm-text dark:text-farm-text-light leading-relaxed">
               <p>
-                A log batch is a zero-row batch on the response stream's schema with
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.log_level</code> and
+                A log batch is a zero-row batch on the response stream's schema with{' '}
+                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.log_level</code> and{' '}
                 <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.log_message</code> in custom metadata.
               </p>
               <p>
-                When <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">log_level</code> is
+                When <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">log_level</code> is{' '}
                 <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">"EXCEPTION"</code>,
                 the client MUST raise/throw an error with:
               </p>
@@ -357,7 +357,7 @@ const sections = [
   Client    →   tick               Client    →   [EOS]
   Server    ←   [EOS] (finish)     Server    ←   [EOS]`}</pre>
               <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
-                A client may cancel either stream by sending a zero-row input batch carrying
+                A client may cancel either stream by sending a zero-row input batch carrying{' '}
                 <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.cancel = "1"</code>.
                 Cancellation is best-effort, invokes the stream state's cancellation hook, and closes cleanly rather than producing an exception batch.
               </p>
@@ -398,18 +398,18 @@ const sections = [
               </div>
 
               <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
-                Capability headers are stamped on every response and can be discovered cheaply at
+                Capability headers are stamped on every response and can be discovered cheaply at{' '}
                 <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">OPTIONS {'{prefix}'}/health</code>.
                 They advertise request/response limits, response codecs, externalization, upload URLs, proxy proof, sticky sessions, and token introspection.
               </p>
               <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
                 Request and response compression are negotiated independently with standard or VGI-specific content-encoding headers.
-                HTTP streams split state into two XChaCha20-Poly1305-sealed tokens: immutable call state minted once by
+                HTTP streams split state into two XChaCha20-Poly1305-sealed tokens: immutable call state minted once by{' '}
                 <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">/init</code>, and a per-turn cursor.
                 Clients must echo both on every continuation, exchange, and cancellation request.
               </p>
               <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
-                Authentication runs before method dispatch. Rejections use HTTP 401 with a machine-readable
+                Authentication runs before method dispatch. Rejections use HTTP 401 with a machine-readable{' '}
                 <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">VGI-Auth-Reason</code>;
                 workers may additionally require a per-request HMAC proxy proof while preserving the caller's end-user credential.
               </p>
@@ -436,7 +436,7 @@ const sections = [
   20      4       padding: uint32 = 0
   24      N*16    allocations: (offset, length) pairs`}</pre>
               <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
-                SHM pointer batches are zero-row batches with <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.shm_offset</code>
+                SHM pointer batches are zero-row batches with <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.shm_offset</code>{' '}
                 and <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.shm_length</code> in custom metadata.
                 The allocator uses first-fit with implicit coalescing. Maximum 4,094 allocations.
               </p>
@@ -451,7 +451,7 @@ const sections = [
             <div class="mt-4 space-y-3 text-farm-text dark:text-farm-text-light leading-relaxed">
               <p>
                 When batches exceed a configurable size threshold, they can be externalized to remote storage
-                (HTTPS, S3, or GCS) and replaced with pointer batches containing a
+                (HTTPS, S3, or GCS) and replaced with pointer batches containing a{' '}
                 <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.location</code> URL.
               </p>
               <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
@@ -469,13 +469,13 @@ const sections = [
             </h2>
             <div class="mt-4 space-y-3 text-farm-text dark:text-farm-text-light leading-relaxed">
               <p>
-                Every request batch MUST carry
+                Every request batch MUST carry{' '}
                 <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.request_version = "1"</code>.
               </p>
               <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
-                Application protocols may independently declare
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.protocol_version</code>
-                as canonical semver. Major and minor must match exactly; patch differences interoperate. The diagnostic
+                Application protocols may independently declare{' '}
+                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.protocol_version</code>{' '}
+                as canonical semver. Major and minor must match exactly; patch differences interoperate. The diagnostic{' '}
                 <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">__describe__</code> call is exempt.
               </p>
               <div class="overflow-x-auto rounded-lg border border-farm-cream-dark dark:border-farm-dark-border">
@@ -506,24 +506,24 @@ const sections = [
             </h2>
             <div class="mt-4 space-y-3 text-farm-text dark:text-farm-text-light leading-relaxed">
               <p>
-                The <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">__describe__</code>
+                The <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">__describe__</code>{' '}
                 method is a built-in synthetic unary method that returns machine-readable metadata
                 about all methods exposed by the server.
               </p>
               <p>
-                Describe format v4 returns one row per method with language-neutral columns including
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">name</code>,
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">method_type</code>,
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">has_return</code>,
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">params_schema_ipc</code>,
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">result_schema_ipc</code>,
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">header_schema_ipc</code>, and
+                Describe format v4 returns one row per method with language-neutral columns including{' '}
+                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">name</code>,{' '}
+                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">method_type</code>,{' '}
+                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">has_return</code>,{' '}
+                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">params_schema_ipc</code>,{' '}
+                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">result_schema_ipc</code>,{' '}
+                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">header_schema_ipc</code>, and{' '}
                 <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">is_exchange</code>.
                 Python-specific doc, type-name, and default-value fields from earlier formats are no longer on the wire.
               </p>
               <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
                 See the <a href="https://vgi-rpc-python.query.farm" target="_blank" rel="noopener noreferrer"
-                  class="text-farm-gold hover:text-farm-gold-light transition-colors">full documentation</a>
+                  class="text-farm-gold hover:text-farm-gold-light transition-colors">full documentation</a>{' '}
                 for complete introspection response schema details.
               </p>
             </div>
@@ -537,13 +537,13 @@ const sections = [
             <div class="mt-4 space-y-3 text-farm-text dark:text-farm-text-light leading-relaxed">
               <p>
                 Before using the shared-memory side channel over pipe, subprocess, or Unix socket transports,
-                peers negotiate once through the synthetic unary method
+                peers negotiate once through the synthetic unary method{' '}
                 <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">__transport_options__</code>.
               </p>
               <pre class="p-4 rounded-lg bg-white dark:bg-farm-dark-card border border-farm-cream-dark dark:border-farm-dark-border overflow-x-auto text-sm font-mono text-farm-text-muted dark:text-farm-text-light-muted">{`shm_enabled = client["vgi_rpc.transport.shm"] == "true"
               && server["vgi_rpc.transport.shm"] == "true"`}</pre>
               <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
-                Capabilities use the open-ended <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.transport.*</code>
+                Capabilities use the open-ended <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.transport.*</code>{' '}
                 namespace. Unknown keys are ignored. If the method is absent, errors, or reports false, the client stays inline.
               </p>
             </div>
@@ -556,7 +556,7 @@ const sections = [
             </h2>
             <div class="mt-4 space-y-3 text-farm-text dark:text-farm-text-light leading-relaxed">
               <p>
-                The optional HTTP-only <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">POST {'{prefix}'}/__introspect_token__</code>
+                The optional HTTP-only <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">POST {'{prefix}'}/__introspect_token__</code>{' '}
                 endpoint lets an authorized reverse proxy resolve an opaque bearer credential to a principal. It is JSON, not Arrow IPC,
                 and is absent or definitively refusing unless explicitly enabled.
               </p>
