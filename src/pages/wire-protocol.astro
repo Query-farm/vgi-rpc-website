@@ -60,7 +60,14 @@ const sections = [
           Wire Protocol Specification
         </h1>
         <p class="mt-2 text-farm-text-muted dark:text-farm-text-light-muted">
-          Wire version 1 &mdash; Normative &mdash; Reflects vgi-rpc 0.42.1
+          Wire version 1 &mdash; Normative &mdash; Reconciled with vgi-rpc Python 0.43.0
+        </p>
+        <p class="mt-2 text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+          This is the web edition of the cross-language contract. The{' '}
+          <a href="https://github.com/Query-farm/vgi-rpc-python/blob/main/docs/WIRE_PROTOCOL.md"
+            target="_blank" rel="noopener noreferrer"
+            class="text-farm-gold hover:text-farm-gold-light transition-colors">canonical Markdown specification</a>{' '}
+          contains additional implementor rationale and worked examples.
         </p>
 
         <!-- Mobile TOC (visible on small screens only) -->
@@ -187,8 +194,34 @@ const sections = [
                     <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.error_kind</td><td class="px-4 py-2">UTF-8 token</td><td class="px-4 py-2">Stable, machine-readable error category. Optional and open-ended.</td></tr>
                     <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.server_id</td><td class="px-4 py-2">12-char hex</td><td class="px-4 py-2">Server instance identifier.</td></tr>
                     <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.request_id</td><td class="px-4 py-2">UTF-8 string</td><td class="px-4 py-2">Echoed request correlation ID.</td></tr>
+                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.transport.shm</td><td class="px-4 py-2">"true" / "false"</td><td class="px-4 py-2">Server SHM capability on the transport-options response.</td></tr>
                     <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.stream_state#b64</td><td class="px-4 py-2">Base64 AEAD token</td><td class="px-4 py-2">Per-turn HTTP stream cursor.</td></tr>
                     <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.call_state#b64</td><td class="px-4 py-2">Base64 AEAD token</td><td class="px-4 py-2">Immutable HTTP call state, minted once at stream initialization.</td></tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h3 class="text-lg font-semibold text-farm-text dark:text-farm-text-light mt-6">Pointer and introspection metadata</h3>
+              <div class="overflow-x-auto rounded-lg border border-farm-cream-dark dark:border-farm-dark-border">
+                <table class="w-full text-sm">
+                  <thead>
+                    <tr class="bg-farm-cream-dark dark:bg-farm-dark-card">
+                      <th class="px-4 py-2 text-left font-semibold">Key</th>
+                      <th class="px-4 py-2 text-left font-semibold">Context</th>
+                      <th class="px-4 py-2 text-left font-semibold">Description</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-farm-cream-dark dark:divide-farm-dark-border text-farm-text-muted dark:text-farm-text-light-muted">
+                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.shm_offset</td><td class="px-4 py-2">SHM pointer</td><td class="px-4 py-2">Absolute segment offset as a decimal integer.</td></tr>
+                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.shm_length</td><td class="px-4 py-2">SHM pointer</td><td class="px-4 py-2">Serialized batch length in bytes.</td></tr>
+                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.shm_source</td><td class="px-4 py-2">Resolved SHM batch</td><td class="px-4 py-2">Source segment name retained for diagnostics.</td></tr>
+                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.location</td><td class="px-4 py-2">External pointer</td><td class="px-4 py-2">URL containing an Arrow IPC stream.</td></tr>
+                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.location.sha256</td><td class="px-4 py-2">External pointer</td><td class="px-4 py-2">SHA-256 of the uncompressed payload; verification is mandatory when present.</td></tr>
+                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.location.fetch_ms</td><td class="px-4 py-2">Resolved external batch</td><td class="px-4 py-2">Fetch duration in milliseconds.</td></tr>
+                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.location.source</td><td class="px-4 py-2">Resolved external batch</td><td class="px-4 py-2">Original source URL retained for diagnostics.</td></tr>
+                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.protocol_name</td><td class="px-4 py-2">Describe response</td><td class="px-4 py-2">Protocol class or interface name.</td></tr>
+                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.describe_version</td><td class="px-4 py-2">Describe response</td><td class="px-4 py-2">Introspection format version; currently "4".</td></tr>
+                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.protocol_hash</td><td class="px-4 py-2">Describe response</td><td class="px-4 py-2">Runtime-local SHA-256 drift fingerprint; not a cross-language equality contract.</td></tr>
                   </tbody>
                 </table>
               </div>
@@ -229,6 +262,11 @@ const sections = [
                   </tbody>
                 </table>
               </div>
+              <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+                A dataclass used directly as an RPC parameter or return value is a binary column containing a complete
+                Arrow IPC stream. Inside that dataclass stream, nested dataclasses are Arrow structs. Container conversion
+                is recursive, including lists, maps, sets, enums, nullable values, and nested dataclasses.
+              </p>
             </div>
           </section>
 
@@ -254,7 +292,8 @@ const sections = [
   EOS marker`}</pre>
               <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
                 For methods with no parameters, the schema has zero fields and the batch
-                has one row with zero columns.
+                should represent one row with zero columns. Because Arrow cannot encode a row count for a zero-field
+                batch consistently across runtimes, servers accept any row count for that special case.
               </p>
             </div>
           </section>
@@ -325,6 +364,7 @@ const sections = [
                 <li><strong>error_message</strong>: from <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.log_message</code></li>
                 <li><strong>remote_traceback</strong>: from <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">log_extra.traceback</code></li>
                 <li><strong>request_id</strong>: from <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.request_id</code></li>
+                <li><strong>error_kind</strong>: stable open-ended classification; well-known values are <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">method_not_implemented</code>, <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">protocol_version_mismatch</code>, <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">session_lost</code>, and <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">server_draining</code></li>
               </ul>
             </div>
           </section>
@@ -357,9 +397,25 @@ const sections = [
   Client    →   tick               Client    →   [EOS]
   Server    ←   [EOS] (finish)     Server    ←   [EOS]`}</pre>
               <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+                Lockstep is normative: one client tick or input batch drives exactly one server{' '}
+                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">process()</code>{' '}
+                invocation and produces zero or more log batches followed by at most one data batch. A producer that
+                finishes closes its output stream instead of returning a data batch for the final tick.
+              </p>
+              <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+                HTTP follows the same rule. The <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">/init</code>{' '}
+                request drives the first producer turn; every continuation request carries one tick and drives exactly
+                one additional turn. The request batch's custom metadata is delivered to that turn after stripping{' '}
+                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.stream_state#b64</code>,{' '}
+                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.call_state#b64</code>, and{' '}
+                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.cancel</code>.
+              </p>
+              <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
                 A client may cancel either stream by sending a zero-row input batch carrying{' '}
                 <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.cancel = "1"</code>.
-                Cancellation is best-effort, invokes the stream state's cancellation hook, and closes cleanly rather than producing an exception batch.
+                Presence of the key is the signal; readers must not depend on its value. Cancellation is best-effort,
+                does not invoke <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">process()</code>,{' '}
+                invokes the stream state's cancellation hook, and closes cleanly rather than producing an exception batch.
               </p>
             </div>
           </section>
@@ -400,13 +456,59 @@ const sections = [
               <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
                 Capability headers are stamped on every response and can be discovered cheaply at{' '}
                 <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">OPTIONS {'{prefix}'}/health</code>.
-                They advertise request/response limits, response codecs, externalization, upload URLs, proxy proof, sticky sessions, and token introspection.
+                There is no <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">__capabilities__</code>{' '}
+                endpoint. An absent capability means unsupported or unconfigured, except that a missing{' '}
+                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">VGI-Supported-Encodings</code>{' '}
+                indicates a legacy server for which clients assume zstd; a present but empty value explicitly disables compression.
+              </p>
+
+              <div class="overflow-x-auto rounded-lg border border-farm-cream-dark dark:border-farm-dark-border">
+                <table class="w-full text-sm">
+                  <thead>
+                    <tr class="bg-farm-cream-dark dark:bg-farm-dark-card">
+                      <th class="px-4 py-2 text-left font-semibold">Capability header</th>
+                      <th class="px-4 py-2 text-left font-semibold">Meaning</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-farm-cream-dark dark:divide-farm-dark-border text-farm-text-muted dark:text-farm-text-light-muted">
+                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">VGI-Max-Request-Bytes</td><td class="px-4 py-2">Maximum accepted inline request body.</td></tr>
+                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">VGI-Max-Response-Bytes</td><td class="px-4 py-2">Per-turn response sizing budget; soft for producer streams and hard elsewhere.</td></tr>
+                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">VGI-Max-Externalized-Response-Bytes</td><td class="px-4 py-2">Hard cap on bytes uploaded externally during one response.</td></tr>
+                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">VGI-Externalization-Enabled</td><td class="px-4 py-2">Whether responses may contain external pointer batches.</td></tr>
+                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">VGI-Supported-Encodings</td><td class="px-4 py-2">Comma-separated response codecs.</td></tr>
+                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">VGI-Upload-URL-Support / VGI-Max-Upload-Bytes</td><td class="px-4 py-2">Upload-URL availability and optional size cap.</td></tr>
+                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">VGI-Proxy-Proof-Required</td><td class="px-4 py-2">Whether the worker requires a per-request proxy proof.</td></tr>
+                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">VGI-Sticky-Enabled / VGI-Sticky-Default-TTL / VGI-Sticky-Echo-Headers</td><td class="px-4 py-2">Sticky-session availability and routing contract.</td></tr>
+                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">VGI-Token-Introspection</td><td class="px-4 py-2">Whether token introspection is enabled.</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+                Request and response compression are independent. Requests use{' '}
+                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">Content-Encoding</code>;{' '}
+                responses are negotiated with <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">Accept-Encoding</code>{' '}
+                or the higher-priority <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">X-VGI-Accept-Encoding</code>.
+                The corresponding response header is <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">Content-Encoding</code>{' '}
+                or <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">X-VGI-Content-Encoding</code>.
+                Codec tokens are zstd, gzip, and identity; the portable conformance worker supports zstd and gzip in both directions.
               </p>
               <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
-                Request and response compression are negotiated independently with standard or VGI-specific content-encoding headers.
                 HTTP streams split state into two XChaCha20-Poly1305-sealed tokens: immutable call state minted once by{' '}
                 <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">/init</code>, and a per-turn cursor.
-                Clients must echo both on every continuation, exchange, and cancellation request.
+                Clients must echo both on every continuation, exchange, and cancellation request. Servers authenticate the cursor first,
+                use its authenticated call ID for cache lookup, then open the call token on a cache miss and require matching call IDs.
+              </p>
+              <pre class="p-4 rounded-lg bg-white dark:bg-farm-dark-card border border-farm-cream-dark dark:border-farm-dark-border overflow-x-auto text-sm font-mono text-farm-text-muted dark:text-farm-text-light-muted">{`Base64-decoded state token envelope:
+  byte 0       independent token version (cursor: 5, call: 1)
+  bytes 1..24  random XChaCha20-Poly1305 nonce
+  bytes 25..   authenticated ciphertext + 16-byte tag
+
+Sealed payload:
+  byte 0       self-describing codec (0x00 raw, 0x01 zstd in reference)
+  bytes 1..    framed state, compressed before encryption when smaller`}</pre>
+              <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+                Token AAD binds the caller's domain and principal. Implementations must bound decompression, reject unknown codecs,
+                and return the same HTTP 400 classification for invalid, expired, mismatched, or unresolvable tokens.
               </p>
               <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
                 Authentication runs before method dispatch. Rejections use HTTP 401 with a machine-readable{' '}
@@ -427,6 +529,13 @@ const sections = [
                 The pipe carries control messages; large batches are written to shared memory and replaced with
                 pointer batches.
               </p>
+              <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+                SHM is an optional side channel for pipe, subprocess, and Unix-socket transports. Before advertising a
+                segment or writing a pointer, both peers must negotiate{' '}
+                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.transport.shm = "true"</code>{' '}
+                through <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">__transport_options__</code>.
+                Missing support or any negotiation error requires an inline fallback.
+              </p>
               <pre class="p-4 rounded-lg bg-white dark:bg-farm-dark-card border border-farm-cream-dark dark:border-farm-dark-border overflow-x-auto text-sm font-mono text-farm-text-muted dark:text-farm-text-light-muted">{`Segment header (64 KiB):
   Offset  Size    Field
   0       4       magic: "VGIS" (0x56 0x47 0x49 0x53)
@@ -438,7 +547,10 @@ const sections = [
               <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
                 SHM pointer batches are zero-row batches with <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.shm_offset</code>{' '}
                 and <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.shm_length</code> in custom metadata.
-                The allocator uses first-fit with implicit coalescing. Maximum 4,094 allocations.
+                The allocator uses first-fit with implicit coalescing. Maximum 4,094 allocations. A resolver validates bounds,
+                opens the IPC stream from the referenced region, retains the mapped owner for the Arrow buffers' lifetime,
+                annotates the resolved batch with <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.shm_source</code>,
+                and releases the allocation when it is safe to reuse.
               </p>
             </div>
           </section>
@@ -487,12 +599,12 @@ const sections = [
                     </tr>
                   </thead>
                   <tbody class="divide-y divide-farm-cream-dark dark:divide-farm-dark-border text-farm-text-muted dark:text-farm-text-light-muted">
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2">Bad IPC, missing metadata, version/state-token mismatch</td><td class="px-4 py-2 font-mono">400</td></tr>
+                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2">Bad IPC, missing metadata, request/protocol-version mismatch, invalid state token, request decompression failure</td><td class="px-4 py-2 font-mono">400</td></tr>
                     <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2">Authentication failure</td><td class="px-4 py-2 font-mono">401</td></tr>
                     <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2">Unknown method</td><td class="px-4 py-2 font-mono">404</td></tr>
                     <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2">Request exceeds advertised limit</td><td class="px-4 py-2 font-mono">413</td></tr>
                     <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2">Wrong Content-Type or unsupported Content-Encoding</td><td class="px-4 py-2 font-mono">415</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2">Method implementation error</td><td class="px-4 py-2 font-mono">200 + X-VGI-RPC-Error</td></tr>
+                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2">Method implementation error or hard response-cap overshoot</td><td class="px-4 py-2 font-mono">200 + X-VGI-RPC-Error</td></tr>
                   </tbody>
                 </table>
               </div>
@@ -521,6 +633,27 @@ const sections = [
                 <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">is_exchange</code>.
                 Python-specific doc, type-name, and default-value fields from earlier formats are no longer on the wire.
               </p>
+              <div class="overflow-x-auto rounded-lg border border-farm-cream-dark dark:border-farm-dark-border">
+                <table class="w-full text-sm">
+                  <thead>
+                    <tr class="bg-farm-cream-dark dark:bg-farm-dark-card">
+                      <th class="px-4 py-2 text-left font-semibold">Column</th>
+                      <th class="px-4 py-2 text-left font-semibold">Arrow type</th>
+                      <th class="px-4 py-2 text-left font-semibold">Nullable</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-farm-cream-dark dark:divide-farm-dark-border text-farm-text-muted dark:text-farm-text-light-muted">
+                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">name</td><td class="px-4 py-2 font-mono text-xs">utf8</td><td class="px-4 py-2">No</td></tr>
+                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">method_type</td><td class="px-4 py-2 font-mono text-xs">utf8</td><td class="px-4 py-2">No</td></tr>
+                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">has_return</td><td class="px-4 py-2 font-mono text-xs">bool</td><td class="px-4 py-2">No</td></tr>
+                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">params_schema_ipc</td><td class="px-4 py-2 font-mono text-xs">binary</td><td class="px-4 py-2">No</td></tr>
+                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">result_schema_ipc</td><td class="px-4 py-2 font-mono text-xs">binary</td><td class="px-4 py-2">No</td></tr>
+                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">has_header</td><td class="px-4 py-2 font-mono text-xs">bool</td><td class="px-4 py-2">No</td></tr>
+                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">header_schema_ipc</td><td class="px-4 py-2 font-mono text-xs">binary</td><td class="px-4 py-2">Yes</td></tr>
+                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">is_exchange</td><td class="px-4 py-2 font-mono text-xs">bool</td><td class="px-4 py-2">Yes</td></tr>
+                  </tbody>
+                </table>
+              </div>
               <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
                 See the <a href="https://vgi-rpc-python.query.farm" target="_blank" rel="noopener noreferrer"
                   class="text-farm-gold hover:text-farm-gold-light transition-colors">full documentation</a>{' '}

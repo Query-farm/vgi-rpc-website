@@ -16,7 +16,9 @@ const {
 } = Astro.props;
 
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site).href;
-const ogImage = new URL('/logo-hero.png', Astro.site).href;
+const brandLogo = new URL('/logo-hero.png', Astro.site).href;
+const socialImage = new URL('/social-card.png', Astro.site).href;
+const socialImageAlt = 'vgi-rpc: transport-agnostic RPC framework built on Apache Arrow';
 ---
 
 <!doctype html>
@@ -34,16 +36,19 @@ const ogImage = new URL('/logo-hero.png', Astro.site).href;
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonicalUrl} />
-    <meta property="og:image" content={ogImage} />
-    <meta property="og:image:width" content="600" />
-    <meta property="og:image:height" content="437" />
+    <meta property="og:image" content={socialImage} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={socialImageAlt} />
     <meta property="og:site_name" content="vgi-rpc" />
 
     <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image" content={socialImage} />
+    <meta name="twitter:image:alt" content={socialImageAlt} />
 
     <!-- JSON-LD Structured Data -->
     <script type="application/ld+json" set:html={JSON.stringify({
@@ -53,7 +58,7 @@ const ogImage = new URL('/logo-hero.png', Astro.site).href;
           "@type": "Organization",
           "name": "Query.Farm",
           "url": "https://query.farm",
-          "logo": ogImage
+          "logo": brandLogo
         },
         {
           "@type": "WebSite",
