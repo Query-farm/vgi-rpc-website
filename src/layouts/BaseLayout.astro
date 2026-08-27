@@ -18,7 +18,7 @@ interface Props {
 
 const {
   title,
-  description = 'Transport-agnostic RPC built on Apache Arrow IPC serialization. Multi-language: Python, TypeScript, Go, Rust, Java, C++.',
+  description = 'Transport-agnostic RPC built on Apache Arrow IPC serialization. Multi-language: Python, TypeScript, Go, Rust, Java, C#, C++.',
   currentPage = '/',
   ogType = 'website',
   ogImage = '/social-card.png',
@@ -86,7 +86,7 @@ const pageJsonLd = jsonLd === undefined ? [] : (Array.isArray(jsonLd) ? jsonLd :
           "@type": "WebSite",
           "name": "vgi-rpc",
           "url": Astro.site?.href,
-          "description": "Transport-agnostic RPC built on Apache Arrow IPC serialization. Multi-language: Python, TypeScript, Go, Rust, Java, C++.",
+          "description": "Transport-agnostic RPC built on Apache Arrow IPC serialization. Multi-language: Python, TypeScript, Go, Rust, Java, C#, C++.",
           "publisher": {
             "@type": "Organization",
             "name": "Query.Farm"

@@ -1,6 +1,6 @@
 # vgi-rpc
 
-> Transport-agnostic RPC framework built on Apache Arrow IPC serialization. Multi-language (Python, TypeScript, Go, Rust, Java, C++), no code generation required.
+> Transport-agnostic RPC framework built on Apache Arrow IPC serialization. Multi-language (Python, TypeScript, Go, Rust, Java, C#, C++), no code generation required.
 
 ## Docs
 
@@ -8,6 +8,7 @@
 - [TypeScript Documentation](https://vgi-rpc-typescript.query.farm): TypeScript API reference and guides
 - [Rust API Documentation](https://docs.rs/vgi-rpc): Rust server API reference
 - [Java API Documentation](https://javadoc.io/doc/farm.query/vgirpc): Java API reference
+- [C# Documentation](https://github.com/Query-farm/vgi-rpc-csharp#readme): C# API reference and guides
 - [C++ Documentation](https://vgi-rpc-cpp.query.farm): C++ API reference and guides
 - [Wire Protocol](https://vgi-rpc.query.farm/wire-protocol): Binary framing and message format specification
 - [Benchmarks](https://vgi-rpc.query.farm/benchmarks): Performance benchmarks across transports and languages
@@ -19,6 +20,7 @@
 - [vgi-rpc-go](https://github.com/Query-farm/vgi-rpc-go): Go implementation
 - [vgi-rpc-rust](https://github.com/Query-farm/vgi-rpc-rust): Rust implementation
 - [vgi-rpc-java](https://github.com/Query-farm/vgi-rpc-java): Java implementation
+- [vgi-rpc-csharp](https://github.com/Query-farm/vgi-rpc-csharp): C# implementation
 - [vgi-rpc-cpp](https://github.com/Query-farm/vgi-rpc-cpp): C++ implementation
 
 ## Key Concepts
@@ -62,6 +64,12 @@ vgi-rpc uses Apache Arrow IPC as its serialization format, giving callers zero-c
 - **Patterns:** unary, unary void, producer (with header), exchange (with header)
 - **Features:** typed interface proxies, introspection v4, client logging, error propagation, complex/optional/annotated types, authentication, OpenTelemetry correlation, sticky sessions, S3/GCS external storage
 - **Package:** [Maven Central](https://central.sonatype.com/artifact/farm.query/vgirpc)
+
+### C# (v0.7.0)
+- **Transports:** pipe, subprocess, Unix socket, TCP, HTTP with identity or zstd content encoding, shared-memory side channel
+- **Patterns:** unary, unary void, producer (with header), exchange (with header)
+- **Features:** typed clients and servers, reflection-based POCO contracts, Arrow record batches, introspection v4, client logging, error propagation, authentication, OpenTelemetry correlation, S3/GCS external storage
+- **Package:** [NuGet](https://www.nuget.org/packages/QueryFarm.VgiRpc/)
 
 ### C++ (v0.1.3)
 - **Transports:** pipe, subprocess, Unix socket, TCP, HTTP, shared-memory side channel

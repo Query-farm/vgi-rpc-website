@@ -14,7 +14,7 @@ TRANSPORTS = ("stdio", "unix", "tcp", "http_identity", "http_zstd", "stdio_shm")
 LAYERS = ("controlled", "native")
 RESULT_STATUSES = ("complete", "unsupported", "failed", "noisy")
 DATASET_STATUSES = ("awaiting_run", "candidate", "published")
-IMPLEMENTATIONS = ("python", "typescript", "go", "rust", "java", "cpp")
+IMPLEMENTATIONS = ("python", "typescript", "go", "rust", "java", "csharp", "cpp")
 BASE_WORKLOADS = (
     "void_noop",
     "add_floats",

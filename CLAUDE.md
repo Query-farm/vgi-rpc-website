@@ -40,7 +40,7 @@ scripts/           # test-capabilities.py — CI script that probes language imp
 
 ## Data flow
 
-- `scripts/test-capabilities.py` probes language repos (Python, TypeScript, Go, Rust, Java, C++) for transport/pattern/feature support.
+- `scripts/test-capabilities.py` probes language repos (Python, TypeScript, Go, Rust, Java, C#, C++) for transport/pattern/feature support.
 - Output goes to `src/data/capabilities.json` — consumed by `CapabilityMatrix.astro`.
 - This runs weekly via GitHub Actions and auto-commits changes.
 

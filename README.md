@@ -4,8 +4,8 @@ Source for [vgi-rpc.query.farm](https://vgi-rpc.query.farm) — the marketing/do
 [`vgi-rpc`](https://github.com/Query-farm/vgi-rpc-python), Query.Farm's transport-agnostic
 Apache-Arrow-IPC RPC framework. Built with [Astro](https://astro.build) + Tailwind CSS.
 
-The site covers what `vgi-rpc` is, per-language quickstarts (Python/Go/Rust/TypeScript/C++), a
-wire-protocol deep dive, a transport comparison, and a benchmark suite comparing all five ports.
+The site covers what `vgi-rpc` is, per-language quickstarts (Python/Go/Rust/TypeScript/Java/C#/C++), a
+wire-protocol deep dive, a transport comparison, and a benchmark suite comparing all seven ports.
 
 ## Structure
 
@@ -48,9 +48,10 @@ uv run --with pillow --with numpy python scripts/regenerate_logo_assets.py
 
 ## Benchmarks
 
-The `/benchmarks` page renders a single published snapshot (`public/benchmarks/latest.json`) that
-compares all five `vgi-rpc` ports (Python, TypeScript, Go, Rust, C++) against pinned, commit-exact
-releases (`benchmarks/manifest.json`) — never against a moving `main` branch. See
+The benchmark harness covers all seven `vgi-rpc` ports (Python, TypeScript, Go, Rust, Java, C#, C++)
+using pinned, commit-exact releases (`benchmarks/manifest.json`) — never a moving `main` branch. The
+`/benchmarks` page renders the latest single-host published snapshot (`public/benchmarks/latest.json`);
+newly added ports remain marked pending until they complete that canonical run. See
 [`benchmarks/README.md`](benchmarks/README.md) for the release policy and the full
 `verify` → `full` → `combine` → `publish` pipeline; the short version:
 

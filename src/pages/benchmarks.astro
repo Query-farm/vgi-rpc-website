@@ -22,6 +22,10 @@ type BenchmarkResult = {
   round_cv?: number;
 };
 
+type BenchmarkImplementation = (typeof benchmarkData.implementations)[number] & {
+  benchmark_status?: 'awaiting_canonical_run';
+};
+
 const results = benchmarkData.results as BenchmarkResult[];
 const controlled = results.filter(result => result.layer === 'controlled');
 const measured = controlled.filter(result => result.status === 'complete' || result.status === 'noisy');
@@ -29,7 +33,9 @@ const failures = controlled.filter(result => result.status === 'failed');
 const transports = [...new Set(controlled.map(result => result.transport))];
 const workloads = [...new Set(controlled.map(result => result.workload))];
 const concurrencies = [...new Set(controlled.map(result => result.concurrency ?? 1))].sort((a, b) => a - b);
-const implementations = new Map(benchmarkData.implementations.map(item => [item.id, item]));
+const benchmarkImplementations = benchmarkData.implementations as BenchmarkImplementation[];
+const implementations = new Map(benchmarkImplementations.map(item => [item.id, item]));
+const pendingImplementations = benchmarkImplementations.filter(item => item.benchmark_status === 'awaiting_canonical_run');
 const filterButtonClass = 'rounded-full border border-farm-cream-dark bg-white px-3 py-1.5 text-xs font-medium text-farm-text-muted transition-colors hover:border-farm-green-field hover:text-farm-green-deep aria-pressed:border-farm-green-field aria-pressed:bg-farm-green-deep aria-pressed:text-white disabled:cursor-not-allowed disabled:opacity-40 dark:border-farm-dark-border dark:bg-farm-dark-card dark:text-farm-text-light-muted dark:hover:text-farm-green-field dark:aria-pressed:bg-farm-green-field dark:aria-pressed:text-farm-dark';
 
 const transportNames: Record<string, string> = {
@@ -130,6 +136,16 @@ const jsonLd = {
       </p>
     )}
 
+    {pendingImplementations.length > 0 && (
+      <section class="mt-6 rounded-xl border border-farm-gold/40 bg-farm-gold/5 p-5">
+        <p class="text-xs font-bold uppercase tracking-wider text-farm-gold">Canonical results pending</p>
+        <p class="mt-2 max-w-3xl text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+          {pendingImplementations.map(item => item.name).join(', ')} has been added to the release-pinned benchmark matrix.
+          Its performance figures will appear after a full run on the canonical c9gd.8xlarge host; the published charts below remain the prior comparable snapshot.
+        </p>
+      </section>
+    )}
+
     <section class="mt-12">
       <h2 class="text-2xl font-bold text-farm-green-deep dark:text-farm-cream">Release inputs</h2>
       <p class="mt-2 text-sm text-farm-text-muted dark:text-farm-text-light-muted">
@@ -142,12 +158,14 @@ const jsonLd = {
             <th class="px-4 py-3 text-left">Commit</th><th class="px-4 py-3 text-left">Status</th>
           </tr></thead>
           <tbody class="divide-y divide-farm-cream-dark dark:divide-farm-dark-border">
-            {benchmarkData.implementations.map(item => (
+            {benchmarkImplementations.map(item => (
               <tr class="bg-white dark:bg-farm-dark">
                 <td class="px-4 py-3 font-semibold text-farm-text dark:text-farm-text-light">{item.name}</td>
                 <td class="px-4 py-3 font-mono text-farm-gold">{item.release}</td>
                 <td class="px-4 py-3 font-mono text-xs text-farm-text-muted dark:text-farm-text-light-muted">{item.sha.slice(0, 12)}</td>
-                <td class="px-4 py-3 text-farm-text-muted dark:text-farm-text-light-muted">{item.release_status === 'published' ? 'Published release' : 'Latest main snapshot'}</td>
+                <td class="px-4 py-3 text-farm-text-muted dark:text-farm-text-light-muted">
+                  {item.benchmark_status === 'awaiting_canonical_run' ? 'Canonical benchmark pending' : item.release_status === 'published' ? 'Published release' : 'Latest main snapshot'}
+                </td>
               </tr>
             ))}
           </tbody>

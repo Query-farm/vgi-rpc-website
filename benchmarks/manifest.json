@@ -105,6 +105,34 @@
         "stdio_shm": ["{repo}/conformance-worker/build/install/conformance-worker/bin/conformance-worker"]
       }
     },
+    "csharp": {
+      "name": "C#",
+      "repository": "https://github.com/Query-farm/vgi-rpc-csharp.git",
+      "release": "v0.7.0",
+      "version": "0.7.0",
+      "sha": "8afe27f8c5ab56571d41e491e71183187cce49df",
+      "release_status": "published",
+      "build": [
+        [
+          "dotnet",
+          "publish",
+          "{repo}/conformance/QueryFarm.VgiRpc.ConformanceWorker/QueryFarm.VgiRpc.ConformanceWorker.csproj",
+          "-c",
+          "Release",
+          "--no-self-contained",
+          "-o",
+          "{artifacts}"
+        ]
+      ],
+      "commands": {
+        "stdio": ["{artifacts}/QueryFarm.VgiRpc.ConformanceWorker"],
+        "unix": ["{artifacts}/QueryFarm.VgiRpc.ConformanceWorker", "--unix", "{socket}"],
+        "tcp": ["{artifacts}/QueryFarm.VgiRpc.ConformanceWorker", "--tcp", "127.0.0.1:0"],
+        "http_identity": ["{artifacts}/QueryFarm.VgiRpc.ConformanceWorker", "--http", "--port", "0", "--max-request-bytes", "67108864", "--max-response-bytes", "67108864"],
+        "http_zstd": ["{artifacts}/QueryFarm.VgiRpc.ConformanceWorker", "--http", "--port", "0", "--max-request-bytes", "67108864", "--max-response-bytes", "67108864"],
+        "stdio_shm": ["{artifacts}/QueryFarm.VgiRpc.ConformanceWorker"]
+      }
+    },
     "cpp": {
       "name": "C++",
       "repository": "https://github.com/Query-farm/vgi-rpc-cpp.git",

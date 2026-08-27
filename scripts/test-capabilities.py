@@ -171,6 +171,39 @@ LANGUAGES: dict[str, dict[str, Any]] = {
             "opentelemetry",
         ]},
     },
+    "csharp": {
+        "repo": "https://github.com/Query-farm/vgi-rpc-csharp",
+        "docs": "https://github.com/Query-farm/vgi-rpc-csharp#readme",
+        "package_url": "https://www.nuget.org/packages/QueryFarm.VgiRpc/",
+        "build_cmd": [
+            "dotnet", "build",
+            "conformance/QueryFarm.VgiRpc.ConformanceWorker/QueryFarm.VgiRpc.ConformanceWorker.csproj",
+            "-c", "Release",
+        ],
+        "worker_cmd": [
+            "./conformance/QueryFarm.VgiRpc.ConformanceWorker/bin/Release/net10.0/QueryFarm.VgiRpc.ConformanceWorker",
+        ],
+        "version_cmd": None,
+        "known_transports": {
+            "pipe": True,
+            "subprocess": True,
+            "unix_socket": True,
+            "tcp": True,
+            "shared_memory": True,
+            "http": True,
+            "worker_pool": False,
+        },
+        "known_patterns": {pattern: True for pattern in [
+            "unary", "unary_void", "producer", "producer_with_header",
+            "exchange", "exchange_with_header",
+        ]},
+        "known_features": {feature: True for feature in [
+            "introspection", "client_logging", "error_propagation",
+            "complex_types", "optional_types", "dataclass_types",
+            "annotated_types", "authentication", "external_storage",
+            "opentelemetry",
+        ]},
+    },
     "cpp": {
         "repo": "https://github.com/Query-farm/vgi-rpc-cpp",
         "docs": "https://vgi-rpc-cpp.query.farm",
@@ -283,6 +316,12 @@ def get_version(lang_config: dict[str, Any], repo_dir: Path) -> str | None:
                     cmake_file.read_text(),
                     re.IGNORECASE | re.DOTALL,
                 )
+                if match:
+                    return match.group(1)
+
+            directory_props = repo_dir / "Directory.Build.props"
+            if directory_props.exists():
+                match = re.search(r"<Version>([^<]+)</Version>", directory_props.read_text())
                 if match:
                     return match.group(1)
         except (subprocess.TimeoutExpired, OSError):
@@ -433,14 +472,18 @@ except Exception as e:
     return patterns, features
 
 
-def test_all_capabilities(repos_dir: Path) -> dict[str, Any]:
+def test_all_capabilities(
+    repos_dir: Path,
+    selected_languages: list[str] | None = None,
+    existing: dict[str, Any] | None = None,
+) -> dict[str, Any]:
     """Test all language implementations and return capabilities dict."""
-    result: dict[str, Any] = {
-        "generated_at": datetime.now(timezone.utc).isoformat(),
-        "languages": {},
-    }
+    result: dict[str, Any] = json.loads(json.dumps(existing)) if existing else {"languages": {}}
+    result["generated_at"] = datetime.now(timezone.utc).isoformat()
 
-    for lang_name, config in LANGUAGES.items():
+    language_names = selected_languages or list(LANGUAGES)
+    for lang_name in language_names:
+        config = LANGUAGES[lang_name]
         print(f"\nTesting {lang_name}...")
         repo_dir = repos_dir / f"vgi-rpc-{lang_name}"
 
@@ -520,6 +563,12 @@ def main() -> None:
         default=Path(__file__).parent.parent / "src" / "data" / "capabilities.json",
         help="Output JSON file path",
     )
+    parser.add_argument(
+        "--language",
+        action="append",
+        choices=list(LANGUAGES),
+        help="Probe only this language and merge it into the existing output (repeatable)",
+    )
     args = parser.parse_args()
 
     if args.repos_dir:
@@ -531,7 +580,11 @@ def main() -> None:
     print(f"Repos directory: {repos_dir}")
     print(f"Output: {args.output}")
 
-    capabilities = test_all_capabilities(repos_dir)
+    existing = None
+    if args.language and args.output.exists():
+        with open(args.output, encoding="utf-8") as handle:
+            existing = json.load(handle)
+    capabilities = test_all_capabilities(repos_dir, args.language, existing)
 
     # Write output
     args.output.parent.mkdir(parents=True, exist_ok=True)

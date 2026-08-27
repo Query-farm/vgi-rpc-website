@@ -6,7 +6,7 @@ not retain or compare older benchmark releases.
 
 ## Release policy
 
-`manifest.json` pins the latest published Python, TypeScript, Go, Rust, and C++
+`manifest.json` pins the latest published Python, TypeScript, Go, Rust, Java, C#, and C++
 releases to full Git commit IDs. Never change a version without also resolving
 and updating its dereferenced commit ID.
 
@@ -53,7 +53,7 @@ ARM64 Linux `c9gd.8xlarge` EC2 runner.
 
 The controlled layer uses the released Rust client for every server. Native
 same-language results use the same dataset contract but are intentionally not
-published until all five native drivers cover the same workload definitions;
+published until every native driver covers the same workload definitions;
 partial native rankings would recreate the bias this suite removes.
 
 ## Measurement rules

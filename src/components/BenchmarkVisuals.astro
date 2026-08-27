@@ -18,7 +18,10 @@ const measured = (benchmarkData.results as Result[]).filter(result =>
   result.layer === 'controlled' && (result.status === 'complete' || result.status === 'noisy')
 );
 const implementationNames = new Map(benchmarkData.implementations.map(item => [item.id, item.name]));
-const implementationOrder = benchmarkData.implementations.map(item => item.id);
+const measuredServers = new Set(measured.map(result => result.server));
+const implementationOrder = benchmarkData.implementations
+  .map(item => item.id)
+  .filter(server => measuredServers.has(server));
 const transportOrder = ['stdio', 'stdio_shm', 'unix', 'tcp', 'http_identity', 'http_zstd'];
 const directTransportOrder = ['stdio', 'stdio_shm', 'unix', 'tcp'];
 const httpTransportOrder = ['http_identity', 'http_zstd'];

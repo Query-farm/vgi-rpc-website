@@ -94,6 +94,7 @@ def verify_local_release(implementation_id: str, implementation: dict[str, Any],
         "go": "vgi-rpc-go",
         "rust": "vgi-rpc-rust",
         "java": "vgi-rpc-java",
+        "csharp": "vgi-rpc-csharp",
         "cpp": "vgi-rpc-c++",
     }
     repo = repos_dir / directory_names[implementation_id]
@@ -246,6 +247,7 @@ def toolchain_versions() -> dict[str, str]:
         "cmake": ["cmake", "--version"],
         "cxx": [os.environ.get("CXX", "c++"), "--version"],
         "java": ["java", "--version"],
+        "dotnet": ["dotnet", "--version"],
     }
     versions: dict[str, str] = {}
     for name, command in commands.items():

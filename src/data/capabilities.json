@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-24T00:00:00Z",
+  "generated_at": "2026-08-27T19:39:40.836787+00:00",
   "languages": {
     "python": {
       "version": "0.43.0",
@@ -209,6 +209,41 @@
         "authentication": true,
         "external_storage": true,
         "opentelemetry": false
+      }
+    },
+    "csharp": {
+      "version": "0.7.0",
+      "repo": "https://github.com/Query-farm/vgi-rpc-csharp",
+      "docs": "https://github.com/Query-farm/vgi-rpc-csharp#readme",
+      "package_url": "https://www.nuget.org/packages/QueryFarm.VgiRpc/",
+      "transports": {
+        "pipe": true,
+        "subprocess": true,
+        "unix_socket": true,
+        "tcp": true,
+        "shared_memory": true,
+        "http": true,
+        "worker_pool": false
+      },
+      "patterns": {
+        "unary": true,
+        "unary_void": true,
+        "producer": true,
+        "producer_with_header": true,
+        "exchange": true,
+        "exchange_with_header": true
+      },
+      "features": {
+        "introspection": true,
+        "client_logging": true,
+        "error_propagation": true,
+        "complex_types": true,
+        "optional_types": true,
+        "dataclass_types": true,
+        "annotated_types": true,
+        "authentication": true,
+        "external_storage": true,
+        "opentelemetry": true
       }
     }
   }

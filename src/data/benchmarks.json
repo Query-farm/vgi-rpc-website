@@ -82,6 +82,15 @@
       }
     },
     {
+      "id": "csharp",
+      "name": "C#",
+      "version": "0.7.0",
+      "release": "v0.7.0",
+      "sha": "8afe27f8c5ab56571d41e491e71183187cce49df",
+      "release_status": "published",
+      "benchmark_status": "awaiting_canonical_run"
+    },
+    {
       "id": "cpp",
       "name": "C++",
       "version": "0.1.4",
