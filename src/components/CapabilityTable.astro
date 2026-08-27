@@ -1,0 +1,53 @@
+---
+type CellValue = boolean | string;
+
+interface Row {
+  label: string;
+  values: Record<string, CellValue>;
+}
+
+interface Props {
+  firstColumnLabel: string;
+  languages: readonly string[];
+  languageLabels: Record<string, string>;
+  rows: Row[];
+}
+
+const { firstColumnLabel, languages, languageLabels, rows } = Astro.props;
+---
+
+<div class="overflow-x-auto rounded-xl border border-farm-cream-dark dark:border-farm-dark-border">
+  <table class="w-full text-sm">
+    <thead>
+      <tr class="bg-farm-cream-dark dark:bg-farm-dark-card">
+        <th class="px-4 py-3 text-left font-semibold text-farm-text dark:text-farm-text-light">{firstColumnLabel}</th>
+        {languages.map(language => (
+          <th class="px-4 py-3 text-center font-semibold text-farm-text dark:text-farm-text-light">
+            {languageLabels[language]}
+          </th>
+        ))}
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-farm-cream-dark dark:divide-farm-dark-border">
+      {rows.map(row => (
+        <tr class="bg-white dark:bg-farm-dark">
+          <td class="px-4 py-2 font-medium text-farm-text dark:text-farm-text-light">{row.label}</td>
+          {languages.map(language => {
+            const value = row.values[language];
+            return (
+              <td class="px-4 py-2 text-center">
+                {value === true
+                  ? <span class="text-farm-green-field font-bold" aria-label="Supported" title="Supported">&#x2713;</span>
+                  : value === 'partial'
+                    ? <span class="text-farm-gold font-semibold text-xs">Partial</span>
+                    : value === false
+                      ? <span class="text-farm-text-muted dark:text-farm-text-light-muted" aria-label="Not supported" title="Not supported">&#x2014;</span>
+                      : <span class="text-xs text-farm-text-muted dark:text-farm-text-light-muted">{value}</span>}
+              </td>
+            );
+          })}
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>

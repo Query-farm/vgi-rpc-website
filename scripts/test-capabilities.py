@@ -9,6 +9,7 @@ This script:
 
 Usage:
     python scripts/test-capabilities.py [--repos-dir /path/to/repos]
+    python scripts/test-capabilities.py --known-only
 """
 
 from __future__ import annotations
@@ -42,12 +43,11 @@ LANGUAGES: dict[str, dict[str, Any]] = {
         # Known capabilities from the reference implementation
         "known_transports": {
             "pipe": True,
-            "subprocess": True,
+            "stdio": True,
             "unix_socket": True,
             "tcp": True,
             "shared_memory": True,
             "http": True,
-            "worker_pool": True,
         },
         "known_patterns": {pattern: True for pattern in [
             "unary", "unary_void", "producer", "producer_with_header",
@@ -74,12 +74,11 @@ LANGUAGES: dict[str, dict[str, Any]] = {
         ],
         "known_transports": {
             "pipe": True,
-            "subprocess": True,
+            "stdio": True,
             "unix_socket": True,
             "tcp": True,
             "shared_memory": False,
             "http": True,
-            "worker_pool": False,
         },
         "known_patterns": {pattern: True for pattern in [
             "unary", "unary_void", "producer", "producer_with_header",
@@ -100,12 +99,11 @@ LANGUAGES: dict[str, dict[str, Any]] = {
         "version_cmd": None,
         "known_transports": {
             "pipe": True,
-            "subprocess": True,
+            "stdio": True,
             "unix_socket": True,
             "tcp": True,
             "shared_memory": True,
             "http": True,
-            "worker_pool": False,
         },
         "known_patterns": {pattern: True for pattern in [
             "unary", "unary_void", "producer", "producer_with_header",
@@ -126,12 +124,11 @@ LANGUAGES: dict[str, dict[str, Any]] = {
         "version_cmd": None,
         "known_transports": {
             "pipe": True,
-            "subprocess": True,
+            "stdio": True,
             "unix_socket": True,
             "tcp": True,
             "shared_memory": True,
             "http": True,
-            "worker_pool": False,
         },
         "known_patterns": {pattern: True for pattern in [
             "unary", "unary_void", "producer", "producer_with_header",
@@ -153,12 +150,11 @@ LANGUAGES: dict[str, dict[str, Any]] = {
         "version_cmd": None,
         "known_transports": {
             "pipe": True,
-            "subprocess": True,
+            "stdio": True,
             "unix_socket": True,
             "tcp": True,
             "shared_memory": True,
             "http": True,
-            "worker_pool": False,
         },
         "known_patterns": {pattern: True for pattern in [
             "unary", "unary_void", "producer", "producer_with_header",
@@ -186,12 +182,11 @@ LANGUAGES: dict[str, dict[str, Any]] = {
         "version_cmd": None,
         "known_transports": {
             "pipe": True,
-            "subprocess": True,
+            "stdio": True,
             "unix_socket": True,
             "tcp": True,
             "shared_memory": True,
             "http": True,
-            "worker_pool": False,
         },
         "known_patterns": {pattern: True for pattern in [
             "unary", "unary_void", "producer", "producer_with_header",
@@ -213,12 +208,11 @@ LANGUAGES: dict[str, dict[str, Any]] = {
         "version_cmd": None,
         "known_transports": {
             "pipe": True,
-            "subprocess": True,
+            "stdio": True,
             "unix_socket": True,
             "tcp": True,
             "shared_memory": True,
             "http": True,
-            "worker_pool": False,
         },
         "known_patterns": {pattern: True for pattern in [
             "unary", "unary_void", "producer", "producer_with_header",
@@ -235,6 +229,111 @@ LANGUAGES: dict[str, dict[str, Any]] = {
             "authentication": True,
             "external_storage": True,
             "opentelemetry": False,
+        },
+    },
+}
+
+# Client capabilities are intentionally tracked separately from worker/server
+# conformance. A port can be a fully conformant worker while exposing a narrower
+# native client API (C# is the clearest example), and worker pools are client-side
+# orchestration rather than a wire transport.
+CLIENTS: dict[str, dict[str, Any]] = {
+    "python": {
+        "available": True,
+        "scope": "Full RPC surface",
+        "api_style": "Typed proxy",
+        "patterns": {"unary": True, "producer": True, "exchange": True},
+        "transports": {
+            "subprocess": True, "unix_socket": True, "tcp": True,
+            "http": True, "http_zstd": True, "shared_memory": True,
+        },
+        "features": {
+            "worker_pool": True, "introspection": True, "authentication": True,
+            "client_logging": True, "external_storage": True,
+        },
+    },
+    "typescript": {
+        "available": True,
+        "scope": "Full RPC surface",
+        "api_style": "Dynamic",
+        "patterns": {"unary": True, "producer": True, "exchange": True},
+        "transports": {
+            "subprocess": True, "unix_socket": False, "tcp": True,
+            "http": True, "http_zstd": True, "shared_memory": False,
+        },
+        "features": {
+            "worker_pool": False, "introspection": True, "authentication": True,
+            "client_logging": True, "external_storage": True,
+        },
+    },
+    "go": {
+        "available": True,
+        "scope": "HTTP only",
+        "api_style": "Schema-first",
+        "patterns": {"unary": True, "producer": True, "exchange": True},
+        "transports": {
+            "subprocess": False, "unix_socket": False, "tcp": False,
+            "http": True, "http_zstd": "partial", "shared_memory": False,
+        },
+        "features": {
+            "worker_pool": False, "introspection": False, "authentication": True,
+            "client_logging": True, "external_storage": False,
+        },
+    },
+    "rust": {
+        "available": True,
+        "scope": "Full RPC surface",
+        "api_style": "Schema-first",
+        "patterns": {"unary": True, "producer": True, "exchange": True},
+        "transports": {
+            "subprocess": True, "unix_socket": True, "tcp": True,
+            "http": True, "http_zstd": True, "shared_memory": True,
+        },
+        "features": {
+            "worker_pool": False, "introspection": True, "authentication": True,
+            "client_logging": True, "external_storage": True,
+        },
+    },
+    "java": {
+        "available": True,
+        "scope": "Full RPC surface",
+        "api_style": "Typed proxy",
+        "patterns": {"unary": True, "producer": True, "exchange": True},
+        "transports": {
+            "subprocess": True, "unix_socket": True, "tcp": True,
+            "http": True, "http_zstd": False, "shared_memory": False,
+        },
+        "features": {
+            "worker_pool": False, "introspection": True, "authentication": True,
+            "client_logging": True, "external_storage": "partial",
+        },
+    },
+    "csharp": {
+        "available": True,
+        "scope": "Unary core",
+        "api_style": "Typed unary proxy",
+        "patterns": {"unary": True, "producer": False, "exchange": False},
+        "transports": {
+            "subprocess": "partial", "unix_socket": True, "tcp": True,
+            "http": "partial", "http_zstd": False, "shared_memory": False,
+        },
+        "features": {
+            "worker_pool": False, "introspection": False, "authentication": "partial",
+            "client_logging": False, "external_storage": "partial",
+        },
+    },
+    "cpp": {
+        "available": True,
+        "scope": "Full RPC surface",
+        "api_style": "Schema-first",
+        "patterns": {"unary": True, "producer": True, "exchange": True},
+        "transports": {
+            "subprocess": True, "unix_socket": True, "tcp": True,
+            "http": True, "http_zstd": True, "shared_memory": True,
+        },
+        "features": {
+            "worker_pool": False, "introspection": True, "authentication": True,
+            "client_logging": True, "external_storage": True,
         },
     },
 }
@@ -476,15 +575,41 @@ def test_all_capabilities(
     repos_dir: Path,
     selected_languages: list[str] | None = None,
     existing: dict[str, Any] | None = None,
+    known_only: bool = False,
 ) -> dict[str, Any]:
     """Test all language implementations and return capabilities dict."""
     result: dict[str, Any] = json.loads(json.dumps(existing)) if existing else {"languages": {}}
     result["generated_at"] = datetime.now(timezone.utc).isoformat()
+    pinned_versions: dict[str, str] = {}
+    if known_only:
+        manifest_path = Path(__file__).parent.parent / "benchmarks" / "manifest.json"
+        with open(manifest_path, encoding="utf-8") as handle:
+            manifest = json.load(handle)
+        pinned_versions = {
+            lang_name: implementation["version"]
+            for lang_name, implementation in manifest["implementations"].items()
+        }
 
     language_names = selected_languages or list(LANGUAGES)
     for lang_name in language_names:
         config = LANGUAGES[lang_name]
         print(f"\nTesting {lang_name}...")
+
+        if known_only:
+            current = result["languages"].get(lang_name, {})
+            result["languages"][lang_name] = {
+                "version": pinned_versions.get(lang_name, current.get("version")),
+                "repo": config["repo"],
+                "docs": config.get("docs"),
+                "package_url": config.get("package_url"),
+                "transports": config["known_transports"],
+                "patterns": config.get("known_patterns", {}),
+                "features": config.get("known_features", {}),
+                "client": CLIENTS[lang_name],
+            }
+            print("  Refreshed declared server and client capabilities")
+            continue
+
         repo_dir = repos_dir / f"vgi-rpc-{lang_name}"
 
         # Clone/pull
@@ -500,6 +625,7 @@ def test_all_capabilities(
                 "transports": config["known_transports"],
                 "patterns": {p: False for p in PATTERNS},
                 "features": {f: False for f in FEATURES},
+                "client": CLIENTS[lang_name],
             }
             continue
 
@@ -542,10 +668,16 @@ def test_all_capabilities(
             "transports": config["known_transports"],
             "patterns": patterns,
             "features": features,
+            "client": CLIENTS[lang_name],
         }
         print(f"  Patterns: {sum(patterns.values())}/{len(patterns)}")
         print(f"  Features: {sum(features.values())}/{len(features)}")
 
+    result["languages"] = {
+        lang_name: result["languages"][lang_name]
+        for lang_name in LANGUAGES
+        if lang_name in result["languages"]
+    }
     return result
 
 
@@ -569,6 +701,11 @@ def main() -> None:
         choices=list(LANGUAGES),
         help="Probe only this language and merge it into the existing output (repeatable)",
     )
+    parser.add_argument(
+        "--known-only",
+        action="store_true",
+        help="Refresh declared capabilities at benchmark-pinned releases without building workers",
+    )
     args = parser.parse_args()
 
     if args.repos_dir:
@@ -581,10 +718,15 @@ def main() -> None:
     print(f"Output: {args.output}")
 
     existing = None
-    if args.language and args.output.exists():
+    if (args.language or args.known_only) and args.output.exists():
         with open(args.output, encoding="utf-8") as handle:
             existing = json.load(handle)
-    capabilities = test_all_capabilities(repos_dir, args.language, existing)
+    capabilities = test_all_capabilities(
+        repos_dir,
+        args.language,
+        existing,
+        known_only=args.known_only,
+    )
 
     # Write output
     args.output.parent.mkdir(parents=True, exist_ok=True)

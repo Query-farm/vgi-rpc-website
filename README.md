@@ -24,6 +24,10 @@ benchmarks/     Python harness that produces the single snapshot published at /b
   driver/       orchestration — runs adapters, validates, assembles results
 ```
 
+The capability matrix separates worker/server conformance from native-client functionality.
+`scripts/test-capabilities.py --known-only` refreshes declared client metadata at the benchmark-pinned
+releases without rebuilding every language worker; normal probes include the same client metadata alongside measured worker support.
+
 ## Development
 
 ```sh

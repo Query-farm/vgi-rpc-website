@@ -27,52 +27,66 @@
 
 vgi-rpc uses Apache Arrow IPC as its serialization format, giving callers zero-copy access to columnar data without schema negotiation or code generation. Clients create typed proxy objects that mirror the server's service interface; method calls are dispatched over a pluggable transport layer.
 
-**Transports:** pipe, subprocess, Unix socket, shared memory, HTTP, and worker pool. Each transport implements the same framing protocol so services are portable across deployment topologies.
+**Worker transports:** in-process pipe, stdio, Unix socket, TCP, shared memory, and HTTP. Each transport implements the same framing protocol so services are portable across deployment topologies.
 
 **RPC Patterns:** unary (single request/response), unary void (fire-and-forget), producer (server-streaming with optional header), and exchange (bidirectional streaming with optional header).
 
 **Arrow IPC Serialization:** Arguments and return values are encoded as Arrow record batches. Complex types, optional types, and dataclass/struct types are mapped automatically from each language's native type system.
 
-**Typed Proxies:** Client code calls methods on a proxy object that mirrors the server interface. The proxy handles serialization, transport framing, and deserialization transparently.
+**Client APIs:** Ports expose either typed proxies that mirror a service interface or dynamic/schema-first clients that work directly with Arrow schemas. The client handles serialization, transport framing, and deserialization.
 
-## Capabilities
+## Native Client Implementations
+
+Every maintained port ships a native client surface, but worker conformance does not imply identical client functionality:
+
+- **Python:** Typed proxy with unary and streaming calls over subprocess, Unix, TCP, HTTP/zstd, and shared memory; includes worker pooling.
+- **TypeScript:** Dynamic unary and streaming client over subprocess, raw pipe, TCP, and HTTP/zstd; no Unix-socket, shared-memory, or worker-pool client.
+- **Go:** Schema-first unary and streaming HTTP client. It decodes zstd/gzip responses but sends identity request bodies; it has no raw-socket or subprocess client.
+- **Rust:** Schema-first unary and streaming client over subprocess, Unix, TCP, HTTP/zstd, and shared memory.
+- **Java:** Typed unary and streaming proxy over subprocess, Unix, TCP, and HTTP. Its HTTP client uses identity encoding, and client-side shared-memory negotiation is not implemented.
+- **C#:** Typed unary proxy over an already-connected pipe, Unix socket, or TCP transport. Subprocess and HTTP examples use lower-level integrations; typed streaming, HTTP/zstd, introspection, client log callbacks, shared-memory negotiation, and worker pooling are not yet integrated.
+- **C++:** Schema-first unary and streaming clients over subprocess, Unix, TCP, HTTP/zstd, and shared memory.
+
+Worker pools are client-side subprocess lifecycle management, not a transport. Python is currently the only implementation with a public worker-pool client.
+
+## Worker / Server Capabilities
 
 ### Python (v0.43.0)
-- **Transports:** pipe, subprocess, Unix socket, shared memory, HTTP, worker pool
+- **Transports:** pipe, stdio, Unix socket, TCP, shared memory, HTTP
 - **Patterns:** unary, unary void, producer (with header), exchange (with header)
 - **Features:** introspection, client logging, error propagation, complex types, optional types, dataclass types, annotated types, authentication, external storage, OpenTelemetry
 - **Package:** [PyPI](https://pypi.org/project/vgi-rpc/)
 
 ### TypeScript (v0.22.0)
-- **Transports:** pipe, subprocess, Unix socket, TCP, HTTP
+- **Transports:** pipe, stdio, Unix socket, TCP, HTTP
 - **Patterns:** unary, unary void, producer (with header), exchange (with header)
 - **Features:** introspection, client logging, error propagation, complex and optional types, authentication, external storage, OpenTelemetry
 
-### Go (v0.26.0)
-- **Transports:** pipe, subprocess, Unix socket, TCP, HTTP, shared-memory side channel
+### Go (v0.26.1)
+- **Transports:** pipe, stdio, Unix socket, TCP, HTTP, shared-memory side channel
 - **Patterns:** unary, unary void, producer (with header), exchange (with header)
 - **Features:** introspection, client logging, error propagation, complex and optional types, authentication, external storage, OpenTelemetry
 
-### Rust (v0.23.0)
-- **Transports:** pipe, subprocess, Unix socket, TCP, HTTP, shared-memory side channel
+### Rust (v0.23.2)
+- **Transports:** pipe, stdio, Unix socket, TCP, HTTP, shared-memory side channel
 - **Patterns:** unary, unary void, producer (with header), exchange (with header)
 - **Features:** native clients and servers, derive macros, introspection v4, client logging, error propagation, complex/optional/annotated types, authentication, OpenTelemetry, sticky sessions, S3/GCS external storage
 - **Package:** [crates.io](https://crates.io/crates/vgi-rpc)
 
-### Java (v0.23.0)
-- **Transports:** pipe, subprocess, Unix socket, TCP, HTTP, shared-memory side channel on JDK 22+
+### Java (v0.23.1)
+- **Transports:** pipe, stdio, Unix socket, TCP, HTTP, shared-memory side channel on JDK 22+
 - **Patterns:** unary, unary void, producer (with header), exchange (with header)
 - **Features:** typed interface proxies, introspection v4, client logging, error propagation, complex/optional/annotated types, authentication, OpenTelemetry correlation, sticky sessions, S3/GCS external storage
 - **Package:** [Maven Central](https://central.sonatype.com/artifact/farm.query/vgirpc)
 
 ### C# (v0.7.0)
-- **Transports:** pipe, subprocess, Unix socket, TCP, HTTP with identity or zstd content encoding, shared-memory side channel
+- **Transports:** pipe, stdio, Unix socket, TCP, HTTP with identity or zstd content encoding, shared-memory side channel
 - **Patterns:** unary, unary void, producer (with header), exchange (with header)
 - **Features:** typed clients and servers, reflection-based POCO contracts, Arrow record batches, introspection v4, client logging, error propagation, authentication, OpenTelemetry correlation, S3/GCS external storage
 - **Package:** [NuGet](https://www.nuget.org/packages/QueryFarm.VgiRpc/)
 
-### C++ (v0.1.3)
-- **Transports:** pipe, subprocess, Unix socket, TCP, HTTP, shared-memory side channel
+### C++ (v0.1.4)
+- **Transports:** pipe, stdio, Unix socket, TCP, HTTP, shared-memory side channel
 - **Patterns:** unary, unary void, producer (with header), exchange (with header)
 - **Features:** native clients and servers, introspection v4, client logging, error propagation, complex/optional/annotated types, authentication, compression, sticky sessions, external storage
 

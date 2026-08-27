@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-27T19:39:40.836787+00:00",
+  "generated_at": "2026-08-27T21:10:39.454219+00:00",
   "languages": {
     "python": {
       "version": "0.43.0",
@@ -8,12 +8,11 @@
       "package_url": "https://pypi.org/project/vgi-rpc/",
       "transports": {
         "pipe": true,
-        "subprocess": true,
+        "stdio": true,
         "unix_socket": true,
         "tcp": true,
         "shared_memory": true,
-        "http": true,
-        "worker_pool": true
+        "http": true
       },
       "patterns": {
         "unary": true,
@@ -34,6 +33,31 @@
         "authentication": true,
         "external_storage": true,
         "opentelemetry": true
+      },
+      "client": {
+        "available": true,
+        "scope": "Full RPC surface",
+        "api_style": "Typed proxy",
+        "patterns": {
+          "unary": true,
+          "producer": true,
+          "exchange": true
+        },
+        "transports": {
+          "subprocess": true,
+          "unix_socket": true,
+          "tcp": true,
+          "http": true,
+          "http_zstd": true,
+          "shared_memory": true
+        },
+        "features": {
+          "worker_pool": true,
+          "introspection": true,
+          "authentication": true,
+          "client_logging": true,
+          "external_storage": true
+        }
       }
     },
     "typescript": {
@@ -43,12 +67,11 @@
       "package_url": "https://www.npmjs.com/package/@query-farm/vgi-rpc",
       "transports": {
         "pipe": true,
-        "subprocess": true,
+        "stdio": true,
         "unix_socket": true,
         "tcp": true,
         "shared_memory": false,
-        "http": true,
-        "worker_pool": false
+        "http": true
       },
       "patterns": {
         "unary": true,
@@ -65,25 +88,48 @@
         "complex_types": true,
         "optional_types": true,
         "dataclass_types": true,
-        "annotated_types": false,
         "authentication": true,
         "external_storage": true,
         "opentelemetry": true
+      },
+      "client": {
+        "available": true,
+        "scope": "Full RPC surface",
+        "api_style": "Dynamic",
+        "patterns": {
+          "unary": true,
+          "producer": true,
+          "exchange": true
+        },
+        "transports": {
+          "subprocess": true,
+          "unix_socket": false,
+          "tcp": true,
+          "http": true,
+          "http_zstd": true,
+          "shared_memory": false
+        },
+        "features": {
+          "worker_pool": false,
+          "introspection": true,
+          "authentication": true,
+          "client_logging": true,
+          "external_storage": true
+        }
       }
     },
     "go": {
-      "version": "0.26.0",
+      "version": "0.26.1",
       "repo": "https://github.com/Query-farm/vgi-rpc-go",
       "docs": "https://vgi-rpc-go.query.farm",
       "package_url": "https://pkg.go.dev/github.com/Query-farm/vgi-rpc-go/vgirpc",
       "transports": {
         "pipe": true,
-        "subprocess": true,
+        "stdio": true,
         "unix_socket": true,
         "tcp": true,
         "shared_memory": true,
-        "http": true,
-        "worker_pool": false
+        "http": true
       },
       "patterns": {
         "unary": true,
@@ -100,25 +146,48 @@
         "complex_types": true,
         "optional_types": true,
         "dataclass_types": true,
-        "annotated_types": false,
         "authentication": true,
         "external_storage": true,
         "opentelemetry": true
+      },
+      "client": {
+        "available": true,
+        "scope": "HTTP only",
+        "api_style": "Schema-first",
+        "patterns": {
+          "unary": true,
+          "producer": true,
+          "exchange": true
+        },
+        "transports": {
+          "subprocess": false,
+          "unix_socket": false,
+          "tcp": false,
+          "http": true,
+          "http_zstd": "partial",
+          "shared_memory": false
+        },
+        "features": {
+          "worker_pool": false,
+          "introspection": false,
+          "authentication": true,
+          "client_logging": true,
+          "external_storage": false
+        }
       }
     },
     "rust": {
-      "version": "0.23.0",
+      "version": "0.23.2",
       "repo": "https://github.com/Query-farm/vgi-rpc-rust",
       "docs": "https://docs.rs/vgi-rpc",
       "package_url": "https://crates.io/crates/vgi-rpc",
       "transports": {
         "pipe": true,
-        "subprocess": true,
+        "stdio": true,
         "unix_socket": true,
         "tcp": true,
         "shared_memory": true,
-        "http": true,
-        "worker_pool": false
+        "http": true
       },
       "patterns": {
         "unary": true,
@@ -139,21 +208,45 @@
         "authentication": true,
         "external_storage": true,
         "opentelemetry": true
+      },
+      "client": {
+        "available": true,
+        "scope": "Full RPC surface",
+        "api_style": "Schema-first",
+        "patterns": {
+          "unary": true,
+          "producer": true,
+          "exchange": true
+        },
+        "transports": {
+          "subprocess": true,
+          "unix_socket": true,
+          "tcp": true,
+          "http": true,
+          "http_zstd": true,
+          "shared_memory": true
+        },
+        "features": {
+          "worker_pool": false,
+          "introspection": true,
+          "authentication": true,
+          "client_logging": true,
+          "external_storage": true
+        }
       }
     },
     "java": {
-      "version": "0.23.0",
+      "version": "0.23.1",
       "repo": "https://github.com/Query-farm/vgi-rpc-java",
       "docs": "https://javadoc.io/doc/farm.query/vgirpc",
       "package_url": "https://central.sonatype.com/artifact/farm.query/vgirpc",
       "transports": {
         "pipe": true,
-        "subprocess": true,
+        "stdio": true,
         "unix_socket": true,
         "tcp": true,
         "shared_memory": true,
-        "http": true,
-        "worker_pool": false
+        "http": true
       },
       "patterns": {
         "unary": true,
@@ -174,21 +267,104 @@
         "authentication": true,
         "external_storage": true,
         "opentelemetry": true
+      },
+      "client": {
+        "available": true,
+        "scope": "Full RPC surface",
+        "api_style": "Typed proxy",
+        "patterns": {
+          "unary": true,
+          "producer": true,
+          "exchange": true
+        },
+        "transports": {
+          "subprocess": true,
+          "unix_socket": true,
+          "tcp": true,
+          "http": true,
+          "http_zstd": false,
+          "shared_memory": false
+        },
+        "features": {
+          "worker_pool": false,
+          "introspection": true,
+          "authentication": true,
+          "client_logging": true,
+          "external_storage": "partial"
+        }
+      }
+    },
+    "csharp": {
+      "version": "0.7.0",
+      "repo": "https://github.com/Query-farm/vgi-rpc-csharp",
+      "docs": "https://github.com/Query-farm/vgi-rpc-csharp#readme",
+      "package_url": "https://www.nuget.org/packages/QueryFarm.VgiRpc/",
+      "transports": {
+        "pipe": true,
+        "stdio": true,
+        "unix_socket": true,
+        "tcp": true,
+        "shared_memory": true,
+        "http": true
+      },
+      "patterns": {
+        "unary": true,
+        "unary_void": true,
+        "producer": true,
+        "producer_with_header": true,
+        "exchange": true,
+        "exchange_with_header": true
+      },
+      "features": {
+        "introspection": true,
+        "client_logging": true,
+        "error_propagation": true,
+        "complex_types": true,
+        "optional_types": true,
+        "dataclass_types": true,
+        "annotated_types": true,
+        "authentication": true,
+        "external_storage": true,
+        "opentelemetry": true
+      },
+      "client": {
+        "available": true,
+        "scope": "Unary core",
+        "api_style": "Typed unary proxy",
+        "patterns": {
+          "unary": true,
+          "producer": false,
+          "exchange": false
+        },
+        "transports": {
+          "subprocess": "partial",
+          "unix_socket": true,
+          "tcp": true,
+          "http": "partial",
+          "http_zstd": false,
+          "shared_memory": false
+        },
+        "features": {
+          "worker_pool": false,
+          "introspection": false,
+          "authentication": "partial",
+          "client_logging": false,
+          "external_storage": "partial"
+        }
       }
     },
     "cpp": {
-      "version": "0.1.3",
+      "version": "0.1.4",
       "repo": "https://github.com/Query-farm/vgi-rpc-cpp",
       "docs": "https://vgi-rpc-cpp.query.farm",
       "package_url": null,
       "transports": {
         "pipe": true,
-        "subprocess": true,
+        "stdio": true,
         "unix_socket": true,
         "tcp": true,
         "shared_memory": true,
-        "http": true,
-        "worker_pool": false
+        "http": true
       },
       "patterns": {
         "unary": true,
@@ -209,41 +385,31 @@
         "authentication": true,
         "external_storage": true,
         "opentelemetry": false
-      }
-    },
-    "csharp": {
-      "version": "0.7.0",
-      "repo": "https://github.com/Query-farm/vgi-rpc-csharp",
-      "docs": "https://github.com/Query-farm/vgi-rpc-csharp#readme",
-      "package_url": "https://www.nuget.org/packages/QueryFarm.VgiRpc/",
-      "transports": {
-        "pipe": true,
-        "subprocess": true,
-        "unix_socket": true,
-        "tcp": true,
-        "shared_memory": true,
-        "http": true,
-        "worker_pool": false
       },
-      "patterns": {
-        "unary": true,
-        "unary_void": true,
-        "producer": true,
-        "producer_with_header": true,
-        "exchange": true,
-        "exchange_with_header": true
-      },
-      "features": {
-        "introspection": true,
-        "client_logging": true,
-        "error_propagation": true,
-        "complex_types": true,
-        "optional_types": true,
-        "dataclass_types": true,
-        "annotated_types": true,
-        "authentication": true,
-        "external_storage": true,
-        "opentelemetry": true
+      "client": {
+        "available": true,
+        "scope": "Full RPC surface",
+        "api_style": "Schema-first",
+        "patterns": {
+          "unary": true,
+          "producer": true,
+          "exchange": true
+        },
+        "transports": {
+          "subprocess": true,
+          "unix_socket": true,
+          "tcp": true,
+          "http": true,
+          "http_zstd": true,
+          "shared_memory": true
+        },
+        "features": {
+          "worker_pool": false,
+          "introspection": true,
+          "authentication": true,
+          "client_logging": true,
+          "external_storage": true
+        }
       }
     }
   }
