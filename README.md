@@ -1,43 +1,74 @@
-# Astro Starter Kit: Minimal
+# vgi-rpc-website
+
+Source for [vgi-rpc.query.farm](https://vgi-rpc.query.farm) — the marketing/docs site for
+[`vgi-rpc`](https://github.com/Query-farm/vgi-rpc-python), Query.Farm's transport-agnostic
+Apache-Arrow-IPC RPC framework. Built with [Astro](https://astro.build) + Tailwind CSS.
+
+The site covers what `vgi-rpc` is, per-language quickstarts (Python/Go/Rust/TypeScript/C++), a
+wire-protocol deep dive, a transport comparison, and a benchmark suite comparing all five ports.
+
+## Structure
+
+```
+src/
+  components/   Hero, WhatIs, WhyVgiRpc, LanguageCards, ComparisonTable,
+                CapabilityMatrix, TransportOverview, BenchmarkCharts/Visuals, Nav, Footer, ...
+  pages/        index.astro, wire-protocol.astro, benchmarks.astro
+  diagrams/     d2 source for the transport-overview diagram (rendered to public/diagrams/ at build time)
+  data/         structured content the components render (capability matrix, language metadata, ...)
+  layouts/      shared page shell
+  styles/       Tailwind entry
+assets/         logo-master.png (source art) + scripts/regenerate_logo_assets.py-derived favicons/hero image
+benchmarks/     Python harness that produces the single snapshot published at /benchmarks/latest.json
+  adapters/     one per language port, drives each implementation's own benchmark workload
+  driver/       orchestration — runs adapters, validates, assembles results
+```
+
+## Development
 
 ```sh
-npm create astro@latest -- --template minimal
+npm install
+npm run dev       # generates the d2 diagram, then starts the Astro dev server
+npm run build      # generates diagrams, builds to ./dist/, then verifies social-metadata tags
+npm run preview     # preview a production build locally
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+Regenerating just the transport-overview diagram (requires [`d2`](https://d2lang.com)):
 
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+```sh
+npm run diagrams
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+Regenerating the logo/favicon assets from `assets/logo-master.png` (requires `uv`, or Python with
+Pillow + numpy):
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+```sh
+uv run --with pillow --with numpy python scripts/regenerate_logo_assets.py
+```
 
-Any static assets, like images, can be placed in the `public/` directory.
+## Benchmarks
 
-## 🧞 Commands
+The `/benchmarks` page renders a single published snapshot (`public/benchmarks/latest.json`) that
+compares all five `vgi-rpc` ports (Python, TypeScript, Go, Rust, C++) against pinned, commit-exact
+releases (`benchmarks/manifest.json`) — never against a moving `main` branch. See
+[`benchmarks/README.md`](benchmarks/README.md) for the release policy and the full
+`verify` → `full` → `combine` → `publish` pipeline; the short version:
 
-All commands are run from the root of the project, from a terminal:
+```sh
+npm run benchmark:quick     # fast local sanity pass
+npm run benchmark:full      # full suite, isolated per-language checkouts under .benchmark-cache/
+npm run benchmark:publish   # writes public/benchmarks/latest.json
+```
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+## Testing
 
-## 👀 Want to learn more?
+```sh
+npm test              # benchmark harness unit tests + `benchmarks/run.py validate`
+npm run test:metadata # social-card/OpenGraph metadata check (also runs as part of `npm run build`)
+```
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+## Deployment
+
+`site` in `astro.config.mjs` is pinned to `https://vgi-rpc.query.farm`. `.github/workflows/update-capabilities.yml`
+(despite the filename, its workflow name is `Deploy`) builds the site and pushes `dist/` to
+Cloudflare Pages on every push to `main`, or on demand via `workflow_dispatch`.
