@@ -57,7 +57,7 @@ Worker pools are client-side subprocess lifecycle management, not a transport. P
 
 ## Worker / Server Capabilities
 
-### Python (v0.43.0)
+### Python (v0.45.3)
 - **Transports:** pipe, stdio, Unix socket, TCP, shared memory, HTTP
 - **Patterns:** unary, unary void, producer (with header), exchange (with header)
 - **Features:** introspection, client logging, error propagation, complex types, optional types, dataclass types, annotated types, authentication, external storage, OpenTelemetry
