@@ -2,17 +2,21 @@
 import icons from '../data/transport-icons.json';
 
 interface Props {
-  transport: keyof typeof icons;
+  /** A key in transport-icons.json. */
+  transport?: keyof typeof icons;
+  /** Inner SVG markup for a 24×24 duotone glyph, when not a transport. */
+  body?: string;
   class?: string;
 }
 
-const { transport, class: className = '' } = Astro.props;
+const { transport, body, class: className = '' } = Astro.props;
+const markup = body ?? (transport ? icons[transport] : '');
 ---
 
 <span class:list={[
-  'transport-icon flex-shrink-0 inline-flex items-center justify-center w-14 h-14 rounded-2xl',
-  'bg-linear-to-br from-farm-green-light/10 to-farm-green-field/20 ring-1 ring-farm-green-field/15',
-  'text-farm-green-deep dark:from-farm-green-field/25 dark:to-farm-green-deep/40 dark:ring-farm-green-light/20 dark:text-farm-cream',
+  'transport-icon flex-shrink-0 inline-flex items-center justify-center w-14 h-14 rounded-xl border',
+  'bg-soil-100 border-soil-300/70 text-field-700',
+  'dark:bg-rock-800 dark:border-rock-700 dark:text-field-400',
   className,
 ]}>
   <svg
@@ -24,17 +28,18 @@ const { transport, class: className = '' } = Astro.props;
     stroke-linecap="round"
     stroke-linejoin="round"
     aria-hidden="true"
-    set:html={icons[transport]}
+    set:html={markup}
   />
 </span>
 
 <style is:global>
+  /* Gold is identity: the one moving part of each glyph takes a mark band. */
   .transport-icon .accent {
-    color: var(--color-farm-gold);
+    color: var(--color-sun-600);
   }
   @media (prefers-color-scheme: dark) {
     .transport-icon .accent {
-      color: var(--color-farm-gold-light);
+      color: var(--color-sun-400);
     }
   }
 </style>

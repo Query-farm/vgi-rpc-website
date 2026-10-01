@@ -17,7 +17,7 @@ const jsonLd = {
   '@id': 'https://vgi-rpc.query.farm/#software',
   name: 'vgi-rpc',
   url: 'https://vgi-rpc.query.farm/',
-  image: 'https://vgi-rpc.query.farm/social-card.png',
+  image: 'https://vgi-rpc.query.farm/og/home.png',
   description,
   applicationCategory: 'DeveloperApplication',
   operatingSystem: 'Linux, macOS, Windows',
@@ -34,7 +34,8 @@ const jsonLd = {
 <BaseLayout
   title="vgi-rpc — Transport-agnostic RPC on Apache Arrow"
   description={description}
-  ogImageAlt="vgi-rpc connects seven programming languages over Apache Arrow and multiple RPC transports"
+  ogImage="/og/home.png"
+  ogImageAlt="Query.Farm card for vgi-rpc: transport-agnostic RPC on Apache Arrow, in seven languages"
   jsonLd={jsonLd}
 >
   <Hero />

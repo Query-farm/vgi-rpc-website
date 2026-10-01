@@ -1,5 +1,7 @@
 ---
+import { Code } from 'astro:components';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { farmTheme } from '../lib/farm-shiki-theme.mjs';
 
 const sections = [
   { id: 'overview', label: '1. Overview & Conventions' },
@@ -29,7 +31,7 @@ const jsonLd = {
   headline: 'vgi-rpc Wire Protocol Specification',
   description,
   url: 'https://vgi-rpc.query.farm/wire-protocol/',
-  image: 'https://vgi-rpc.query.farm/social-card.png',
+  image: 'https://vgi-rpc.query.farm/og/wire-protocol.png',
   dateModified: '2026-10-01',
   version: '1',
   author: {
@@ -55,7 +57,8 @@ const jsonLd = {
   description={description}
   currentPage="/wire-protocol"
   ogType="article"
-  ogImageAlt="vgi-rpc wire protocol version 1 specification for Arrow IPC transports"
+  ogImage="/og/wire-protocol.png"
+  ogImageAlt="Query.Farm card for the vgi-rpc wire protocol: the normative spec for wire version 1"
   dateModified="2026-10-01T00:00:00-04:00"
   articleSection="Technical specification"
   articleTags={['RPC protocol', 'Apache Arrow IPC', 'Shared memory', 'HTTP streaming', 'Protocol reflection']}
@@ -66,53 +69,53 @@ const jsonLd = {
 
       <!-- Sidebar nav (sticky on desktop, hidden on mobile) -->
       <aside class="hidden lg:block">
-        <nav class="sticky top-24 max-h-[calc(100vh-8rem)] overflow-y-auto">
-          <h2 class="font-semibold text-sm uppercase tracking-wider text-farm-text-muted dark:text-farm-text-light-muted mb-3">
+        <nav class="sticky top-[calc(var(--qf-nav-h)+2rem)] max-h-[calc(100vh-var(--qf-nav-h)-4rem)] overflow-y-auto border-l border-soil-300 dark:border-rock-700 pl-4">
+          <h2 class="font-sans font-semibold text-xs uppercase tracking-wider text-soil-700 dark:text-cream-2 mb-3">
             Contents
           </h2>
           <ol class="space-y-1 text-sm list-none">
             {sections.map(s => (
               <li>
                 <a href={`#${s.id}`}
-                  class="block py-1 text-farm-text-muted dark:text-farm-text-light-muted
-                    hover:text-farm-green-deep dark:hover:text-farm-green-field transition-colors">
+                  class="block py-1 text-soil-700 dark:text-cream-2
+                    hover:text-link-hover dark:hover:text-link-dark-hover transition-colors">
                   {s.label}
                 </a>
               </li>
             ))}
           </ol>
           <a href="#top"
-            class="block mt-6 py-1 text-sm font-medium text-farm-gold hover:text-farm-gold-light transition-colors">
+            class="block mt-6 py-1 text-sm font-medium text-link hover:text-link-hover transition-colors dark:text-link-dark dark:hover:text-link-dark-hover">
             &uarr; Back to top
           </a>
         </nav>
       </aside>
 
       <!-- Main content -->
-      <article id="top">
-        <h1 class="text-4xl font-bold text-farm-green-deep dark:text-farm-cream">
+      <article id="top" class="qf-prose min-w-0">
+        <h1 class="text-4xl font-semibold text-soil-900 dark:text-cream">
           Wire Protocol Specification
         </h1>
-        <p class="mt-2 text-farm-text-muted dark:text-farm-text-light-muted">
+        <p class="mt-2 text-soil-700 dark:text-cream-2">
           Wire version 1 &mdash; Normative &mdash; Reconciled with vgi-rpc Python 0.47.2
         </p>
-        <p class="mt-2 text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+        <p class="mt-2 text-sm text-soil-700 dark:text-cream-2">
           This is the web edition of the cross-language contract. The{' '}
           <a href="https://github.com/Query-farm/vgi-rpc-python/blob/main/docs/WIRE_PROTOCOL.md"
             target="_blank" rel="noopener noreferrer"
-            class="text-farm-gold hover:text-farm-gold-light transition-colors">canonical Markdown specification</a>{' '}
+            class="text-link hover:text-link-hover transition-colors dark:text-link-dark dark:hover:text-link-dark-hover">canonical Markdown specification</a>{' '}
           contains additional implementor rationale and worked examples.
         </p>
 
         <!-- Mobile TOC (visible on small screens only) -->
-        <nav class="lg:hidden mt-8 p-4 rounded-xl bg-farm-cream-dark dark:bg-farm-dark-card
-          border border-farm-cream-dark dark:border-farm-dark-border">
-          <h2 class="font-semibold text-sm uppercase tracking-wider text-farm-text-muted dark:text-farm-text-light-muted mb-3">
+        <nav class="lg:hidden mt-8 p-4 rounded-xl bg-soil-100 dark:bg-rock-800
+          border border-soil-300 dark:border-rock-700">
+          <h2 class="font-sans font-semibold text-xs uppercase tracking-wider text-soil-700 dark:text-cream-2 mb-3">
             Contents
           </h2>
           <ol class="space-y-1 text-sm list-decimal list-inside">
             {sections.map(s => (
-              <li><a href={`#${s.id}`} class="text-farm-gold hover:text-farm-gold-light transition-colors">{s.label.replace(/^\d+\.\s*/, '')}</a></li>
+              <li><a href={`#${s.id}`} class="no-underline text-link hover:text-link-hover transition-colors dark:text-link-dark dark:hover:text-link-dark-hover">{s.label.replace(/^\d+\.\s*/, '')}</a></li>
             ))}
           </ol>
         </nav>
@@ -121,36 +124,36 @@ const jsonLd = {
 
           <!-- Section 1: Overview -->
           <section id="overview">
-            <h2 class="text-2xl font-bold text-farm-green-deep dark:text-farm-cream border-b border-farm-cream-dark dark:border-farm-dark-border pb-2">
+            <h2 class="text-2xl font-semibold text-soil-900 dark:text-cream border-b border-soil-300 dark:border-rock-700 pb-2">
               1. Overview & Conventions
             </h2>
-            <div class="mt-4 space-y-3 text-farm-text dark:text-farm-text-light leading-relaxed">
+            <div class="mt-4 space-y-3 text-soil-900 dark:text-cream leading-relaxed">
               <p>
                 <span class="font-mono">vgi-rpc</span> is an RPC framework where <strong>serialization</strong> uses the{' '}
                 <a href="https://arrow.apache.org/docs/format/Columnar.html#ipc-streaming-format" target="_blank" rel="noopener noreferrer"
-                  class="text-farm-gold hover:text-farm-gold-light transition-colors">Apache Arrow IPC Streaming Format</a>.
+                  class="text-link hover:text-link-hover transition-colors dark:text-link-dark dark:hover:text-link-dark-hover">Apache Arrow IPC Streaming Format</a>.
               </p>
-              <ul class="list-disc list-inside space-y-1 text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+              <ul class="list-disc list-inside space-y-1 text-sm text-soil-700 dark:text-cream-2">
                 <li>All integers are little-endian unless stated otherwise</li>
                 <li>All metadata strings are UTF-8 encoded</li>
-                <li>Wire protocol version: <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">"1"</code> (ASCII <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">0x31</code>)</li>
-                <li>Metadata keys in the <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.*</code> namespace are framework-reserved</li>
+                <li>Wire protocol version: <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">"1"</code> (ASCII <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">0x31</code>)</li>
+                <li>Metadata keys in the <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">vgi_rpc.*</code> namespace are framework-reserved</li>
               </ul>
 
-              <div class="mt-4 overflow-x-auto rounded-lg border border-farm-cream-dark dark:border-farm-dark-border">
+              <div class="mt-4 overflow-x-auto rounded-lg border border-soil-300 dark:border-rock-700">
                 <table class="w-full text-sm">
                   <thead>
-                    <tr class="bg-farm-cream-dark dark:bg-farm-dark-card">
+                    <tr class="bg-soil-100 dark:bg-rock-800">
                       <th class="px-4 py-2 text-left font-semibold">Term</th>
                       <th class="px-4 py-2 text-left font-semibold">Definition</th>
                     </tr>
                   </thead>
-                  <tbody class="divide-y divide-farm-cream-dark dark:divide-farm-dark-border">
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-medium">IPC stream</td><td class="px-4 py-2 text-farm-text-muted dark:text-farm-text-light-muted">A complete Arrow IPC streaming-format sequence: schema + record batches + EOS marker</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-medium">Batch</td><td class="px-4 py-2 text-farm-text-muted dark:text-farm-text-light-muted">An Arrow RecordBatch — zero or more rows conforming to a schema</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-medium">Custom metadata</td><td class="px-4 py-2 text-farm-text-muted dark:text-farm-text-light-muted">Per-batch KeyValueMetadata (distinct from schema-level metadata)</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-medium">Zero-row batch</td><td class="px-4 py-2 text-farm-text-muted dark:text-farm-text-light-muted">A batch with num_rows == 0. Used for log, error, pointer, and completion signals</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-medium">Data batch</td><td class="px-4 py-2 text-farm-text-muted dark:text-farm-text-light-muted">A batch with num_rows &gt; 0, or a zero-row batch without log/error metadata</td></tr>
+                  <tbody class="divide-y divide-soil-200 dark:divide-rock-700">
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-medium">IPC stream</td><td class="px-4 py-2 text-soil-700 dark:text-cream-2">A complete Arrow IPC streaming-format sequence: schema + record batches + EOS marker</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-medium">Batch</td><td class="px-4 py-2 text-soil-700 dark:text-cream-2">An Arrow RecordBatch — zero or more rows conforming to a schema</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-medium">Custom metadata</td><td class="px-4 py-2 text-soil-700 dark:text-cream-2">Per-batch KeyValueMetadata (distinct from schema-level metadata)</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-medium">Zero-row batch</td><td class="px-4 py-2 text-soil-700 dark:text-cream-2">A batch with num_rows == 0. Used for log, error, pointer, and completion signals</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-medium">Data batch</td><td class="px-4 py-2 text-soil-700 dark:text-cream-2">A batch with num_rows &gt; 0, or a zero-row batch without log/error metadata</td></tr>
                   </tbody>
                 </table>
               </div>
@@ -159,21 +162,21 @@ const jsonLd = {
 
           <!-- Section 2: Framing -->
           <section id="framing">
-            <h2 class="text-2xl font-bold text-farm-green-deep dark:text-farm-cream border-b border-farm-cream-dark dark:border-farm-dark-border pb-2">
+            <h2 class="text-2xl font-semibold text-soil-900 dark:text-cream border-b border-soil-300 dark:border-rock-700 pb-2">
               2. Arrow IPC Framing
             </h2>
-            <div class="mt-4 space-y-3 text-farm-text dark:text-farm-text-light leading-relaxed">
+            <div class="mt-4 space-y-3 text-soil-900 dark:text-cream leading-relaxed">
               <p>
                 Each logical message exchange uses one or more IPC streams written sequentially on the same byte stream
                 (pipe, TCP socket, HTTP body, etc.).
               </p>
               <p>An IPC stream consists of:</p>
-              <ol class="list-decimal list-inside space-y-1 text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+              <ol class="list-decimal list-inside space-y-1 text-sm text-soil-700 dark:text-cream-2">
                 <li><strong>Schema message</strong> — describes the columns and their Arrow types</li>
                 <li><strong>Zero or more RecordBatch messages</strong> — each optionally carrying per-batch custom metadata</li>
-                <li><strong>EOS marker</strong> — the 8-byte sequence <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">0xFF 0xFF 0xFF 0xFF 0x00 0x00 0x00 0x00</code></li>
+                <li><strong>EOS marker</strong> — the 8-byte sequence <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">0xFF 0xFF 0xFF 0xFF 0x00 0x00 0x00 0x00</code></li>
               </ol>
-              <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+              <p class="text-sm text-soil-700 dark:text-cream-2">
                 Multiple IPC streams are written sequentially on the same underlying byte stream.
                 Each reader opens one stream, reads until EOS, and stops. The next reader picks up immediately after.
               </p>
@@ -182,145 +185,145 @@ const jsonLd = {
 
           <!-- Section 3: Metadata -->
           <section id="metadata">
-            <h2 class="text-2xl font-bold text-farm-green-deep dark:text-farm-cream border-b border-farm-cream-dark dark:border-farm-dark-border pb-2">
+            <h2 class="text-2xl font-semibold text-soil-900 dark:text-cream border-b border-soil-300 dark:border-rock-700 pb-2">
               3. Metadata Key Reference &amp; Protocol Routing
             </h2>
             <div class="mt-4 space-y-4">
-              <h3 class="text-lg font-semibold text-farm-text dark:text-farm-text-light">Request metadata</h3>
-              <div class="overflow-x-auto rounded-lg border border-farm-cream-dark dark:border-farm-dark-border">
+              <h3 class="text-lg font-semibold text-soil-900 dark:text-cream">Request metadata</h3>
+              <div class="overflow-x-auto rounded-lg border border-soil-300 dark:border-rock-700">
                 <table class="w-full text-sm">
                   <thead>
-                    <tr class="bg-farm-cream-dark dark:bg-farm-dark-card">
+                    <tr class="bg-soil-100 dark:bg-rock-800">
                       <th class="px-4 py-2 text-left font-semibold">Key</th>
                       <th class="px-4 py-2 text-left font-semibold">Value</th>
                       <th class="px-4 py-2 text-left font-semibold">Description</th>
                     </tr>
                   </thead>
-                  <tbody class="divide-y divide-farm-cream-dark dark:divide-farm-dark-border text-farm-text-muted dark:text-farm-text-light-muted">
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.method</td><td class="px-4 py-2">UTF-8 method name</td><td class="px-4 py-2">Target RPC method. <strong class="text-farm-text dark:text-farm-text-light">Required.</strong></td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.protocol</td><td class="px-4 py-2">UTF-8 protocol name</td><td class="px-4 py-2">Which hosted protocol the method belongs to &mdash; the routing key. <strong class="text-farm-text dark:text-farm-text-light">Required</strong>, including against a server hosting exactly one protocol.</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.request_version</td><td class="px-4 py-2">"1"</td><td class="px-4 py-2">Wire protocol version. <strong class="text-farm-text dark:text-farm-text-light">Required.</strong></td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.protocol_version</td><td class="px-4 py-2">Semver</td><td class="px-4 py-2">Application protocol version. Required when the Protocol declares one.</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.request_id</td><td class="px-4 py-2">16-char hex</td><td class="px-4 py-2">Per-request correlation ID. Optional.</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.cancel</td><td class="px-4 py-2">"1"</td><td class="px-4 py-2">Best-effort stream cancellation signal. Optional.</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">traceparent</td><td class="px-4 py-2">W3C Trace Context</td><td class="px-4 py-2">OpenTelemetry trace propagation. Optional.</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">tracestate</td><td class="px-4 py-2">W3C Trace Context</td><td class="px-4 py-2">OpenTelemetry vendor state. Optional.</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.shm_segment_name</td><td class="px-4 py-2">UTF-8 OS name</td><td class="px-4 py-2">Shared memory segment name. Optional.</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.shm_segment_size</td><td class="px-4 py-2">Decimal integer</td><td class="px-4 py-2">SHM segment total size in bytes. Optional.</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.transport.shm</td><td class="px-4 py-2">"true" / "false"</td><td class="px-4 py-2">Peer SHM capability during transport negotiation.</td></tr>
+                  <tbody class="divide-y divide-soil-200 dark:divide-rock-700 text-soil-700 dark:text-cream-2">
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.method</td><td class="px-4 py-2">UTF-8 method name</td><td class="px-4 py-2">Target RPC method. <strong class="text-soil-900 dark:text-cream">Required.</strong></td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.protocol</td><td class="px-4 py-2">UTF-8 protocol name</td><td class="px-4 py-2">Which hosted protocol the method belongs to &mdash; the routing key. <strong class="text-soil-900 dark:text-cream">Required</strong>, including against a server hosting exactly one protocol.</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.request_version</td><td class="px-4 py-2">"1"</td><td class="px-4 py-2">Wire protocol version. <strong class="text-soil-900 dark:text-cream">Required.</strong></td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.protocol_version</td><td class="px-4 py-2">Semver</td><td class="px-4 py-2">Application protocol version. Required when the Protocol declares one.</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.request_id</td><td class="px-4 py-2">16-char hex</td><td class="px-4 py-2">Per-request correlation ID. Optional.</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.cancel</td><td class="px-4 py-2">"1"</td><td class="px-4 py-2">Best-effort stream cancellation signal. Optional.</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">traceparent</td><td class="px-4 py-2">W3C Trace Context</td><td class="px-4 py-2">OpenTelemetry trace propagation. Optional.</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">tracestate</td><td class="px-4 py-2">W3C Trace Context</td><td class="px-4 py-2">OpenTelemetry vendor state. Optional.</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.shm_segment_name</td><td class="px-4 py-2">UTF-8 OS name</td><td class="px-4 py-2">Shared memory segment name. Optional.</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.shm_segment_size</td><td class="px-4 py-2">Decimal integer</td><td class="px-4 py-2">SHM segment total size in bytes. Optional.</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.transport.shm</td><td class="px-4 py-2">"true" / "false"</td><td class="px-4 py-2">Peer SHM capability during transport negotiation.</td></tr>
                   </tbody>
                 </table>
               </div>
 
-              <h3 class="text-lg font-semibold text-farm-text dark:text-farm-text-light mt-6">Response / log / error metadata</h3>
-              <div class="overflow-x-auto rounded-lg border border-farm-cream-dark dark:border-farm-dark-border">
+              <h3 class="text-lg font-semibold text-soil-900 dark:text-cream mt-6">Response / log / error metadata</h3>
+              <div class="overflow-x-auto rounded-lg border border-soil-300 dark:border-rock-700">
                 <table class="w-full text-sm">
                   <thead>
-                    <tr class="bg-farm-cream-dark dark:bg-farm-dark-card">
+                    <tr class="bg-soil-100 dark:bg-rock-800">
                       <th class="px-4 py-2 text-left font-semibold">Key</th>
                       <th class="px-4 py-2 text-left font-semibold">Value</th>
                       <th class="px-4 py-2 text-left font-semibold">Description</th>
                     </tr>
                   </thead>
-                  <tbody class="divide-y divide-farm-cream-dark dark:divide-farm-dark-border text-farm-text-muted dark:text-farm-text-light-muted">
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.log_level</td><td class="px-4 py-2">EXCEPTION, ERROR, WARN, INFO, DEBUG, TRACE</td><td class="px-4 py-2">Severity level. Present on log/error batches.</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.log_message</td><td class="px-4 py-2">UTF-8 string</td><td class="px-4 py-2">Human-readable message text.</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.log_extra</td><td class="px-4 py-2">JSON string</td><td class="px-4 py-2">Additional structured data. Optional.</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.error_kind</td><td class="px-4 py-2">UTF-8 token</td><td class="px-4 py-2">Stable, machine-readable error category. Optional and open-ended.</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.server_id</td><td class="px-4 py-2">12-char hex</td><td class="px-4 py-2">Server instance identifier.</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.request_id</td><td class="px-4 py-2">UTF-8 string</td><td class="px-4 py-2">Echoed request correlation ID.</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.transport.shm</td><td class="px-4 py-2">"true" / "false"</td><td class="px-4 py-2">Server SHM capability on the transport-options response.</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.stream_state#b64</td><td class="px-4 py-2">Base64 AEAD token</td><td class="px-4 py-2">Per-turn HTTP stream cursor.</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.call_state#b64</td><td class="px-4 py-2">Base64 AEAD token</td><td class="px-4 py-2">Immutable HTTP call state, minted once at stream initialization.</td></tr>
+                  <tbody class="divide-y divide-soil-200 dark:divide-rock-700 text-soil-700 dark:text-cream-2">
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.log_level</td><td class="px-4 py-2">EXCEPTION, ERROR, WARN, INFO, DEBUG, TRACE</td><td class="px-4 py-2">Severity level. Present on log/error batches.</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.log_message</td><td class="px-4 py-2">UTF-8 string</td><td class="px-4 py-2">Human-readable message text.</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.log_extra</td><td class="px-4 py-2">JSON string</td><td class="px-4 py-2">Additional structured data. Optional.</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.error_kind</td><td class="px-4 py-2">UTF-8 token</td><td class="px-4 py-2">Stable, machine-readable error category. Optional and open-ended.</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.server_id</td><td class="px-4 py-2">12-char hex</td><td class="px-4 py-2">Server instance identifier.</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.request_id</td><td class="px-4 py-2">UTF-8 string</td><td class="px-4 py-2">Echoed request correlation ID.</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.transport.shm</td><td class="px-4 py-2">"true" / "false"</td><td class="px-4 py-2">Server SHM capability on the transport-options response.</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.stream_state#b64</td><td class="px-4 py-2">Base64 AEAD token</td><td class="px-4 py-2">Per-turn HTTP stream cursor.</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.call_state#b64</td><td class="px-4 py-2">Base64 AEAD token</td><td class="px-4 py-2">Immutable HTTP call state, minted once at stream initialization.</td></tr>
                   </tbody>
                 </table>
               </div>
 
-              <h3 class="text-lg font-semibold text-farm-text dark:text-farm-text-light mt-6">Pointer batch metadata</h3>
-              <div class="overflow-x-auto rounded-lg border border-farm-cream-dark dark:border-farm-dark-border">
+              <h3 class="text-lg font-semibold text-soil-900 dark:text-cream mt-6">Pointer batch metadata</h3>
+              <div class="overflow-x-auto rounded-lg border border-soil-300 dark:border-rock-700">
                 <table class="w-full text-sm">
                   <thead>
-                    <tr class="bg-farm-cream-dark dark:bg-farm-dark-card">
+                    <tr class="bg-soil-100 dark:bg-rock-800">
                       <th class="px-4 py-2 text-left font-semibold">Key</th>
                       <th class="px-4 py-2 text-left font-semibold">Context</th>
                       <th class="px-4 py-2 text-left font-semibold">Description</th>
                     </tr>
                   </thead>
-                  <tbody class="divide-y divide-farm-cream-dark dark:divide-farm-dark-border text-farm-text-muted dark:text-farm-text-light-muted">
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.shm_offset</td><td class="px-4 py-2">SHM pointer</td><td class="px-4 py-2">Absolute segment offset as a decimal integer.</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.shm_length</td><td class="px-4 py-2">SHM pointer</td><td class="px-4 py-2">Serialized batch length in bytes.</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.shm_source</td><td class="px-4 py-2">Resolved SHM batch</td><td class="px-4 py-2">Source segment name retained for diagnostics.</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.location</td><td class="px-4 py-2">External pointer</td><td class="px-4 py-2">URL containing an Arrow IPC stream.</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.location.sha256</td><td class="px-4 py-2">External pointer</td><td class="px-4 py-2">SHA-256 of the uncompressed payload; verification is mandatory when present.</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.location.fetch_ms</td><td class="px-4 py-2">Resolved external batch</td><td class="px-4 py-2">Fetch duration in milliseconds.</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.location.source</td><td class="px-4 py-2">Resolved external batch</td><td class="px-4 py-2">Original source URL retained for diagnostics.</td></tr>
+                  <tbody class="divide-y divide-soil-200 dark:divide-rock-700 text-soil-700 dark:text-cream-2">
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.shm_offset</td><td class="px-4 py-2">SHM pointer</td><td class="px-4 py-2">Absolute segment offset as a decimal integer.</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.shm_length</td><td class="px-4 py-2">SHM pointer</td><td class="px-4 py-2">Serialized batch length in bytes.</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.shm_source</td><td class="px-4 py-2">Resolved SHM batch</td><td class="px-4 py-2">Source segment name retained for diagnostics.</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.location</td><td class="px-4 py-2">External pointer</td><td class="px-4 py-2">URL containing an Arrow IPC stream.</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.location.sha256</td><td class="px-4 py-2">External pointer</td><td class="px-4 py-2">SHA-256 of the uncompressed payload; verification is mandatory when present.</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.location.fetch_ms</td><td class="px-4 py-2">Resolved external batch</td><td class="px-4 py-2">Fetch duration in milliseconds.</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.location.source</td><td class="px-4 py-2">Resolved external batch</td><td class="px-4 py-2">Original source URL retained for diagnostics.</td></tr>
                   </tbody>
                 </table>
               </div>
 
-              <h3 class="text-lg font-semibold text-farm-text dark:text-farm-text-light mt-8">3.1 Protocol routing</h3>
-              <div class="mt-3 space-y-3 text-farm-text dark:text-farm-text-light leading-relaxed">
+              <h3 class="text-lg font-semibold text-soil-900 dark:text-cream mt-8">3.1 Protocol routing</h3>
+              <div class="mt-3 space-y-3 text-soil-900 dark:text-cream leading-relaxed">
                 <p>
                   A server hosts one or more <strong>protocols</strong>. Every request names the one it addresses, and
-                  dispatch resolves the pair <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">(protocol, method)</code>. Method names may collide across
+                  dispatch resolves the pair <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">(protocol, method)</code>. Method names may collide across
                   protocols &mdash; that is what lets protocols be authored independently, and a port that merges them
                   into one namespace is not conformant.
                 </p>
-                <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+                <p class="text-sm text-soil-700 dark:text-cream-2">
                   A protocol name is an identifier, optionally dot-qualified &mdash;{' '}
-                  <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">[A-Za-z_][A-Za-z0-9_.]*</code>, at most 255 bytes UTF-8. The{' '}
-                  <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.</code> prefix is reserved for protocols the framework itself defines; a server
+                  <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">[A-Za-z_][A-Za-z0-9_.]*</code>, at most 255 bytes UTF-8. The{' '}
+                  <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">vgi_rpc.</code> prefix is reserved for protocols the framework itself defines; a server
                   MUST refuse to register an application protocol claiming it, because an application that could claim{' '}
-                  <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.Reflection.v1</code> could shadow the one surface a client trusts before it knows
+                  <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">vgi_rpc.Reflection.v1</code> could shadow the one surface a client trusts before it knows
                   anything else about the server.
                 </p>
-                <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
-                  <strong class="text-farm-text dark:text-farm-text-light">The major version is part of the name</strong> &mdash;{' '}
-                  <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.Reflection.v1</code>,{' '}
-                  <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.Identity.v1</code> &mdash; following gRPC (AIP-185), Kubernetes API groups, and
+                <p class="text-sm text-soil-700 dark:text-cream-2">
+                  <strong class="text-soil-900 dark:text-cream">The major version is part of the name</strong> &mdash;{' '}
+                  <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">vgi_rpc.Reflection.v1</code>,{' '}
+                  <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">vgi_rpc.Identity.v1</code> &mdash; following gRPC (AIP-185), Kubernetes API groups, and
                   D-Bus. An incompatible major is therefore a <em>different protocol</em>, so addressing it is a routing
                   failure every proxy and load balancer understands without an Arrow parser, and{' '}
-                  <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">.v1</code> and <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">.v2</code> can be served side by side while clients migrate.
+                  <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">.v1</code> and <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">.v2</code> can be served side by side while clients migrate.
                 </p>
-                <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
-                  On HTTP the protocol rides twice: in <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.protocol</code> and as a path segment,{' '}
-                  <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">{'{prefix}'}/{'{protocol}'}/{'{method}'}</code>. <strong class="text-farm-text dark:text-farm-text-light">The metadata field is
+                <p class="text-sm text-soil-700 dark:text-cream-2">
+                  On HTTP the protocol rides twice: in <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">vgi_rpc.protocol</code> and as a path segment,{' '}
+                  <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">{'{prefix}'}/{'{protocol}'}/{'{method}'}</code>. <strong class="text-soil-900 dark:text-cream">The metadata field is
                   canonical</strong> &mdash; it is the only carrier on the stdio, Unix-socket, and named-pipe transports.
                   The path segment is a required faithful projection, present so an edge device can act on the protocol
                   without parsing Arrow. A server MUST reject a request whose two carriers disagree, and a{' '}
-                  <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">%</code> anywhere in the protocol path segment is rejected without decoding &mdash; the
+                  <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">%</code> anywhere in the protocol path segment is rejected without decoding &mdash; the
                   name charset never requires percent-encoding, so a percent sign is a bug or an attempt to make the edge
                   and the worker read different strings.
                 </p>
-                <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+                <p class="text-sm text-soil-700 dark:text-cream-2">
                   Stream continuations re-verify. Implementations bind the protocol into the AEAD associated data of the
                   cursor and call tokens, so a cross-protocol continuation fails the tag check and is rejected exactly as
                   an invalid token. Binding it into the <em>cursor</em> token is what covers the call-state cache-hit
                   path, where the call token is never opened at all.
                 </p>
-                <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
-                  <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.protocol</code> is required <strong class="text-farm-text dark:text-farm-text-light">even when the server hosts exactly
+                <p class="text-sm text-soil-700 dark:text-cream-2">
+                  <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">vgi_rpc.protocol</code> is required <strong class="text-soil-900 dark:text-cream">even when the server hosts exactly
                   one protocol</strong>. An exemption would let an intermediary that rebuilds a request and drops the
                   field land silently on whichever protocol happened to be first, rather than being told. The three
                   answers are distinct and a client depends on the difference:
                 </p>
-                <div class="overflow-x-auto rounded-lg border border-farm-cream-dark dark:border-farm-dark-border">
+                <div class="overflow-x-auto rounded-lg border border-soil-300 dark:border-rock-700">
                   <table class="w-full text-sm">
                     <thead>
-                      <tr class="bg-farm-cream-dark dark:bg-farm-dark-card">
+                      <tr class="bg-soil-100 dark:bg-rock-800">
                         <th class="px-4 py-2 text-left font-semibold">Condition</th>
                         <th class="px-4 py-2 text-left font-semibold">Answer</th>
                         <th class="px-4 py-2 text-left font-semibold">error_kind</th>
                       </tr>
                     </thead>
-                    <tbody class="divide-y divide-farm-cream-dark dark:divide-farm-dark-border text-farm-text-muted dark:text-farm-text-light-muted">
-                      <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2">No routing key on the request</td><td class="px-4 py-2">Refuse</td><td class="px-4 py-2 font-mono text-xs">protocol_not_specified</td></tr>
-                      <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2">Named protocol not hosted here</td><td class="px-4 py-2">404</td><td class="px-4 py-2 font-mono text-xs">protocol_not_supported</td></tr>
-                      <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2">Protocol hosted, method absent</td><td class="px-4 py-2">404</td><td class="px-4 py-2 font-mono text-xs">method_not_implemented</td></tr>
+                    <tbody class="divide-y divide-soil-200 dark:divide-rock-700 text-soil-700 dark:text-cream-2">
+                      <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2">No routing key on the request</td><td class="px-4 py-2">Refuse</td><td class="px-4 py-2 font-mono text-xs">protocol_not_specified</td></tr>
+                      <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2">Named protocol not hosted here</td><td class="px-4 py-2">404</td><td class="px-4 py-2 font-mono text-xs">protocol_not_supported</td></tr>
+                      <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2">Protocol hosted, method absent</td><td class="px-4 py-2">404</td><td class="px-4 py-2 font-mono text-xs">method_not_implemented</td></tr>
                     </tbody>
                   </table>
                 </div>
-                <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+                <p class="text-sm text-soil-700 dark:text-cream-2">
                   The last row is the documented capability-probe signal: a client testing for an optional method must be
                   able to tell &ldquo;you do not speak this protocol&rdquo; from &ldquo;you speak it but lack this
                   method&rdquo;.
@@ -331,39 +334,39 @@ const jsonLd = {
 
           <!-- Section 4: Type Mapping -->
           <section id="types">
-            <h2 class="text-2xl font-bold text-farm-green-deep dark:text-farm-cream border-b border-farm-cream-dark dark:border-farm-dark-border pb-2">
+            <h2 class="text-2xl font-semibold text-soil-900 dark:text-cream border-b border-soil-300 dark:border-rock-700 pb-2">
               4. Type Mapping
             </h2>
-            <div class="mt-4 space-y-3 text-farm-text dark:text-farm-text-light leading-relaxed">
+            <div class="mt-4 space-y-3 text-soil-900 dark:text-cream leading-relaxed">
               <p>
                 RPC parameters and return values are serialized as Arrow columns.
                 Cross-language implementations MUST use these Arrow types for interoperability.
               </p>
-              <div class="overflow-x-auto rounded-lg border border-farm-cream-dark dark:border-farm-dark-border">
+              <div class="overflow-x-auto rounded-lg border border-soil-300 dark:border-rock-700">
                 <table class="w-full text-sm">
                   <thead>
-                    <tr class="bg-farm-cream-dark dark:bg-farm-dark-card">
+                    <tr class="bg-soil-100 dark:bg-rock-800">
                       <th class="px-4 py-2 text-left font-semibold">Abstract Type</th>
                       <th class="px-4 py-2 text-left font-semibold">Arrow Type</th>
                       <th class="px-4 py-2 text-left font-semibold">Notes</th>
                     </tr>
                   </thead>
-                  <tbody class="divide-y divide-farm-cream-dark dark:divide-farm-dark-border text-farm-text-muted dark:text-farm-text-light-muted">
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">string</td><td class="px-4 py-2 font-mono text-xs">utf8</td><td class="px-4 py-2">UTF-8 encoded</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">bytes / binary</td><td class="px-4 py-2 font-mono text-xs">binary</td><td class="px-4 py-2">Raw byte sequence</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">int / integer</td><td class="px-4 py-2 font-mono text-xs">int64</td><td class="px-4 py-2">64-bit signed integer</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">float / double</td><td class="px-4 py-2 font-mono text-xs">float64</td><td class="px-4 py-2">IEEE 754 double precision</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">bool</td><td class="px-4 py-2 font-mono text-xs">bool</td><td class="px-4 py-2">&mdash;</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">list[T]</td><td class="px-4 py-2 font-mono text-xs">list(T)</td><td class="px-4 py-2">Recursive</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">dict[K, V]</td><td class="px-4 py-2 font-mono text-xs">map(K, V)</td><td class="px-4 py-2">Serialized as (key, value) tuples</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">set[T]</td><td class="px-4 py-2 font-mono text-xs">list(T)</td><td class="px-4 py-2">Order undefined</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">enum</td><td class="px-4 py-2 font-mono text-xs">dictionary(int16, utf8)</td><td class="px-4 py-2">Serialized as member name</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">optional[T]</td><td class="px-4 py-2 font-mono text-xs">T (nullable=true)</td><td class="px-4 py-2">null = absent value</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">dataclass</td><td class="px-4 py-2 font-mono text-xs">binary</td><td class="px-4 py-2">Serialized as IPC stream</td></tr>
+                  <tbody class="divide-y divide-soil-200 dark:divide-rock-700 text-soil-700 dark:text-cream-2">
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">string</td><td class="px-4 py-2 font-mono text-xs">utf8</td><td class="px-4 py-2">UTF-8 encoded</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">bytes / binary</td><td class="px-4 py-2 font-mono text-xs">binary</td><td class="px-4 py-2">Raw byte sequence</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">int / integer</td><td class="px-4 py-2 font-mono text-xs">int64</td><td class="px-4 py-2">64-bit signed integer</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">float / double</td><td class="px-4 py-2 font-mono text-xs">float64</td><td class="px-4 py-2">IEEE 754 double precision</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">bool</td><td class="px-4 py-2 font-mono text-xs">bool</td><td class="px-4 py-2">&mdash;</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">list[T]</td><td class="px-4 py-2 font-mono text-xs">list(T)</td><td class="px-4 py-2">Recursive</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">dict[K, V]</td><td class="px-4 py-2 font-mono text-xs">map(K, V)</td><td class="px-4 py-2">Serialized as (key, value) tuples</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">set[T]</td><td class="px-4 py-2 font-mono text-xs">list(T)</td><td class="px-4 py-2">Order undefined</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">enum</td><td class="px-4 py-2 font-mono text-xs">dictionary(int16, utf8)</td><td class="px-4 py-2">Serialized as member name</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">optional[T]</td><td class="px-4 py-2 font-mono text-xs">T (nullable=true)</td><td class="px-4 py-2">null = absent value</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">dataclass</td><td class="px-4 py-2 font-mono text-xs">binary</td><td class="px-4 py-2">Serialized as IPC stream</td></tr>
                   </tbody>
                 </table>
               </div>
-              <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+              <p class="text-sm text-soil-700 dark:text-cream-2">
                 A dataclass used directly as an RPC parameter or return value is a binary column containing a complete
                 Arrow IPC stream. Inside that dataclass stream, nested dataclasses are Arrow structs. Container conversion
                 is recursive, including lists, maps, sets, enums, nullable values, and nested dataclasses.
@@ -373,14 +376,14 @@ const jsonLd = {
 
           <!-- Section 5: Request Format -->
           <section id="request">
-            <h2 class="text-2xl font-bold text-farm-green-deep dark:text-farm-cream border-b border-farm-cream-dark dark:border-farm-dark-border pb-2">
+            <h2 class="text-2xl font-semibold text-soil-900 dark:text-cream border-b border-soil-300 dark:border-rock-700 pb-2">
               5. Request Batch Format
             </h2>
-            <div class="mt-4 space-y-3 text-farm-text dark:text-farm-text-light leading-relaxed">
+            <div class="mt-4 space-y-3 text-soil-900 dark:text-cream leading-relaxed">
               <p>
                 Every RPC request is a single IPC stream containing exactly one batch with one row:
               </p>
-              <pre class="p-4 rounded-lg bg-white dark:bg-farm-dark-card border border-farm-cream-dark dark:border-farm-dark-border overflow-x-auto text-sm font-mono text-farm-text-muted dark:text-farm-text-light-muted">{`IPC Stream:
+              <pre class="p-4 rounded-lg bg-rock-900 border border-rock-800 dark:border-rock-700 overflow-x-auto text-sm leading-relaxed font-mono text-[#e9e1d3]">{`IPC Stream:
   Schema message:
     - One field per method parameter
     - Field types per the type mapping
@@ -392,7 +395,7 @@ const jsonLd = {
         vgi_rpc.request_version = "1"          (REQUIRED)
         vgi_rpc.protocol_version = "1.4.0"     (when declared)
   EOS marker`}</pre>
-              <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+              <p class="text-sm text-soil-700 dark:text-cream-2">
                 For methods with no parameters, the schema has zero fields and the batch
                 should represent one row with zero columns. Because Arrow cannot encode a row count for a zero-field
                 batch consistently across runtimes, servers accept any row count for that special case.
@@ -402,12 +405,12 @@ const jsonLd = {
 
           <!-- Section 6: Response Format -->
           <section id="response">
-            <h2 class="text-2xl font-bold text-farm-green-deep dark:text-farm-cream border-b border-farm-cream-dark dark:border-farm-dark-border pb-2">
+            <h2 class="text-2xl font-semibold text-soil-900 dark:text-cream border-b border-soil-300 dark:border-rock-700 pb-2">
               6. Response Format (Unary)
             </h2>
-            <div class="mt-4 space-y-3 text-farm-text dark:text-farm-text-light leading-relaxed">
+            <div class="mt-4 space-y-3 text-soil-900 dark:text-cream leading-relaxed">
               <p>A unary response is a single IPC stream on the result schema:</p>
-              <pre class="p-4 rounded-lg bg-white dark:bg-farm-dark-card border border-farm-cream-dark dark:border-farm-dark-border overflow-x-auto text-sm font-mono text-farm-text-muted dark:text-farm-text-light-muted">{`IPC Stream:
+              <pre class="p-4 rounded-lg bg-rock-900 border border-rock-800 dark:border-rock-700 overflow-x-auto text-sm leading-relaxed font-mono text-[#e9e1d3]">{`IPC Stream:
   Schema message:
     - Single field named "result" (or empty for void)
   0..N log batches (zero-row, with log metadata)
@@ -416,7 +419,7 @@ const jsonLd = {
     - Void: 0-row batch on empty schema
     - Error: 0-row batch with EXCEPTION metadata
   EOS marker`}</pre>
-              <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+              <p class="text-sm text-soil-700 dark:text-cream-2">
                 Log batches MUST appear before the result/error batch.
               </p>
             </div>
@@ -424,11 +427,11 @@ const jsonLd = {
 
           <!-- Section 7: Batch Classification -->
           <section id="classification">
-            <h2 class="text-2xl font-bold text-farm-green-deep dark:text-farm-cream border-b border-farm-cream-dark dark:border-farm-dark-border pb-2">
+            <h2 class="text-2xl font-semibold text-soil-900 dark:text-cream border-b border-soil-300 dark:border-rock-700 pb-2">
               7. Batch Classification Algorithm
             </h2>
             <div class="mt-4">
-              <pre class="p-4 rounded-lg bg-white dark:bg-farm-dark-card border border-farm-cream-dark dark:border-farm-dark-border overflow-x-auto text-sm font-mono text-farm-text-muted dark:text-farm-text-light-muted">{`receive(batch, custom_metadata):
+              <pre class="p-4 rounded-lg bg-rock-900 border border-rock-800 dark:border-rock-700 overflow-x-auto text-sm leading-relaxed font-mono text-[#e9e1d3]">{`receive(batch, custom_metadata):
   IF custom_metadata is NULL         → DATA batch
   IF batch.num_rows > 0              → DATA batch
 
@@ -447,102 +450,102 @@ const jsonLd = {
 
           <!-- Section 8: Log & Error -->
           <section id="log-error">
-            <h2 class="text-2xl font-bold text-farm-green-deep dark:text-farm-cream border-b border-farm-cream-dark dark:border-farm-dark-border pb-2">
+            <h2 class="text-2xl font-semibold text-soil-900 dark:text-cream border-b border-soil-300 dark:border-rock-700 pb-2">
               8. Log & Error Batch Format
             </h2>
-            <div class="mt-4 space-y-3 text-farm-text dark:text-farm-text-light leading-relaxed">
+            <div class="mt-4 space-y-3 text-soil-900 dark:text-cream leading-relaxed">
               <p>
                 A log batch is a zero-row batch on the response stream's schema with{' '}
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.log_level</code> and{' '}
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.log_message</code> in custom metadata.
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">vgi_rpc.log_level</code> and{' '}
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">vgi_rpc.log_message</code> in custom metadata.
               </p>
               <p>
-                When <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">log_level</code> is{' '}
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">"EXCEPTION"</code>,
+                When <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">log_level</code> is{' '}
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">"EXCEPTION"</code>,
                 the client MUST raise/throw an error with:
               </p>
-              <ul class="list-disc list-inside space-y-1 text-sm text-farm-text-muted dark:text-farm-text-light-muted">
-                <li><strong>error_type</strong>: from <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">log_extra.exception_type</code></li>
-                <li><strong>error_message</strong>: from <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.log_message</code></li>
-                <li><strong>remote_traceback</strong>: from <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">log_extra.traceback</code></li>
-                <li><strong>request_id</strong>: from <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.request_id</code></li>
+              <ul class="list-disc list-inside space-y-1 text-sm text-soil-700 dark:text-cream-2">
+                <li><strong>error_type</strong>: from <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">log_extra.exception_type</code></li>
+                <li><strong>error_message</strong>: from <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">vgi_rpc.log_message</code></li>
+                <li><strong>remote_traceback</strong>: from <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">log_extra.traceback</code></li>
+                <li><strong>request_id</strong>: from <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">vgi_rpc.request_id</code></li>
                 <li><strong>error_kind</strong>: stable, open-ended classification &mdash; a client MUST treat an unrecognised value as an unclassified error rather than rejecting the batch</li>
               </ul>
-              <div class="overflow-x-auto rounded-lg border border-farm-cream-dark dark:border-farm-dark-border">
+              <div class="overflow-x-auto rounded-lg border border-soil-300 dark:border-rock-700">
                 <table class="w-full text-sm">
                   <thead>
-                    <tr class="bg-farm-cream-dark dark:bg-farm-dark-card">
+                    <tr class="bg-soil-100 dark:bg-rock-800">
                       <th class="px-4 py-2 text-left font-semibold">Well-known error_kind</th>
                       <th class="px-4 py-2 text-left font-semibold">Meaning</th>
                     </tr>
                   </thead>
-                  <tbody class="divide-y divide-farm-cream-dark dark:divide-farm-dark-border text-farm-text-muted dark:text-farm-text-light-muted">
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">method_not_implemented</td><td class="px-4 py-2">The named protocol is hosted but has no such method. The intended signal for capability detection with fallback.</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">protocol_not_specified</td><td class="px-4 py-2">The request carried no <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.protocol</code> routing key.</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">protocol_not_supported</td><td class="px-4 py-2">This server does not host the named protocol, or the path and the metadata named different ones. Also the answer for an incompatible major, since the major is part of the name.</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">protocol_version_mismatch</td><td class="px-4 py-2">The client's <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.protocol_version</code> is incompatible with the server's, for the protocol the resolved method belongs to.</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">session_lost</td><td class="px-4 py-2">An HTTP sticky-session token could not be honoured &mdash; expired, evicted, misrouted, or presented under a different principal.</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">server_draining</td><td class="px-4 py-2">The server is shutting down and refuses new sticky-session opens.</td></tr>
+                  <tbody class="divide-y divide-soil-200 dark:divide-rock-700 text-soil-700 dark:text-cream-2">
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">method_not_implemented</td><td class="px-4 py-2">The named protocol is hosted but has no such method. The intended signal for capability detection with fallback.</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">protocol_not_specified</td><td class="px-4 py-2">The request carried no <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">vgi_rpc.protocol</code> routing key.</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">protocol_not_supported</td><td class="px-4 py-2">This server does not host the named protocol, or the path and the metadata named different ones. Also the answer for an incompatible major, since the major is part of the name.</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">protocol_version_mismatch</td><td class="px-4 py-2">The client's <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">vgi_rpc.protocol_version</code> is incompatible with the server's, for the protocol the resolved method belongs to.</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">session_lost</td><td class="px-4 py-2">An HTTP sticky-session token could not be honoured &mdash; expired, evicted, misrouted, or presented under a different principal.</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">server_draining</td><td class="px-4 py-2">The server is shutting down and refuses new sticky-session opens.</td></tr>
                   </tbody>
                 </table>
               </div>
-              <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
-                On <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">protocol_not_supported</code> a client SHOULD call{' '}
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.Reflection.v1/list_protocols</code> to learn what the server does host, and MUST
+              <p class="text-sm text-soil-700 dark:text-cream-2">
+                On <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">protocol_not_supported</code> a client SHOULD call{' '}
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">vgi_rpc.Reflection.v1/list_protocols</code> to learn what the server does host, and MUST
                 surface both what it asked for and what it was told.{' '}
-                <a href="#identity" class="text-farm-gold hover:text-farm-gold-light transition-colors">Section 16</a> defines five further kinds specific to{' '}
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.Identity.v1</code>.
+                <a href="#identity" class="text-link hover:text-link-hover transition-colors dark:text-link-dark dark:hover:text-link-dark-hover">Section 16</a> defines five further kinds specific to{' '}
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">vgi_rpc.Identity.v1</code>.
               </p>
             </div>
           </section>
 
           <!-- Section 9: Stream Protocol -->
           <section id="stream">
-            <h2 class="text-2xl font-bold text-farm-green-deep dark:text-farm-cream border-b border-farm-cream-dark dark:border-farm-dark-border pb-2">
+            <h2 class="text-2xl font-semibold text-soil-900 dark:text-cream border-b border-soil-300 dark:border-rock-700 pb-2">
               9. Stream Protocol (Pipe / Subprocess)
             </h2>
-            <div class="mt-4 space-y-4 text-farm-text dark:text-farm-text-light leading-relaxed">
+            <div class="mt-4 space-y-4 text-soil-900 dark:text-cream leading-relaxed">
               <p>Streaming methods use a multi-phase exchange over a bidirectional byte stream.</p>
 
               <h3 class="text-lg font-semibold">Phase 1: Request parameters</h3>
-              <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+              <p class="text-sm text-soil-700 dark:text-cream-2">
                 Identical to a unary request: IPC stream with params schema, 1 request row, EOS.
               </p>
 
               <h3 class="text-lg font-semibold">Phase 1.5: Optional header stream</h3>
-              <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+              <p class="text-sm text-soil-700 dark:text-cream-2">
                 When the stream method declares a header type, the server sends a header IPC stream
                 (header schema, log batches, 1 header row, EOS) before the main data exchange.
               </p>
 
               <h3 class="text-lg font-semibold">Phase 2: Lockstep data exchange</h3>
-              <pre class="p-4 rounded-lg bg-white dark:bg-farm-dark-card border border-farm-cream-dark dark:border-farm-dark-border overflow-x-auto text-sm font-mono text-farm-text-muted dark:text-farm-text-light-muted">{`Producer:                        Exchange:
+              <pre class="p-4 rounded-lg bg-rock-900 border border-rock-800 dark:border-rock-700 overflow-x-auto text-sm leading-relaxed font-mono text-[#e9e1d3]">{`Producer:                        Exchange:
   Client    →   tick (0-row)       Client    →   input batch
   Server    ←   log* + data        Server    ←   log* + output
   Client    →   tick (0-row)       Client    →   input batch
   Server    ←   log* + data        Server    ←   log* + output
   Client    →   tick               Client    →   [EOS]
   Server    ←   [EOS] (finish)     Server    ←   [EOS]`}</pre>
-              <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+              <p class="text-sm text-soil-700 dark:text-cream-2">
                 Lockstep is normative: one client tick or input batch drives exactly one server{' '}
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">process()</code>{' '}
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">process()</code>{' '}
                 invocation and produces zero or more log batches followed by at most one data batch. A producer that
                 finishes closes its output stream instead of returning a data batch for the final tick.
               </p>
-              <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+              <p class="text-sm text-soil-700 dark:text-cream-2">
                 HTTP follows the same rule. The{' '}
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">{'{prefix}'}/{'{protocol}'}/{'{method}'}/init</code>{' '}
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">{'{prefix}'}/{'{protocol}'}/{'{method}'}/init</code>{' '}
                 request drives the first producer turn; every continuation request carries one tick and drives exactly
                 one additional turn. The request batch's custom metadata is delivered to that turn after stripping{' '}
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.stream_state#b64</code>,{' '}
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.call_state#b64</code>, and{' '}
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.cancel</code>.
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">vgi_rpc.stream_state#b64</code>,{' '}
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">vgi_rpc.call_state#b64</code>, and{' '}
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">vgi_rpc.cancel</code>.
               </p>
-              <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+              <p class="text-sm text-soil-700 dark:text-cream-2">
                 A client may cancel either stream by sending a zero-row input batch carrying{' '}
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.cancel = "1"</code>.
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">vgi_rpc.cancel = "1"</code>.
                 Presence of the key is the signal; readers must not depend on its value. Cancellation is best-effort,
-                does not invoke <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">process()</code>,{' '}
+                does not invoke <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">process()</code>,{' '}
                 invokes the stream state's cancellation hook, and closes cleanly rather than producing an exception batch.
               </p>
             </div>
@@ -550,82 +553,82 @@ const jsonLd = {
 
           <!-- Section 10: HTTP Transport -->
           <section id="http">
-            <h2 class="text-2xl font-bold text-farm-green-deep dark:text-farm-cream border-b border-farm-cream-dark dark:border-farm-dark-border pb-2">
+            <h2 class="text-2xl font-semibold text-soil-900 dark:text-cream border-b border-soil-300 dark:border-rock-700 pb-2">
               10. HTTP Transport
             </h2>
-            <div class="mt-4 space-y-3 text-farm-text dark:text-farm-text-light leading-relaxed">
+            <div class="mt-4 space-y-3 text-soil-900 dark:text-cream leading-relaxed">
               <p>
                 The HTTP transport maps the pipe-based protocol to stateless HTTP request/response pairs.
-                All requests use <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">Content-Type: application/vnd.apache.arrow.stream</code>.
+                All requests use <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">Content-Type: application/vnd.apache.arrow.stream</code>.
               </p>
 
-              <div class="overflow-x-auto rounded-lg border border-farm-cream-dark dark:border-farm-dark-border">
+              <div class="overflow-x-auto rounded-lg border border-soil-300 dark:border-rock-700">
                 <table class="w-full text-sm">
                   <thead>
-                    <tr class="bg-farm-cream-dark dark:bg-farm-dark-card">
+                    <tr class="bg-soil-100 dark:bg-rock-800">
                       <th class="px-4 py-2 text-left font-semibold">Endpoint</th>
                       <th class="px-4 py-2 text-left font-semibold">Method</th>
                       <th class="px-4 py-2 text-left font-semibold">Description</th>
                     </tr>
                   </thead>
-                  <tbody class="divide-y divide-farm-cream-dark dark:divide-farm-dark-border text-farm-text-muted dark:text-farm-text-light-muted">
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">{'{prefix}'}/{'{protocol}'}/{'{method}'}</td><td class="px-4 py-2">POST</td><td class="px-4 py-2">Unary RPC call</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">{'{prefix}'}/{'{protocol}'}/{'{method}'}/init</td><td class="px-4 py-2">POST</td><td class="px-4 py-2">Stream initialization (producer and exchange)</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">{'{prefix}'}/{'{protocol}'}/{'{method}'}/exchange</td><td class="px-4 py-2">POST</td><td class="px-4 py-2">Stream continuation, exchange, and cancel</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">{'{prefix}'}/__upload_url__/init</td><td class="px-4 py-2">POST</td><td class="px-4 py-2">Pre-signed upload/download URL generation, when a provider is configured</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">{'{prefix}'}/health</td><td class="px-4 py-2">GET, HEAD, OPTIONS</td><td class="px-4 py-2">Health check and capability discovery</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">{'{prefix}'}/__session__</td><td class="px-4 py-2">DELETE</td><td class="px-4 py-2">Optional sticky-session teardown</td></tr>
+                  <tbody class="divide-y divide-soil-200 dark:divide-rock-700 text-soil-700 dark:text-cream-2">
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">{'{prefix}'}/{'{protocol}'}/{'{method}'}</td><td class="px-4 py-2">POST</td><td class="px-4 py-2">Unary RPC call</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">{'{prefix}'}/{'{protocol}'}/{'{method}'}/init</td><td class="px-4 py-2">POST</td><td class="px-4 py-2">Stream initialization (producer and exchange)</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">{'{prefix}'}/{'{protocol}'}/{'{method}'}/exchange</td><td class="px-4 py-2">POST</td><td class="px-4 py-2">Stream continuation, exchange, and cancel</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">{'{prefix}'}/__upload_url__/init</td><td class="px-4 py-2">POST</td><td class="px-4 py-2">Pre-signed upload/download URL generation, when a provider is configured</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">{'{prefix}'}/health</td><td class="px-4 py-2">GET, HEAD, OPTIONS</td><td class="px-4 py-2">Health check and capability discovery</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">{'{prefix}'}/__session__</td><td class="px-4 py-2">DELETE</td><td class="px-4 py-2">Optional sticky-session teardown</td></tr>
                   </tbody>
                 </table>
               </div>
 
-              <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
-                The first three rows are the <strong class="text-farm-text dark:text-farm-text-light">RPC surface</strong> and are{' '}
-                <strong class="text-farm-text dark:text-farm-text-light">namespaced by protocol</strong>; the path segment must agree with{' '}
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.protocol</code> (<a href="#metadata" class="text-farm-gold hover:text-farm-gold-light transition-colors">Section 3.1</a>). Introspection is not a
+              <p class="text-sm text-soil-700 dark:text-cream-2">
+                The first three rows are the <strong class="text-soil-900 dark:text-cream">RPC surface</strong> and are{' '}
+                <strong class="text-soil-900 dark:text-cream">namespaced by protocol</strong>; the path segment must agree with{' '}
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">vgi_rpc.protocol</code> (<a href="#metadata" class="text-link hover:text-link-hover transition-colors dark:text-link-dark dark:hover:text-link-dark-hover">Section 3.1</a>). Introspection is not a
                 special path &mdash; it is{' '}
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">{'{prefix}'}/vgi_rpc.Reflection.v1/list_protocols</code> and{' '}
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">{'{prefix}'}/vgi_rpc.Reflection.v1/describe</code>, reached the same way as anything else,
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">{'{prefix}'}/vgi_rpc.Reflection.v1/list_protocols</code> and{' '}
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">{'{prefix}'}/vgi_rpc.Reflection.v1/describe</code>, reached the same way as anything else,
                 and identity is likewise{' '}
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">{'{prefix}'}/vgi_rpc.Identity.v1/introspect_token</code>. The reserved framework
-                endpoints are deliberately <strong class="text-farm-text dark:text-farm-text-light">not</strong> namespaced: they belong to the server rather
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">{'{prefix}'}/vgi_rpc.Identity.v1/introspect_token</code>. The reserved framework
+                endpoints are deliberately <strong class="text-soil-900 dark:text-cream">not</strong> namespaced: they belong to the server rather
                 than to any one protocol. A GET to a two-segment path whose first segment cannot be a protocol name is
                 404, not 405 &mdash; without that rule any unrelated two-segment path, a{' '}
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">/.well-known/&hellip;</code> document among them, matches the RPC route and is answered
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">/.well-known/&hellip;</code> document among them, matches the RPC route and is answered
                 &ldquo;method not allowed&rdquo; by it.
               </p>
-              <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+              <p class="text-sm text-soil-700 dark:text-cream-2">
                 Capability headers are stamped on every response and can be discovered cheaply at{' '}
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">HEAD {'{prefix}'}/health</code>.
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">HEAD {'{prefix}'}/health</code>.
                 Browser clients must use HEAD for discovery so the probe passes the CORS method check. GET and OPTIONS also carry capability headers.
-                There is no <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">__capabilities__</code>{' '}
+                There is no <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">__capabilities__</code>{' '}
                 endpoint. An absent capability means unsupported or unconfigured, except that a missing{' '}
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">VGI-Supported-Encodings</code>{' '}
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">VGI-Supported-Encodings</code>{' '}
                 indicates a legacy server for which clients assume zstd; a present but empty value explicitly disables compression.
               </p>
 
-              <div class="overflow-x-auto rounded-lg border border-farm-cream-dark dark:border-farm-dark-border">
+              <div class="overflow-x-auto rounded-lg border border-soil-300 dark:border-rock-700">
                 <table class="w-full text-sm">
                   <thead>
-                    <tr class="bg-farm-cream-dark dark:bg-farm-dark-card">
+                    <tr class="bg-soil-100 dark:bg-rock-800">
                       <th class="px-4 py-2 text-left font-semibold">Capability header</th>
                       <th class="px-4 py-2 text-left font-semibold">Meaning</th>
                     </tr>
                   </thead>
-                  <tbody class="divide-y divide-farm-cream-dark dark:divide-farm-dark-border text-farm-text-muted dark:text-farm-text-light-muted">
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">VGI-Max-Request-Bytes</td><td class="px-4 py-2">Maximum accepted inline request body.</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">VGI-Max-Response-Bytes</td><td class="px-4 py-2">Decoded Arrow IPC body cap, before HTTP content coding. Hard for every response shape.</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">VGI-Accept-Max-Response-Bytes-Support</td><td class="px-4 py-2">Always <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">"true"</code>. The server honours the client's strict per-response limit request header, <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">VGI-Accept-Max-Response-Bytes</code>.</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">VGI-Max-Externalized-Response-Bytes</td><td class="px-4 py-2">Hard cap on bytes uploaded externally during one response.</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">VGI-Externalization-Enabled</td><td class="px-4 py-2">Whether responses may contain external pointer batches.</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">VGI-Supported-Encodings</td><td class="px-4 py-2">Comma-separated response codecs.</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">VGI-Upload-URL-Support / VGI-Max-Upload-Bytes</td><td class="px-4 py-2">Upload-URL availability and optional size cap.</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">VGI-Proxy-Proof-Required</td><td class="px-4 py-2">Whether the worker requires a per-request proxy proof.</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">VGI-Sticky-Enabled / VGI-Sticky-Default-TTL / VGI-Sticky-Echo-Headers</td><td class="px-4 py-2">Sticky-session availability and routing contract.</td></tr>
+                  <tbody class="divide-y divide-soil-200 dark:divide-rock-700 text-soil-700 dark:text-cream-2">
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">VGI-Max-Request-Bytes</td><td class="px-4 py-2">Maximum accepted inline request body.</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">VGI-Max-Response-Bytes</td><td class="px-4 py-2">Decoded Arrow IPC body cap, before HTTP content coding. Hard for every response shape.</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">VGI-Accept-Max-Response-Bytes-Support</td><td class="px-4 py-2">Always <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">"true"</code>. The server honours the client's strict per-response limit request header, <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">VGI-Accept-Max-Response-Bytes</code>.</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">VGI-Max-Externalized-Response-Bytes</td><td class="px-4 py-2">Hard cap on bytes uploaded externally during one response.</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">VGI-Externalization-Enabled</td><td class="px-4 py-2">Whether responses may contain external pointer batches.</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">VGI-Supported-Encodings</td><td class="px-4 py-2">Comma-separated response codecs.</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">VGI-Upload-URL-Support / VGI-Max-Upload-Bytes</td><td class="px-4 py-2">Upload-URL availability and optional size cap.</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">VGI-Proxy-Proof-Required</td><td class="px-4 py-2">Whether the worker requires a per-request proxy proof.</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">VGI-Sticky-Enabled / VGI-Sticky-Default-TTL / VGI-Sticky-Echo-Headers</td><td class="px-4 py-2">Sticky-session availability and routing contract.</td></tr>
                   </tbody>
                 </table>
               </div>
-              <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+              <p class="text-sm text-soil-700 dark:text-cream-2">
                 Clients can send <code>VGI-Accept-Max-Response-Bytes</code> as one ASCII positive decimal integer
                 from 65536 through 2<sup>53</sup> &minus; 1. Signs, leading zeroes, comma lists, and duplicate values
                 are invalid and receive HTTP 400 before dispatch. The effective decoded response cap is the minimum
@@ -633,22 +636,22 @@ const jsonLd = {
                 produces a cursor-free <code>ResponseTooLargeError</code>. Each HTTP producer turn invokes the producer
                 once; a response target does not combine multiple turns.
               </p>
-              <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+              <p class="text-sm text-soil-700 dark:text-cream-2">
                 Request and response compression are independent. Requests use{' '}
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">Content-Encoding</code>;{' '}
-                responses are negotiated with <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">Accept-Encoding</code>{' '}
-                or the higher-priority <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">X-VGI-Accept-Encoding</code>.
-                The corresponding response header is <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">Content-Encoding</code>{' '}
-                or <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">X-VGI-Content-Encoding</code>.
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">Content-Encoding</code>;{' '}
+                responses are negotiated with <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">Accept-Encoding</code>{' '}
+                or the higher-priority <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">X-VGI-Accept-Encoding</code>.
+                The corresponding response header is <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">Content-Encoding</code>{' '}
+                or <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">X-VGI-Content-Encoding</code>.
                 Codec tokens are zstd, gzip, and identity; the portable conformance worker supports zstd and gzip in both directions.
               </p>
-              <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+              <p class="text-sm text-soil-700 dark:text-cream-2">
                 HTTP streams split state into two XChaCha20-Poly1305-sealed tokens: immutable call state minted once by{' '}
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">/init</code>, and a per-turn cursor.
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">/init</code>, and a per-turn cursor.
                 Clients must echo both on every continuation, exchange, and cancellation request. Servers authenticate the cursor first,
                 use its authenticated call ID for cache lookup, then open the call token on a cache miss and require matching call IDs.
               </p>
-              <pre class="p-4 rounded-lg bg-white dark:bg-farm-dark-card border border-farm-cream-dark dark:border-farm-dark-border overflow-x-auto text-sm font-mono text-farm-text-muted dark:text-farm-text-light-muted">{`Base64-decoded state token envelope:
+              <pre class="p-4 rounded-lg bg-rock-900 border border-rock-800 dark:border-rock-700 overflow-x-auto text-sm leading-relaxed font-mono text-[#e9e1d3]">{`Base64-decoded state token envelope:
   byte 0       independent token version (cursor: 5, call: 1)
   bytes 1..24  random XChaCha20-Poly1305 nonce
   bytes 25..   authenticated ciphertext + 16-byte tag
@@ -656,13 +659,13 @@ const jsonLd = {
 Sealed payload:
   byte 0       self-describing codec (0x00 raw, 0x01 zstd in reference)
   bytes 1..    framed state, compressed before encryption when smaller`}</pre>
-              <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+              <p class="text-sm text-soil-700 dark:text-cream-2">
                 Token AAD binds the caller's domain and principal. Implementations must bound decompression, reject unknown codecs,
                 and return the same HTTP 400 classification for invalid, expired, mismatched, or unresolvable tokens.
               </p>
-              <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+              <p class="text-sm text-soil-700 dark:text-cream-2">
                 Authentication runs before method dispatch. Rejections use HTTP 401 with a machine-readable{' '}
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">VGI-Auth-Reason</code>;
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">VGI-Auth-Reason</code>;
                 workers may additionally require a per-request HMAC proxy proof while preserving the caller's end-user credential.
               </p>
             </div>
@@ -670,23 +673,23 @@ Sealed payload:
 
           <!-- Section 11: Shared Memory -->
           <section id="shm">
-            <h2 class="text-2xl font-bold text-farm-green-deep dark:text-farm-cream border-b border-farm-cream-dark dark:border-farm-dark-border pb-2">
+            <h2 class="text-2xl font-semibold text-soil-900 dark:text-cream border-b border-soil-300 dark:border-rock-700 pb-2">
               11. Shared Memory (SHM) Transport
             </h2>
-            <div class="mt-4 space-y-3 text-farm-text dark:text-farm-text-light leading-relaxed">
+            <div class="mt-4 space-y-3 text-soil-900 dark:text-cream leading-relaxed">
               <p>
                 The shared memory side-channel enables zero-copy batch transfer between co-located processes.
                 The pipe carries control messages; large batches are written to shared memory and replaced with
                 pointer batches.
               </p>
-              <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+              <p class="text-sm text-soil-700 dark:text-cream-2">
                 SHM is an optional side channel for pipe, subprocess, and Unix-socket transports. Before advertising a
                 segment or writing a pointer, both peers must negotiate{' '}
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.transport.shm = "true"</code>{' '}
-                through <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">__transport_options__</code>.
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">vgi_rpc.transport.shm = "true"</code>{' '}
+                through <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">__transport_options__</code>.
                 Missing support or any negotiation error requires an inline fallback.
               </p>
-              <pre class="p-4 rounded-lg bg-white dark:bg-farm-dark-card border border-farm-cream-dark dark:border-farm-dark-border overflow-x-auto text-sm font-mono text-farm-text-muted dark:text-farm-text-light-muted">{`Segment header (64 KiB):
+              <pre class="p-4 rounded-lg bg-rock-900 border border-rock-800 dark:border-rock-700 overflow-x-auto text-sm leading-relaxed font-mono text-[#e9e1d3]">{`Segment header (64 KiB):
   Offset  Size    Field
   0       4       magic: "VGIS" (0x56 0x47 0x49 0x53)
   4       4       version: uint32 = 1
@@ -694,12 +697,12 @@ Sealed payload:
   16      4       num_allocs: uint32
   20      4       padding: uint32 = 0
   24      N*16    allocations: (offset, length) pairs`}</pre>
-              <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
-                SHM pointer batches are zero-row batches with <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.shm_offset</code>{' '}
-                and <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.shm_length</code> in custom metadata.
+              <p class="text-sm text-soil-700 dark:text-cream-2">
+                SHM pointer batches are zero-row batches with <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">vgi_rpc.shm_offset</code>{' '}
+                and <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">vgi_rpc.shm_length</code> in custom metadata.
                 The allocator uses first-fit with implicit coalescing. Maximum 4,094 allocations. A resolver validates bounds,
                 opens the IPC stream from the referenced region, retains the mapped owner for the Arrow buffers' lifetime,
-                annotates the resolved batch with <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.shm_source</code>,
+                annotates the resolved batch with <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">vgi_rpc.shm_source</code>,
                 and releases the allocation when it is safe to reuse.
               </p>
             </div>
@@ -707,17 +710,17 @@ Sealed payload:
 
           <!-- Section 12: External Storage -->
           <section id="external">
-            <h2 class="text-2xl font-bold text-farm-green-deep dark:text-farm-cream border-b border-farm-cream-dark dark:border-farm-dark-border pb-2">
+            <h2 class="text-2xl font-semibold text-soil-900 dark:text-cream border-b border-soil-300 dark:border-rock-700 pb-2">
               12. External Storage Pointer Batches
             </h2>
-            <div class="mt-4 space-y-3 text-farm-text dark:text-farm-text-light leading-relaxed">
+            <div class="mt-4 space-y-3 text-soil-900 dark:text-cream leading-relaxed">
               <p>
                 When batches exceed a configurable size threshold, they can be externalized to remote storage
                 (HTTPS, S3, or GCS) and replaced with pointer batches containing a{' '}
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.location</code> URL.
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">vgi_rpc.location</code> URL.
               </p>
-              <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
-                Writers may attach <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.location.sha256</code>;
+              <p class="text-sm text-soil-700 dark:text-cream-2">
+                Writers may attach <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">vgi_rpc.location.sha256</code>;
                 readers that receive it must verify the uncompressed payload. Resolution enforces scheme, host, redirect,
                 encoded-size, decoded-size, and retry limits before opening the fetched IPC stream.
               </p>
@@ -726,293 +729,293 @@ Sealed payload:
 
           <!-- Section 13: Version Negotiation -->
           <section id="versioning">
-            <h2 class="text-2xl font-bold text-farm-green-deep dark:text-farm-cream border-b border-farm-cream-dark dark:border-farm-dark-border pb-2">
+            <h2 class="text-2xl font-semibold text-soil-900 dark:text-cream border-b border-soil-300 dark:border-rock-700 pb-2">
               13. Version Negotiation & Error Handling
             </h2>
-            <div class="mt-4 space-y-3 text-farm-text dark:text-farm-text-light leading-relaxed">
+            <div class="mt-4 space-y-3 text-soil-900 dark:text-cream leading-relaxed">
               <p>
                 Every request batch MUST carry{' '}
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.request_version = "1"</code>.
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">vgi_rpc.request_version = "1"</code>.
               </p>
-              <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+              <p class="text-sm text-soil-700 dark:text-cream-2">
                 Three independent things can be skewed between a client and a worker, and each has its own mechanism.
                 None substitutes for another, and a port that implements two of the three has a silent failure mode.
               </p>
-              <div class="overflow-x-auto rounded-lg border border-farm-cream-dark dark:border-farm-dark-border">
+              <div class="overflow-x-auto rounded-lg border border-soil-300 dark:border-rock-700">
                 <table class="w-full text-sm">
                   <thead>
-                    <tr class="bg-farm-cream-dark dark:bg-farm-dark-card">
+                    <tr class="bg-soil-100 dark:bg-rock-800">
                       <th class="px-4 py-2 text-left font-semibold">Skew</th>
                       <th class="px-4 py-2 text-left font-semibold">Caught by</th>
                       <th class="px-4 py-2 text-left font-semibold">Answer</th>
                     </tr>
                   </thead>
-                  <tbody class="divide-y divide-farm-cream-dark dark:divide-farm-dark-border text-farm-text-muted dark:text-farm-text-light-muted">
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2">Incompatible <strong class="text-farm-text dark:text-farm-text-light">major</strong> version</td><td class="px-4 py-2">Routing &mdash; the major is part of the protocol name, so this is a different protocol</td><td class="px-4 py-2"><code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">protocol_not_supported</code>, HTTP 404</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2">Method <strong class="text-farm-text dark:text-farm-text-light">absent</strong> on the server</td><td class="px-4 py-2">Method resolution within the named protocol</td><td class="px-4 py-2"><code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">method_not_implemented</code>, HTTP 404</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2"><strong class="text-farm-text dark:text-farm-text-light">Signature changed</strong> under an unchanged method name</td><td class="px-4 py-2">The <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">protocol_version</code> gate</td><td class="px-4 py-2"><code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">protocol_version_mismatch</code>, HTTP 400</td></tr>
+                  <tbody class="divide-y divide-soil-200 dark:divide-rock-700 text-soil-700 dark:text-cream-2">
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2">Incompatible <strong class="text-soil-900 dark:text-cream">major</strong> version</td><td class="px-4 py-2">Routing &mdash; the major is part of the protocol name, so this is a different protocol</td><td class="px-4 py-2"><code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">protocol_not_supported</code>, HTTP 404</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2">Method <strong class="text-soil-900 dark:text-cream">absent</strong> on the server</td><td class="px-4 py-2">Method resolution within the named protocol</td><td class="px-4 py-2"><code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">method_not_implemented</code>, HTTP 404</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2"><strong class="text-soil-900 dark:text-cream">Signature changed</strong> under an unchanged method name</td><td class="px-4 py-2">The <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">protocol_version</code> gate</td><td class="px-4 py-2"><code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">protocol_version_mismatch</code>, HTTP 400</td></tr>
                   </tbody>
                 </table>
               </div>
-              <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+              <p class="text-sm text-soil-700 dark:text-cream-2">
                 The third row is the one nothing else covers. Protobuf's field numbers and unknown-field semantics make
-                a renamed or retyped field self-detecting; <strong class="text-farm-text dark:text-farm-text-light">Arrow has neither</strong>. A parameter
+                a renamed or retyped field self-detecting; <strong class="text-soil-900 dark:text-cream">Arrow has neither</strong>. A parameter
                 renamed between releases, or retyped under the same name, produces a request the server will happily
                 coerce through its <em>own</em> declared type and act on. The gate is what turns that into a directional
                 error.
               </p>
-              <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+              <p class="text-sm text-soil-700 dark:text-cream-2">
                 Application protocols may independently declare{' '}
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.protocol_version</code>{' '}
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">vgi_rpc.protocol_version</code>{' '}
                 as canonical semver &mdash; no prereleases, no build metadata. Major and minor must match exactly; patch
                 differences interoperate. A server MUST also reject a request carrying a parameter its protocol does not
                 declare: a strict version gate sitting on a lenient deserializer is two policies in one codepath.
               </p>
-              <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
-                <strong class="text-farm-text dark:text-farm-text-light">The gate is per binding.</strong> A server hosting several protocols has a version per
+              <p class="text-sm text-soil-700 dark:text-cream-2">
+                <strong class="text-soil-900 dark:text-cream">The gate is per binding.</strong> A server hosting several protocols has a version per
                 protocol and no single &ldquo;server version&rdquo;; gating against the primary rejects correct callers
                 of a secondary and names the wrong protocol when it does, so the error message MUST name the protocol.{' '}
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.Reflection.v1</code> is <strong class="text-farm-text dark:text-farm-text-light">exempt</strong> &mdash; it is what a
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">vgi_rpc.Reflection.v1</code> is <strong class="text-soil-900 dark:text-cream">exempt</strong> &mdash; it is what a
                 version-mismatched client calls to learn <em>what</em> mismatched, and the exemption is a property of
                 the binding, not of a method name.
               </p>
-              <div class="overflow-x-auto rounded-lg border border-farm-cream-dark dark:border-farm-dark-border">
+              <div class="overflow-x-auto rounded-lg border border-soil-300 dark:border-rock-700">
                 <table class="w-full text-sm">
                   <thead>
-                    <tr class="bg-farm-cream-dark dark:bg-farm-dark-card">
+                    <tr class="bg-soil-100 dark:bg-rock-800">
                       <th class="px-4 py-2 text-left font-semibold">Condition</th>
                       <th class="px-4 py-2 text-left font-semibold">HTTP Status</th>
                     </tr>
                   </thead>
-                  <tbody class="divide-y divide-farm-cream-dark dark:divide-farm-dark-border text-farm-text-muted dark:text-farm-text-light-muted">
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2">Bad IPC, missing metadata, request/protocol-version mismatch, invalid state token, request decompression failure</td><td class="px-4 py-2 font-mono">400</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2">Path and <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.protocol</code> name different protocols</td><td class="px-4 py-2 font-mono">400</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2">Authentication failure, including proxy proof</td><td class="px-4 py-2 font-mono">401</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2">Unknown method on a hosted protocol</td><td class="px-4 py-2 font-mono">404</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2">Protocol not hosted, a path segment that cannot be a protocol name, or a <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">%</code> in the protocol path segment</td><td class="px-4 py-2 font-mono">404</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2">Request exceeds advertised limit</td><td class="px-4 py-2 font-mono">413</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2">Wrong Content-Type or unsupported Content-Encoding</td><td class="px-4 py-2 font-mono">415</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2">Method implementation error or hard response-cap overshoot</td><td class="px-4 py-2 font-mono">200 + X-VGI-RPC-Error</td></tr>
+                  <tbody class="divide-y divide-soil-200 dark:divide-rock-700 text-soil-700 dark:text-cream-2">
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2">Bad IPC, missing metadata, request/protocol-version mismatch, invalid state token, request decompression failure</td><td class="px-4 py-2 font-mono">400</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2">Path and <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">vgi_rpc.protocol</code> name different protocols</td><td class="px-4 py-2 font-mono">400</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2">Authentication failure, including proxy proof</td><td class="px-4 py-2 font-mono">401</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2">Unknown method on a hosted protocol</td><td class="px-4 py-2 font-mono">404</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2">Protocol not hosted, a path segment that cannot be a protocol name, or a <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">%</code> in the protocol path segment</td><td class="px-4 py-2 font-mono">404</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2">Request exceeds advertised limit</td><td class="px-4 py-2 font-mono">413</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2">Wrong Content-Type or unsupported Content-Encoding</td><td class="px-4 py-2 font-mono">415</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2">Method implementation error or hard response-cap overshoot</td><td class="px-4 py-2 font-mono">200 + X-VGI-RPC-Error</td></tr>
                   </tbody>
                 </table>
               </div>
-              <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
-                An <strong class="text-farm-text dark:text-farm-text-light">application</strong> failure never reaches the client as a 5xx: intermediaries and
+              <p class="text-sm text-soil-700 dark:text-cream-2">
+                An <strong class="text-soil-900 dark:text-cream">application</strong> failure never reaches the client as a 5xx: intermediaries and
                 HTTP client libraries routinely discard or replace response bodies on 5xx, and the body is precisely
                 where the typed error lives. Clients MUST therefore treat 200 as &ldquo;a response arrived&rdquo;, not
                 &ldquo;the call succeeded&rdquo;, and classify by inspecting the body &mdash; the batch-classification
-                algorithm in <a href="#classification" class="text-farm-gold hover:text-farm-gold-light transition-colors">Section 7</a> already does this, so{' '}
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">X-VGI-RPC-Error</code> is a fast path, not a second source of truth.
+                algorithm in <a href="#classification" class="text-link hover:text-link-hover transition-colors dark:text-link-dark dark:hover:text-link-dark-hover">Section 7</a> already does this, so{' '}
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">X-VGI-RPC-Error</code> is a fast path, not a second source of truth.
               </p>
             </div>
           </section>
 
           <!-- Section 14: Reflection -->
           <section id="introspection">
-            <h2 class="text-2xl font-bold text-farm-green-deep dark:text-farm-cream border-b border-farm-cream-dark dark:border-farm-dark-border pb-2">
+            <h2 class="text-2xl font-semibold text-soil-900 dark:text-cream border-b border-soil-300 dark:border-rock-700 pb-2">
               14. Reflection (vgi_rpc.Reflection.v1)
             </h2>
-            <div class="mt-4 space-y-3 text-farm-text dark:text-farm-text-light leading-relaxed">
+            <div class="mt-4 space-y-3 text-soil-900 dark:text-cream leading-relaxed">
               <p>
                 Introspection is an ordinary co-hosted protocol, not a special method name. That is what lets every port{' '}
                 <em>generate</em> it from the same pipeline as any other method rather than hand-maintain a bespoke
                 format &mdash; which is how the ports drifted before.
               </p>
-              <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
-                A server that offers introspection hosts <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.Reflection.v1</code>{' '}
+              <p class="text-sm text-soil-700 dark:text-cream-2">
+                A server that offers introspection hosts <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">vgi_rpc.Reflection.v1</code>{' '}
                 and it appears in that protocol's own output. A server that does not simply does not host it, and a
-                client asking gets the ordinary <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">protocol_not_supported</code> &mdash;
+                client asking gets the ordinary <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">protocol_not_supported</code> &mdash;
                 not a bespoke &ldquo;introspection is disabled&rdquo; to special-case.
               </p>
-              <div class="mt-4 rounded-xl border border-farm-gold/40 bg-farm-gold/5 p-5">
-                <p class="text-sm text-farm-text dark:text-farm-text-light">
-                  <strong>The retired <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">__describe__</code> method.</strong>{' '}
+              <div class="mt-4 rounded-xl border border-sun-400/40 bg-sun-400/5 p-5">
+                <p class="text-sm text-soil-900 dark:text-cream">
+                  <strong>The retired <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">__describe__</code> method.</strong>{' '}
                   No server answers it. It is refused with a message naming its replacement rather than with a plain
                   &ldquo;unknown method&rdquo;, because a stale client told only the latter has no way to learn that
                   introspection moved &mdash; and &ldquo;retired&rdquo; and &ldquo;this server was built without
                   introspection&rdquo; need opposite fixes. Every other reserved name keeps the plain capability answer.
-                  The <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.describe_version</code>{' '}
+                  The <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">vgi_rpc.describe_version</code>{' '}
                   metadata key is gone with it.
                 </p>
               </div>
 
-              <h3 class="text-lg font-semibold text-farm-text dark:text-farm-text-light mt-6">Methods</h3>
-              <pre class="p-4 rounded-lg bg-white dark:bg-farm-dark-card border border-farm-cream-dark dark:border-farm-dark-border overflow-x-auto text-sm font-mono text-farm-text-muted dark:text-farm-text-light-muted">{`list_protocols() -> ProtocolList
+              <h3 class="text-lg font-semibold text-soil-900 dark:text-cream mt-6">Methods</h3>
+              <pre class="p-4 rounded-lg bg-rock-900 border border-rock-800 dark:border-rock-700 overflow-x-auto text-sm leading-relaxed font-mono text-[#e9e1d3]">{`list_protocols() -> ProtocolList
 describe(protocol: utf8) -> ServiceDescription`}</pre>
-              <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">list_protocols</code>{' '}
+              <p class="text-sm text-soil-700 dark:text-cream-2">
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">list_protocols</code>{' '}
                 is the cheap question &mdash; what is here, and has it changed &mdash; and is the only one a client
-                needs on a warm path, because <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">protocol_hash</code>{' '}
+                needs on a warm path, because <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">protocol_hash</code>{' '}
                 answers &ldquo;has it changed&rdquo; without transferring any schema.{' '}
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">describe</code> is the
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">describe</code> is the
                 expensive one, asked once. A client that does not already know a protocol name needs both, in that order.
                 Both are ordinary unary methods: they carry{' '}
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.protocol = "vgi_rpc.Reflection.v1"</code>,
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">vgi_rpc.protocol = "vgi_rpc.Reflection.v1"</code>,
                 their replies ride as serialized bytes in a single{' '}
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">result</code> column,
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">result</code> column,
                 and a server that externalizes payloads externalizes these too.
               </p>
 
-              <h3 class="text-lg font-semibold text-farm-text dark:text-farm-text-light mt-6">Payload</h3>
-              <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">ProtocolList</code> carries{' '}
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">server_id</code>,{' '}
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">server_version</code>,{' '}
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">request_version</code>, and{' '}
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">protocols: list&lt;ProtocolSummary&gt;</code> &mdash;
+              <h3 class="text-lg font-semibold text-soil-900 dark:text-cream mt-6">Payload</h3>
+              <p class="text-sm text-soil-700 dark:text-cream-2">
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">ProtocolList</code> carries{' '}
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">server_id</code>,{' '}
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">server_version</code>,{' '}
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">request_version</code>, and{' '}
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">protocols: list&lt;ProtocolSummary&gt;</code> &mdash;
                 every hosted protocol, reflection included.
               </p>
-              <div class="overflow-x-auto rounded-lg border border-farm-cream-dark dark:border-farm-dark-border">
+              <div class="overflow-x-auto rounded-lg border border-soil-300 dark:border-rock-700">
                 <table class="w-full text-sm">
                   <thead>
-                    <tr class="bg-farm-cream-dark dark:bg-farm-dark-card">
+                    <tr class="bg-soil-100 dark:bg-rock-800">
                       <th class="px-4 py-2 text-left font-semibold">ProtocolSummary field</th>
                       <th class="px-4 py-2 text-left font-semibold">Arrow type</th>
                       <th class="px-4 py-2 text-left font-semibold">Notes</th>
                     </tr>
                   </thead>
-                  <tbody class="divide-y divide-farm-cream-dark dark:divide-farm-dark-border text-farm-text-muted dark:text-farm-text-light-muted">
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">protocol</td><td class="px-4 py-2 font-mono text-xs">utf8</td><td class="px-4 py-2">Wire name &mdash; the routing key.</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">protocol_version</td><td class="px-4 py-2 font-mono text-xs">utf8</td><td class="px-4 py-2">Declared semver, or empty when the protocol opts out.</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">protocol_hash</td><td class="px-4 py-2 font-mono text-xs">utf8</td><td class="px-4 py-2">64 lowercase hex. See below.</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">deprecated</td><td class="px-4 py-2 font-mono text-xs">bool</td><td class="px-4 py-2">Whether callers should migrate off.</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">deprecation_message</td><td class="px-4 py-2 font-mono text-xs">utf8</td><td class="px-4 py-2">What to migrate to. Empty unless deprecated.</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">features</td><td class="px-4 py-2 font-mono text-xs">list&lt;utf8&gt;</td><td class="px-4 py-2">Open set of capability tokens.</td></tr>
+                  <tbody class="divide-y divide-soil-200 dark:divide-rock-700 text-soil-700 dark:text-cream-2">
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">protocol</td><td class="px-4 py-2 font-mono text-xs">utf8</td><td class="px-4 py-2">Wire name &mdash; the routing key.</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">protocol_version</td><td class="px-4 py-2 font-mono text-xs">utf8</td><td class="px-4 py-2">Declared semver, or empty when the protocol opts out.</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">protocol_hash</td><td class="px-4 py-2 font-mono text-xs">utf8</td><td class="px-4 py-2">64 lowercase hex. See below.</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">deprecated</td><td class="px-4 py-2 font-mono text-xs">bool</td><td class="px-4 py-2">Whether callers should migrate off.</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">deprecation_message</td><td class="px-4 py-2 font-mono text-xs">utf8</td><td class="px-4 py-2">What to migrate to. Empty unless deprecated.</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">features</td><td class="px-4 py-2 font-mono text-xs">list&lt;utf8&gt;</td><td class="px-4 py-2">Open set of capability tokens.</td></tr>
                   </tbody>
                 </table>
               </div>
-              <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">ServiceDescription</code>{' '}
-                is those fields plus <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">methods: list&lt;MethodInfo&gt;</code>,
-                sorted by name. It deliberately carries <strong class="text-farm-text dark:text-farm-text-light">no server identity</strong>:
+              <p class="text-sm text-soil-700 dark:text-cream-2">
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">ServiceDescription</code>{' '}
+                is those fields plus <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">methods: list&lt;MethodInfo&gt;</code>,
+                sorted by name. It deliberately carries <strong class="text-soil-900 dark:text-cream">no server identity</strong>:
                 two processes serving one protocol must describe it identically, or the description is not a property of
                 the protocol. Server identity lives on{' '}
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">ProtocolList</code>,
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">ProtocolList</code>,
                 which is a statement about a server.
               </p>
-              <div class="overflow-x-auto rounded-lg border border-farm-cream-dark dark:border-farm-dark-border">
+              <div class="overflow-x-auto rounded-lg border border-soil-300 dark:border-rock-700">
                 <table class="w-full text-sm">
                   <thead>
-                    <tr class="bg-farm-cream-dark dark:bg-farm-dark-card">
+                    <tr class="bg-soil-100 dark:bg-rock-800">
                       <th class="px-4 py-2 text-left font-semibold">MethodInfo field</th>
                       <th class="px-4 py-2 text-left font-semibold">Arrow type</th>
                       <th class="px-4 py-2 text-left font-semibold">Notes</th>
                     </tr>
                   </thead>
-                  <tbody class="divide-y divide-farm-cream-dark dark:divide-farm-dark-border text-farm-text-muted dark:text-farm-text-light-muted">
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">name</td><td class="px-4 py-2 font-mono text-xs">utf8</td><td class="px-4 py-2">&mdash;</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">method_type</td><td class="px-4 py-2 font-mono text-xs">utf8</td><td class="px-4 py-2">"unary" or "stream".</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">has_return</td><td class="px-4 py-2 font-mono text-xs">bool</td><td class="px-4 py-2">&mdash;</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">has_header</td><td class="px-4 py-2 font-mono text-xs">bool</td><td class="px-4 py-2">&mdash;</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">stream_kind</td><td class="px-4 py-2 font-mono text-xs">utf8</td><td class="px-4 py-2">Empty for unary; otherwise unknown / producer / exchange. The only field that says whether a stream accepts input, since a stream's input schema arrives at init time. A port that can classify a method MUST state it.</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">params_schema_ipc</td><td class="px-4 py-2 font-mono text-xs">binary</td><td class="px-4 py-2">Arrow IPC.</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">result_schema_ipc</td><td class="px-4 py-2 font-mono text-xs">binary</td><td class="px-4 py-2">Arrow IPC; empty when has_return is false.</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">header_schema_ipc</td><td class="px-4 py-2 font-mono text-xs">binary</td><td class="px-4 py-2">Arrow IPC; empty when has_header is false.</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">idempotency</td><td class="px-4 py-2 font-mono text-xs">utf8</td><td class="px-4 py-2">unknown / no_side_effects / idempotent, following gRPC's idempotency_level. unknown is the default and means a caller must assume the worst.</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">deprecated</td><td class="px-4 py-2 font-mono text-xs">bool</td><td class="px-4 py-2">&mdash;</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">deprecation_message</td><td class="px-4 py-2 font-mono text-xs">utf8</td><td class="px-4 py-2">&mdash;</td></tr>
+                  <tbody class="divide-y divide-soil-200 dark:divide-rock-700 text-soil-700 dark:text-cream-2">
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">name</td><td class="px-4 py-2 font-mono text-xs">utf8</td><td class="px-4 py-2">&mdash;</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">method_type</td><td class="px-4 py-2 font-mono text-xs">utf8</td><td class="px-4 py-2">"unary" or "stream".</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">has_return</td><td class="px-4 py-2 font-mono text-xs">bool</td><td class="px-4 py-2">&mdash;</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">has_header</td><td class="px-4 py-2 font-mono text-xs">bool</td><td class="px-4 py-2">&mdash;</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">stream_kind</td><td class="px-4 py-2 font-mono text-xs">utf8</td><td class="px-4 py-2">Empty for unary; otherwise unknown / producer / exchange. The only field that says whether a stream accepts input, since a stream's input schema arrives at init time. A port that can classify a method MUST state it.</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">params_schema_ipc</td><td class="px-4 py-2 font-mono text-xs">binary</td><td class="px-4 py-2">Arrow IPC.</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">result_schema_ipc</td><td class="px-4 py-2 font-mono text-xs">binary</td><td class="px-4 py-2">Arrow IPC; empty when has_return is false.</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">header_schema_ipc</td><td class="px-4 py-2 font-mono text-xs">binary</td><td class="px-4 py-2">Arrow IPC; empty when has_header is false.</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">idempotency</td><td class="px-4 py-2 font-mono text-xs">utf8</td><td class="px-4 py-2">unknown / no_side_effects / idempotent, following gRPC's idempotency_level. unknown is the default and means a caller must assume the worst.</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">deprecated</td><td class="px-4 py-2 font-mono text-xs">bool</td><td class="px-4 py-2">&mdash;</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">deprecation_message</td><td class="px-4 py-2 font-mono text-xs">utf8</td><td class="px-4 py-2">&mdash;</td></tr>
                   </tbody>
                 </table>
               </div>
-              <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+              <p class="text-sm text-soil-700 dark:text-cream-2">
                 Schemas travel as serialized Arrow IPC rather than as a structural description: a client's whole purpose
                 in asking is to get a schema it can hand to its own Arrow implementation. An absent schema is empty bytes
                 rather than null, so no port pays a null check on a value it will only ever treat as absent.
               </p>
 
-              <h3 class="text-lg font-semibold text-farm-text dark:text-farm-text-light mt-6">Decoding is tolerant &mdash; normative</h3>
-              <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
-                A decoder MUST read fields <strong class="text-farm-text dark:text-farm-text-light">by name</strong>, not
-                by position; <strong class="text-farm-text dark:text-farm-text-light">ignore</strong> columns it does not
-                know; and <strong class="text-farm-text dark:text-farm-text-light">default</strong> columns that are
+              <h3 class="text-lg font-semibold text-soil-900 dark:text-cream mt-6">Decoding is tolerant &mdash; normative</h3>
+              <p class="text-sm text-soil-700 dark:text-cream-2">
+                A decoder MUST read fields <strong class="text-soil-900 dark:text-cream">by name</strong>, not
+                by position; <strong class="text-soil-900 dark:text-cream">ignore</strong> columns it does not
+                know; and <strong class="text-soil-900 dark:text-cream">default</strong> columns that are
                 absent and have a default. This is what makes minor skew survivable in both directions, and it is load
                 bearing: a strict decoder fails at exactly the moment a client most needs a good answer. A decoder MUST
                 NOT default a field that has no default &mdash; it errors instead. One rule follows, binding every port:{' '}
-                <strong class="text-farm-text dark:text-farm-text-light">a field added in a minor version MUST carry a
+                <strong class="text-soil-900 dark:text-cream">a field added in a minor version MUST carry a
                 default</strong>, or the addition is a breaking change wearing a minor version number.
               </p>
 
-              <h3 class="text-lg font-semibold text-farm-text dark:text-farm-text-light mt-6">protocol_hash &mdash; normative</h3>
-              <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+              <h3 class="text-lg font-semibold text-soil-900 dark:text-cream mt-6">protocol_hash &mdash; normative</h3>
+              <p class="text-sm text-soil-700 dark:text-cream-2">
                 The hash is a fingerprint of a protocol's wire surface, so a client and a worker can say which one they
                 have without transferring the whole description. It is defined over{' '}
-                <strong class="text-farm-text dark:text-farm-text-light">what Arrow decodes to, not what an encoder
+                <strong class="text-soil-900 dark:text-cream">what Arrow decodes to, not what an encoder
                 emits</strong>: each language's Arrow implementation may legitimately produce different bytes for the
                 same logical schema.
               </p>
-              <pre class="p-4 rounded-lg bg-white dark:bg-farm-dark-card border border-farm-cream-dark dark:border-farm-dark-border overflow-x-auto text-sm font-mono text-farm-text-muted dark:text-farm-text-light-muted">{`protocol_hash = lowercase_hex(sha256(
+              <pre class="p-4 rounded-lg bg-rock-900 border border-rock-800 dark:border-rock-700 overflow-x-auto text-sm leading-relaxed font-mono text-[#e9e1d3]">{`protocol_hash = lowercase_hex(sha256(
     b"vgi_rpc.protocol_hash.v1|" + canonical_json(description)))`}</pre>
-              <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
-                The canonicalisation profile is <strong class="text-farm-text dark:text-farm-text-light">RFC 8785
+              <p class="text-sm text-soil-700 dark:text-cream-2">
+                The canonicalisation profile is <strong class="text-soil-900 dark:text-cream">RFC 8785
                 (JCS)</strong>, chosen for its published test vectors. The structure is restricted to objects, arrays,
                 strings, and booleans: every numeric parameter is folded into a type token, so the preimage contains{' '}
-                <strong class="text-farm-text dark:text-farm-text-light">no JSON numbers</strong> and JCS's
+                <strong class="text-soil-900 dark:text-cream">no JSON numbers</strong> and JCS's
                 number-canonicalisation rule &mdash; its hardest, and the likeliest place for seven ports to diverge
                 &mdash; never applies.
               </p>
-              <pre class="p-4 rounded-lg bg-white dark:bg-farm-dark-card border border-farm-cream-dark dark:border-farm-dark-border overflow-x-auto text-sm font-mono text-farm-text-muted dark:text-farm-text-light-muted">{`{"protocol":"vgi_rpc.Reflection.v1","methods":[
+              <pre class="p-4 rounded-lg bg-rock-900 border border-rock-800 dark:border-rock-700 overflow-x-auto text-sm leading-relaxed font-mono text-[#e9e1d3]">{`{"protocol":"vgi_rpc.Reflection.v1","methods":[
   {"name":"describe","type":"unary","has_return":true,"has_header":false,
    "params":[{"name":"protocol","nullable":false,"type":"utf8"}],
    "result":[{"name":"result","nullable":false,"type":"binary"}]},
   {"name":"list_protocols","type":"unary","has_return":true,"has_header":false,
    "params":[],
    "result":[{"name":"result","nullable":false,"type":"binary"}]}]}`}</pre>
-              <ul class="list-disc list-inside space-y-1 text-sm text-farm-text-muted dark:text-farm-text-light-muted">
-                <li>Methods are <strong class="text-farm-text dark:text-farm-text-light">sorted by name</strong>; a port iterating a hash map must still produce this order.</li>
+              <ul class="list-disc list-inside space-y-1 text-sm text-soil-700 dark:text-cream-2">
+                <li>Methods are <strong class="text-soil-900 dark:text-cream">sorted by name</strong>; a port iterating a hash map must still produce this order.</li>
                 <li>Field order <em>within</em> a schema is declaration order and is significant.</li>
-                <li><code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">result</code> and <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">header</code> are <strong class="text-farm-text dark:text-farm-text-light">omitted</strong> when the method has none. A method returning nothing is not a method returning an empty struct.</li>
-                <li>Server identity, docstrings, parameter defaults, language-specific type names, and <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">request_version</code> are <strong class="text-farm-text dark:text-farm-text-light">not</strong> in the preimage.</li>
-                <li><code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">stream_kind</code> is not either, for a different reason: <em>which</em> methods a port can classify depends on how that port's registration works, so two ports can disagree while neither is wrong, and a field one port can state and another cannot is not a contract.</li>
-                <li>The <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">v1</code> in the domain tag is the only version the hash carries, and it moves only when the hash definition moves.</li>
+                <li><code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">result</code> and <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">header</code> are <strong class="text-soil-900 dark:text-cream">omitted</strong> when the method has none. A method returning nothing is not a method returning an empty struct.</li>
+                <li>Server identity, docstrings, parameter defaults, language-specific type names, and <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">request_version</code> are <strong class="text-soil-900 dark:text-cream">not</strong> in the preimage.</li>
+                <li><code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">stream_kind</code> is not either, for a different reason: <em>which</em> methods a port can classify depends on how that port's registration works, so two ports can disagree while neither is wrong, and a field one port can state and another cannot is not a contract.</li>
+                <li>The <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">v1</code> in the domain tag is the only version the hash carries, and it moves only when the hash definition moves.</li>
               </ul>
-              <div class="mt-4 rounded-xl border border-farm-green-field/40 bg-farm-green-field/5 p-5">
-                <p class="text-sm text-farm-text dark:text-farm-text-light">
+              <div class="mt-4 rounded-xl border border-field-600/40 bg-field-700/5 p-5">
+                <p class="text-sm text-soil-900 dark:text-cream">
                   <strong>All seven ports produce identical digests.</strong> Conformance asserts it and ships the
                   canonical preimage beside each digest so a failing port diffs JSON rather than guessing. The
                   87-method conformance service hashes to{' '}
-                  <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-[0.68rem] break-all">5cc768771c2e8a54e19ebb7546c97c119823eb13e20a5ff62ca5ce7ed2a1334e</code>{' '}
-                  and <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.Reflection.v1</code> itself to{' '}
-                  <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-[0.68rem] break-all">3c7db4cae8cdfc93dc4a76e73b8b759e18e45e6a5811adba4e520366344b919a</code>.
+                  <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-[0.68rem] break-all">5cc768771c2e8a54e19ebb7546c97c119823eb13e20a5ff62ca5ce7ed2a1334e</code>{' '}
+                  and <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">vgi_rpc.Reflection.v1</code> itself to{' '}
+                  <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-[0.68rem] break-all">3c7db4cae8cdfc93dc4a76e73b8b759e18e45e6a5811adba4e520366344b919a</code>.
                   Earlier revisions of this page disclaimed cross-language hash stability, because the hash was then
                   taken over encoder <em>bytes</em>. That disclaimer no longer holds.
                 </p>
               </div>
-              <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+              <p class="text-sm text-soil-700 dark:text-cream-2">
                 Types appear in the preimage as lowercase ASCII tokens &mdash;{' '}
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">utf8</code>,{' '}
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">decimal128(p,s)</code>,{' '}
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">timestamp(unit,tz=Z)</code>,{' '}
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">list&lt;item?:T&gt;</code>,{' '}
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">struct&lt;a:T,b?:U&gt;</code>{' '}
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">utf8</code>,{' '}
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">decimal128(p,s)</code>,{' '}
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">timestamp(unit,tz=Z)</code>,{' '}
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">list&lt;item?:T&gt;</code>,{' '}
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">struct&lt;a:T,b?:U&gt;</code>{' '}
                 &mdash; with parameters in parentheses, children in angle brackets, and a trailing{' '}
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">?</code> on a
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">?</code> on a
                 nullable child. List and map child field names are normalised to{' '}
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">item</code> /{' '}
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">key</code> /{' '}
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">value</code>, because
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">item</code> /{' '}
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">key</code> /{' '}
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">value</code>, because
                 Arrow's own type equality ignores them; everything Arrow <em>does</em> treat as part of the type is kept,
                 child nullability included. A timezone is carried verbatim &mdash;{' '}
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">UTC</code> and{' '}
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">+00:00</code> are
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">UTC</code> and{' '}
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">+00:00</code> are
                 distinct Arrow types. A type with no token MUST raise rather than fall back to the Arrow
                 implementation's own string form. The{' '}
                 <a href="https://github.com/Query-farm/vgi-rpc-python/blob/main/docs/WIRE_PROTOCOL.md"
                   target="_blank" rel="noopener noreferrer"
-                  class="text-farm-gold hover:text-farm-gold-light transition-colors">canonical specification</a>{' '}
+                  class="text-link hover:text-link-hover transition-colors dark:text-link-dark dark:hover:text-link-dark-hover">canonical specification</a>{' '}
                 carries the full token table.
               </p>
-              <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">protocol_hash</code>{' '}
+              <p class="text-sm text-soil-700 dark:text-cream-2">
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">protocol_hash</code>{' '}
                 is also the access log's registry key for decoding archived records. Each access record carries the{' '}
-                <strong class="text-farm-text dark:text-farm-text-light">owning binding's</strong>{' '}
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">protocol</code> and{' '}
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">protocol_hash</code>{' '}
+                <strong class="text-soil-900 dark:text-cream">owning binding's</strong>{' '}
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">protocol</code> and{' '}
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">protocol_hash</code>{' '}
                 &mdash; the protocol that owns the dispatched method, not a server-wide default. Framework endpoints
                 owned by no protocol log the server's primary. A mislabelled record is well-formed, passes the schema,
                 and produces a plausible dashboard, so it is the field most worth getting right. Method names may collide
                 across protocols, so anything aggregating on{' '}
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">method</code> alone
-                must group by <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">(protocol, method)</code>{' '}
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">method</code> alone
+                must group by <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">(protocol, method)</code>{' '}
                 or it silently merges two protocols' traffic.
               </p>
             </div>
@@ -1020,23 +1023,23 @@ describe(protocol: utf8) -> ServiceDescription`}</pre>
 
           <!-- Section 15: Transport Capability Negotiation -->
           <section id="transport-options">
-            <h2 class="text-2xl font-bold text-farm-green-deep dark:text-farm-cream border-b border-farm-cream-dark dark:border-farm-dark-border pb-2">
+            <h2 class="text-2xl font-semibold text-soil-900 dark:text-cream border-b border-soil-300 dark:border-rock-700 pb-2">
               15. Transport Capability Negotiation (__transport_options__)
             </h2>
-            <div class="mt-4 space-y-3 text-farm-text dark:text-farm-text-light leading-relaxed">
+            <div class="mt-4 space-y-3 text-soil-900 dark:text-cream leading-relaxed">
               <p>
                 Before using the shared-memory side channel over pipe, subprocess, or Unix socket transports,
                 peers negotiate once through the synthetic unary method{' '}
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">__transport_options__</code>.
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">__transport_options__</code>.
                 It is a framework built-in, resolved before routing and owned by no protocol, so it carries no{' '}
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.protocol</code>{' '}
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">vgi_rpc.protocol</code>{' '}
                 routing key. HTTP deployment capabilities use response headers instead; the discovery probe there is{' '}
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">HEAD {'{prefix}'}/health</code>.
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">HEAD {'{prefix}'}/health</code>.
               </p>
-              <pre class="p-4 rounded-lg bg-white dark:bg-farm-dark-card border border-farm-cream-dark dark:border-farm-dark-border overflow-x-auto text-sm font-mono text-farm-text-muted dark:text-farm-text-light-muted">{`shm_enabled = client["vgi_rpc.transport.shm"] == "true"
+              <pre class="p-4 rounded-lg bg-rock-900 border border-rock-800 dark:border-rock-700 overflow-x-auto text-sm leading-relaxed font-mono text-[#e9e1d3]">{`shm_enabled = client["vgi_rpc.transport.shm"] == "true"
            && server["vgi_rpc.transport.shm"] == "true"`}</pre>
-              <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
-                Capabilities use the open-ended <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.transport.*</code>{' '}
+              <p class="text-sm text-soil-700 dark:text-cream-2">
+                Capabilities use the open-ended <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">vgi_rpc.transport.*</code>{' '}
                 namespace. Unknown keys are ignored. If the method is absent, errors, or reports false, the client stays inline.
               </p>
             </div>
@@ -1044,114 +1047,114 @@ describe(protocol: utf8) -> ServiceDescription`}</pre>
 
           <!-- Section 16: Identity -->
           <section id="identity">
-            <h2 class="text-2xl font-bold text-farm-green-deep dark:text-farm-cream border-b border-farm-cream-dark dark:border-farm-dark-border pb-2">
+            <h2 class="text-2xl font-semibold text-soil-900 dark:text-cream border-b border-soil-300 dark:border-rock-700 pb-2">
               16. Identity (vgi_rpc.Identity.v1)
             </h2>
-            <div class="mt-4 space-y-3 text-farm-text dark:text-farm-text-light leading-relaxed">
+            <div class="mt-4 space-y-3 text-soil-900 dark:text-cream leading-relaxed">
               <p>
                 Two optional methods, hosted as an ordinary co-hosted protocol. This was previously an HTTP-only JSON
-                route, <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">POST {'{prefix}'}/__introspect_token__</code>,
+                route, <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">POST {'{prefix}'}/__introspect_token__</code>,
                 which meant it existed on one transport only and had to be hand-written in every port.
               </p>
-              <pre class="p-4 rounded-lg bg-white dark:bg-farm-dark-card border border-farm-cream-dark dark:border-farm-dark-border overflow-x-auto text-sm font-mono text-farm-text-muted dark:text-farm-text-light-muted">{`introspect_token(token: utf8) -> TokenIdentity
+              <pre class="p-4 rounded-lg bg-rock-900 border border-rock-800 dark:border-rock-700 overflow-x-auto text-sm leading-relaxed font-mono text-[#e9e1d3]">{`introspect_token(token: utf8) -> TokenIdentity
 issue_grant(purpose: utf8, scopes: list<utf8>, ttl_seconds: int64) -> IssuedGrant`}</pre>
-              <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
-                <strong class="text-farm-text dark:text-farm-text-light">A method whose hook the deployment did not
+              <p class="text-sm text-soil-700 dark:text-cream-2">
+                <strong class="text-soil-900 dark:text-cream">A method whose hook the deployment did not
                 configure is not hosted at all</strong>, and the binding's method set &mdash; and therefore its{' '}
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">protocol_hash</code>{' '}
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">protocol_hash</code>{' '}
                 &mdash; narrows with it. A worker that resolves credentials but does not mint grants hosts{' '}
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">introspect_token</code>{' '}
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">introspect_token</code>{' '}
                 alone, and a client learns that from reflection rather than by calling and reading an error. Absent beats
                 routed-and-refusing: only a narrowed digest distinguishes a worker that cannot mint from one that will
                 not, and it is what keeps a dependency upgrade from growing a credential-to-identity oracle on every
                 existing worker.
               </p>
 
-              <h3 class="text-lg font-semibold text-farm-text dark:text-farm-text-light mt-6">introspect_token &mdash; an oracle, and guarded as one</h3>
-              <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+              <h3 class="text-lg font-semibold text-soil-900 dark:text-cream mt-6">introspect_token &mdash; an oracle, and guarded as one</h3>
+              <p class="text-sm text-soil-700 dark:text-cream-2">
                 Resolves an opaque bearer credential to the principal it authenticates as, for a reverse proxy that
                 terminates the only public listener and must know the caller's identity before it can authorize anything.
                 The answer is an identity assertion made by the thing being protected, which the asker then acts on using
                 credentials the worker does not hold &mdash; so it must be trusted <em>more</em> than the worker, not
                 merely as much. Hence four normative guards:
               </p>
-              <ul class="list-disc list-inside space-y-1 text-sm text-farm-text-muted dark:text-farm-text-light-muted">
-                <li><strong class="text-farm-text dark:text-farm-text-light">An introspector allowlist with no permissive default.</strong> A server whose resolver is configured without one MUST refuse to start. &ldquo;Any authenticated caller&rdquo; lets any user resolve any other user's credential to its owner.</li>
-                <li><strong class="text-farm-text dark:text-farm-text-light">Authorization is checked before the credential is touched</strong>, so an unauthorized caller learns nothing about it &mdash; including how long looking at it took.</li>
-                <li><strong class="text-farm-text dark:text-farm-text-light">Rejections are uniform.</strong> Unknown, expired, malformed, and over-long are one answer; distinguishing them confirms that a guessed credential exists.</li>
-                <li><strong class="text-farm-text dark:text-farm-text-light">A JWS-shaped subject is refused before the resolver runs.</strong> Three dot-separated base64url segments are validated locally against a key set.</li>
+              <ul class="list-disc list-inside space-y-1 text-sm text-soil-700 dark:text-cream-2">
+                <li><strong class="text-soil-900 dark:text-cream">An introspector allowlist with no permissive default.</strong> A server whose resolver is configured without one MUST refuse to start. &ldquo;Any authenticated caller&rdquo; lets any user resolve any other user's credential to its owner.</li>
+                <li><strong class="text-soil-900 dark:text-cream">Authorization is checked before the credential is touched</strong>, so an unauthorized caller learns nothing about it &mdash; including how long looking at it took.</li>
+                <li><strong class="text-soil-900 dark:text-cream">Rejections are uniform.</strong> Unknown, expired, malformed, and over-long are one answer; distinguishing them confirms that a guessed credential exists.</li>
+                <li><strong class="text-soil-900 dark:text-cream">A JWS-shaped subject is refused before the resolver runs.</strong> Three dot-separated base64url segments are validated locally against a key set.</li>
               </ul>
-              <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+              <p class="text-sm text-soil-700 dark:text-cream-2">
                 Rate limiting (20 per caller per second by default) <em>bounds</em>, rather than closes, the oracle an
                 allowlisted-but-compromised caller still has.{' '}
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">TokenIdentity</code>{' '}
-                carries <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">principal</code>,{' '}
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">token_name</code>, and{' '}
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">ttl_seconds</code>, and{' '}
-                <strong class="text-farm-text dark:text-farm-text-light">never claims</strong> &mdash; a pass-through
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">TokenIdentity</code>{' '}
+                carries <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">principal</code>,{' '}
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">token_name</code>, and{' '}
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">ttl_seconds</code>, and{' '}
+                <strong class="text-soil-900 dark:text-cream">never claims</strong> &mdash; a pass-through
                 claims field would let a worker choose its caller's tenant routing, row scope, and policy branch.{' '}
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">ttl_seconds</code> is
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">ttl_seconds</code> is
                 how long the answer may be cached: an authorization window, and therefore the revocation lag.
               </p>
 
-              <h3 class="text-lg font-semibold text-farm-text dark:text-farm-text-light mt-6">issue_grant &mdash; not an oracle, so not guarded as one</h3>
-              <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+              <h3 class="text-lg font-semibold text-soil-900 dark:text-cream mt-6">issue_grant &mdash; not an oracle, so not guarded as one</h3>
+              <p class="text-sm text-soil-700 dark:text-cream-2">
                 Mints a standing delegation credential for the <em>calling</em> user. OAuth cannot express durable
                 delegation: it fuses the grant, the credential, and the session into one refresh token, so an IdP
                 shortening session lifetime shortens the grant.{' '}
-                <strong class="text-farm-text dark:text-farm-text-light">There is no subject parameter</strong> &mdash;
+                <strong class="text-soil-900 dark:text-cream">There is no subject parameter</strong> &mdash;
                 the subject is always the caller's authenticated principal, so cross-subject minting is closed by
                 construction rather than by a check one of seven ports can forget. That is also why this method needs no
                 allowlist and no rate limit while{' '}
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">introspect_token</code> has both.
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">introspect_token</code> has both.
               </p>
-              <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
-                <strong class="text-farm-text dark:text-farm-text-light">A credential with no verifiable{' '}
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">auth_time</code> cannot
+              <p class="text-sm text-soil-700 dark:text-cream-2">
+                <strong class="text-soil-900 dark:text-cream">A credential with no verifiable{' '}
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">auth_time</code> cannot
                 mint.</strong> That single rule is what stops a grant being used to mint another grant and escaping the
                 identity provider permanently, and it makes subprocess and Unix transports fail closed for free, since
                 there is no authenticated principal there at all. A static bearer proves a machine holds a secret, never
                 that a human just authenticated, so it is refused here too. Unlike the introspection rejections, these
-                are deliberately <strong class="text-farm-text dark:text-farm-text-light">actionable</strong>: they are
+                are deliberately <strong class="text-soil-900 dark:text-cream">actionable</strong>: they are
                 always about the caller themselves, so naming the reason leaks nothing, and it is the only way a console
                 learns to re-prompt.
               </p>
-              <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">IssuedGrant</code>{' '}
-                carries <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">token</code>,{' '}
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">expires_at</code>, and{' '}
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">grant_id</code>.{' '}
-                <strong class="text-farm-text dark:text-farm-text-light">The token format is the worker's entirely</strong> &mdash;
+              <p class="text-sm text-soil-700 dark:text-cream-2">
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">IssuedGrant</code>{' '}
+                carries <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">token</code>,{' '}
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">expires_at</code>, and{' '}
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">grant_id</code>.{' '}
+                <strong class="text-soil-900 dark:text-cream">The token format is the worker's entirely</strong> &mdash;
                 a sealed envelope, a database row, or a credential brokered from the IdP are equally valid and equally
                 invisible here. It is never parsed and never logged.
               </p>
 
-              <h3 class="text-lg font-semibold text-farm-text dark:text-farm-text-light mt-6">Error kinds</h3>
-              <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+              <h3 class="text-lg font-semibold text-soil-900 dark:text-cream mt-6">Error kinds</h3>
+              <p class="text-sm text-soil-700 dark:text-cream-2">
                 These were an HTTP route whose callers classified definitive-versus-transient on the status code (404 vs
                 503). As protocol methods every handler exception surfaces the same way, so{' '}
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">error_kind</code>{' '}
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">error_kind</code>{' '}
                 carries the whole distinction and is load-bearing rather than decorative.
               </p>
-              <div class="overflow-x-auto rounded-lg border border-farm-cream-dark dark:border-farm-dark-border">
+              <div class="overflow-x-auto rounded-lg border border-soil-300 dark:border-rock-700">
                 <table class="w-full text-sm">
                   <thead>
-                    <tr class="bg-farm-cream-dark dark:bg-farm-dark-card">
+                    <tr class="bg-soil-100 dark:bg-rock-800">
                       <th class="px-4 py-2 text-left font-semibold">error_kind</th>
                       <th class="px-4 py-2 text-left font-semibold">Meaning</th>
                       <th class="px-4 py-2 text-left font-semibold">Caller</th>
                     </tr>
                   </thead>
-                  <tbody class="divide-y divide-farm-cream-dark dark:divide-farm-dark-border text-farm-text-muted dark:text-farm-text-light-muted">
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">introspection_refused</td><td class="px-4 py-2">The caller may not introspect.</td><td class="px-4 py-2">Definitive; MAY cache.</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">token_unresolved</td><td class="px-4 py-2">The subject credential did not resolve.</td><td class="px-4 py-2">Definitive; MAY cache.</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">stale_auth</td><td class="px-4 py-2">The caller has not authenticated recently enough to mint.</td><td class="px-4 py-2">Definitive, and actionable &mdash; re-prompt.</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">grant_refused</td><td class="px-4 py-2">The worker declined to mint.</td><td class="px-4 py-2">Definitive.</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">identity_unavailable</td><td class="px-4 py-2">The answer is not <em>knowable</em> &mdash; a store is down.</td><td class="px-4 py-2"><strong class="text-farm-text dark:text-farm-text-light">Transient</strong>; MUST NOT negative-cache.</td></tr>
+                  <tbody class="divide-y divide-soil-200 dark:divide-rock-700 text-soil-700 dark:text-cream-2">
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">introspection_refused</td><td class="px-4 py-2">The caller may not introspect.</td><td class="px-4 py-2">Definitive; MAY cache.</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">token_unresolved</td><td class="px-4 py-2">The subject credential did not resolve.</td><td class="px-4 py-2">Definitive; MAY cache.</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">stale_auth</td><td class="px-4 py-2">The caller has not authenticated recently enough to mint.</td><td class="px-4 py-2">Definitive, and actionable &mdash; re-prompt.</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">grant_refused</td><td class="px-4 py-2">The worker declined to mint.</td><td class="px-4 py-2">Definitive.</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">identity_unavailable</td><td class="px-4 py-2">The answer is not <em>knowable</em> &mdash; a store is down.</td><td class="px-4 py-2"><strong class="text-soil-900 dark:text-cream">Transient</strong>; MUST NOT negative-cache.</td></tr>
                   </tbody>
                 </table>
               </div>
-              <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+              <p class="text-sm text-soil-700 dark:text-cream-2">
                 A caller that negative-caches a transient failure locks out valid users; one that retries a definitive
                 rejection hammers the worker.
               </p>
@@ -1160,55 +1163,55 @@ issue_grant(purpose: utf8, scopes: list<utf8>, ttl_seconds: int64) -> IssuedGran
 
           <!-- Section 17: Sticky Sessions -->
           <section id="sticky-sessions">
-            <h2 class="text-2xl font-bold text-farm-green-deep dark:text-farm-cream border-b border-farm-cream-dark dark:border-farm-dark-border pb-2">
+            <h2 class="text-2xl font-semibold text-soil-900 dark:text-cream border-b border-soil-300 dark:border-rock-700 pb-2">
               17. Sticky Sessions (HTTP, Optional)
             </h2>
-            <div class="mt-4 space-y-3 text-farm-text dark:text-farm-text-light leading-relaxed">
+            <div class="mt-4 space-y-3 text-soil-900 dark:text-cream leading-relaxed">
               <p>
                 Sticky sessions bind handle-bearing process-local state—such as an open cursor, model, or file—to the worker that created it.
                 Both peers opt in; the state stays in process memory and only an AEAD-sealed token crosses the wire.
               </p>
-              <div class="overflow-x-auto rounded-lg border border-farm-cream-dark dark:border-farm-dark-border">
+              <div class="overflow-x-auto rounded-lg border border-soil-300 dark:border-rock-700">
                 <table class="w-full text-sm">
                   <thead>
-                    <tr class="bg-farm-cream-dark dark:bg-farm-dark-card">
+                    <tr class="bg-soil-100 dark:bg-rock-800">
                       <th class="px-4 py-2 text-left font-semibold">Header</th>
                       <th class="px-4 py-2 text-left font-semibold">Purpose</th>
                     </tr>
                   </thead>
-                  <tbody class="divide-y divide-farm-cream-dark dark:divide-farm-dark-border text-farm-text-muted dark:text-farm-text-light-muted">
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">VGI-Session-Accept: true</td><td class="px-4 py-2">Client opts in to opening a session.</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">VGI-Session</td><td class="px-4 py-2">Server mints, client echoes to resume.</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">VGI-Session-Close: true</td><td class="px-4 py-2">Client drops its captured token.</td></tr>
-                    <tr class="bg-white dark:bg-farm-dark"><td class="px-4 py-2 font-mono text-xs">VGI-Echo-&lt;name&gt;</td><td class="px-4 py-2">Header value the client replays for session routing.</td></tr>
+                  <tbody class="divide-y divide-soil-200 dark:divide-rock-700 text-soil-700 dark:text-cream-2">
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">VGI-Session-Accept: true</td><td class="px-4 py-2">Client opts in to opening a session.</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">VGI-Session</td><td class="px-4 py-2">Server mints, client echoes to resume.</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">VGI-Session-Close: true</td><td class="px-4 py-2">Client drops its captured token.</td></tr>
+                    <tr class="bg-white dark:bg-rock-900"><td class="px-4 py-2 font-mono text-xs">VGI-Echo-&lt;name&gt;</td><td class="px-4 py-2">Header value the client replays for session routing.</td></tr>
                   </tbody>
                 </table>
               </div>
-              <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
-                Teardown is an idempotent <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">DELETE {'{prefix}'}/__session__</code>.
-                Lost sessions surface in-band with <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">error_kind = "session_lost"</code>;
+              <p class="text-sm text-soil-700 dark:text-cream-2">
+                Teardown is an idempotent <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">DELETE {'{prefix}'}/__session__</code>.
+                Lost sessions surface in-band with <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">error_kind = "session_lost"</code>;
                 frameworks do not retry them transparently.
               </p>
             </div>
           </section>
 
           <section id="iroh">
-            <h2 class="text-2xl font-bold text-farm-green-deep dark:text-farm-cream border-b border-farm-cream-dark dark:border-farm-dark-border pb-2">
+            <h2 class="text-2xl font-semibold text-soil-900 dark:text-cream border-b border-soil-300 dark:border-rock-700 pb-2">
               18. Iroh &amp; HTTP over Iroh
             </h2>
-            <div class="mt-4 space-y-4 text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+            <div class="mt-4 space-y-4 text-sm text-soil-700 dark:text-cream-2">
               <p>
                 Iroh provides encrypted QUIC connections addressed by an EndpointId. The URI scheme selects
                 one of two RPC modes. Both preserve Arrow IPC payloads and the protocol routing described above.
               </p>
-              <div class="overflow-x-auto rounded-lg border border-farm-cream-dark dark:border-farm-dark-border">
+              <div class="overflow-x-auto rounded-lg border border-soil-300 dark:border-rock-700">
                 <table class="w-full text-sm">
-                  <thead class="bg-farm-cream-dark dark:bg-farm-dark-card"><tr>
+                  <thead class="bg-soil-100 dark:bg-rock-800"><tr>
                     <th class="px-4 py-2 text-left" scope="col">Mode</th>
                     <th class="px-4 py-2 text-left" scope="col">Wire protocol</th>
                     <th class="px-4 py-2 text-left" scope="col">State and deployment</th>
                   </tr></thead>
-                  <tbody class="divide-y divide-farm-cream-dark dark:divide-farm-dark-border">
+                  <tbody class="divide-y divide-soil-200 dark:divide-rock-700">
                     <tr><td class="px-4 py-2"><code>iroh://&lt;endpoint-id&gt;</code></td>
                       <td class="px-4 py-2"><code>vgi-rpc/arrow-mux/1</code></td>
                       <td class="px-4 py-2">Each logical RPC transport occupies a long-lived bidirectional QUIC stream. Several independent transports share one connection; stream state stays on the selected worker.</td></tr>
@@ -1218,7 +1221,7 @@ issue_grant(purpose: utf8, scopes: list<utf8>, ttl_seconds: int64) -> IssuedGran
                   </tbody>
                 </table>
               </div>
-              <h3 class="text-lg font-semibold text-farm-green-deep dark:text-farm-cream">Clients and optional bindings</h3>
+              <h3 class="text-lg font-semibold text-soil-900 dark:text-cream">Clients and optional bindings</h3>
               <p>
                 Python uses the <code>iroh</code> extra; Rust offers <code>vgi-rpc-iroh</code> and the optional
                 HTTP-Iroh client path. TypeScript provides <code>irohConnect</code> and <code>httpiConnect</code>{' '}
@@ -1228,7 +1231,7 @@ issue_grant(purpose: utf8, scopes: list<utf8>, ttl_seconds: int64) -> IssuedGran
                 Go requires an explicitly supplied native or community provider. Browser Iroh uses a separate
                 adapter; the Node/Bun native binding cannot be bundled into a browser application.
               </p>
-              <pre class="p-4 rounded-lg bg-white dark:bg-farm-dark-card border border-farm-cream-dark dark:border-farm-dark-border overflow-x-auto text-sm font-mono">{`# pip install 'vgi-rpc[iroh]'
+              <Code lang="python" theme={farmTheme} class="p-4 rounded-lg bg-rock-900 border border-rock-800 dark:border-rock-700 overflow-x-auto text-sm leading-relaxed font-mono" code={`# pip install 'vgi-rpc[iroh]'
 from protocol import Calculator
 from vgi_rpc import iroh_connect, httpi_connect
 
@@ -1238,18 +1241,18 @@ with iroh_connect(Calculator, f"iroh://{endpoint_id}") as client:
     print(client.add(a=2.0, b=3.0))
 
 with httpi_connect(Calculator, f"httpi://{endpoint_id}/vgi") as client:
-    print(client.add(a=2.0, b=3.0))`}</pre>
-              <h3 class="text-lg font-semibold text-farm-green-deep dark:text-farm-cream">Host an existing worker behind the bridge</h3>
+    print(client.add(a=2.0, b=3.0))`} />
+              <h3 class="text-lg font-semibold text-soil-900 dark:text-cream">Host an existing worker behind the bridge</h3>
               <p>
                 Rust can embed a native Iroh server. Workers in all seven languages can instead listen on
                 loopback behind <code>vgi-iroh-bridge</code>. Configure the worker’s Iroh bridge trust and
                 issuer, then point the bridge at its raw TCP and/or HTTP listener. For example, with workers
                 already listening on ports 9400 and 9401:
               </p>
-              <pre class="p-4 rounded-lg bg-white dark:bg-farm-dark-card border border-farm-cream-dark dark:border-farm-dark-border overflow-x-auto text-sm font-mono">{`vgi-iroh-bridge \\
+              <Code lang="shellscript" theme={farmTheme} class="p-4 rounded-lg bg-rock-900 border border-rock-800 dark:border-rock-700 overflow-x-auto text-sm leading-relaxed font-mono" code={`vgi-iroh-bridge \\
   --secret-key-file /run/secrets/vgi-iroh-key \\
   --raw-upstream tcp://127.0.0.1:9400 \\
-  --http-upstream http://127.0.0.1:9401`}</pre>
+  --http-upstream http://127.0.0.1:9401`} />
               <p>
                 The bridge prints its EndpointId. A persistent key preserves that address across restarts.
                 Peer-key authentication supplies identity evidence; application policy still decides access.
@@ -1264,20 +1267,20 @@ with httpi_connect(Calculator, f"httpi://{endpoint_id}/vgi") as client:
                 required token keys and external storage.
               </p>
               <p>
-                <a href="https://github.com/Query-farm/vgi-rpc-python/blob/main/docs/iroh-framework-operations.md" target="_blank" rel="noopener noreferrer" class="text-farm-gold hover:text-farm-gold-light">Cross-language setup and operations</a>
+                <a href="https://github.com/Query-farm/vgi-rpc-python/blob/main/docs/iroh-framework-operations.md" target="_blank" rel="noopener noreferrer" class="text-link hover:text-link-hover dark:text-link-dark dark:hover:text-link-dark-hover">Cross-language setup and operations</a>
                 {' '}&middot;{' '}
-                <a href="https://github.com/Query-farm/vgi-rpc-rust/tree/main/vgi-rpc-iroh" target="_blank" rel="noopener noreferrer" class="text-farm-gold hover:text-farm-gold-light">Native Rust adapter</a>
+                <a href="https://github.com/Query-farm/vgi-rpc-rust/tree/main/vgi-rpc-iroh" target="_blank" rel="noopener noreferrer" class="text-link hover:text-link-hover dark:text-link-dark dark:hover:text-link-dark-hover">Native Rust adapter</a>
                 {' '}&middot;{' '}
-                <a href="https://github.com/Query-farm/vgi-rpc-rust/tree/main/vgi-iroh-bridge" target="_blank" rel="noopener noreferrer" class="text-farm-gold hover:text-farm-gold-light">Bridge configuration</a>
+                <a href="https://github.com/Query-farm/vgi-rpc-rust/tree/main/vgi-iroh-bridge" target="_blank" rel="noopener noreferrer" class="text-link hover:text-link-hover dark:text-link-dark dark:hover:text-link-dark-hover">Bridge configuration</a>
               </p>
             </div>
           </section>
 
         </div>
 
-        <div class="mt-16 pt-8 border-t border-farm-cream-dark dark:border-farm-dark-border text-center">
+        <div class="mt-16 pt-8 border-t border-soil-300 dark:border-rock-700 text-center">
           <a href="/"
-            class="text-sm font-medium text-farm-gold hover:text-farm-gold-light transition-colors">
+            class="text-sm font-medium text-link hover:text-link-hover transition-colors dark:text-link-dark dark:hover:text-link-dark-hover">
             &larr; Back to home
           </a>
         </div>

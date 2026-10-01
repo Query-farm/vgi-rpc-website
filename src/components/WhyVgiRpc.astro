@@ -1,61 +1,60 @@
 ---
+import TransportIcon from './TransportIcon.astro';
+
 const features = [
   {
     title: 'No IDL Required',
-    description: 'Define services with native type annotations. No .proto files, no separate IDL. Your Protocol class is the interface.',
-    icon: '&#x2728;',
+    description: 'Arrow schemas are derived from your native type annotations, so the interface your type checker sees is the one that goes on the wire.',
+    icon: '<rect x="3.5" y="3.5" width="17" height="17" rx="2.5" fill="currentColor" fill-opacity="0.12"/><path d="M3.5 9h17"/><path class="accent" d="M7 13h7"/><path d="M7 16.5h4.5"/>',
   },
   {
     title: 'Transport-Agnostic',
-    description: 'Pipe, subprocess, Unix or TCP socket, shared memory, HTTP, and authenticated Iroh/QUIC — same service code, just swap the transport. Add custom transports too.',
-    icon: '&#x1F50C;',
+    description: 'Built-in transports run from in-process pipes to authenticated Iroh/QUIC across a network, and the transport layer accepts custom implementations.',
+    icon: '<rect x="2.5" y="6.5" width="19" height="11" rx="5.5" fill="currentColor" fill-opacity="0.12"/><circle class="accent" cx="16" cy="12" r="3" fill="currentColor" fill-opacity="0.25"/><path d="M6.5 12h4"/>',
   },
   {
     title: 'Apache Arrow Native',
-    description: 'Columnar serialization with zero-copy potential. Efficient for scalar values and massive DataFrames alike.',
-    icon: '&#x1F3AF;',
+    description: 'Arguments and results travel as Arrow record batches. Large DataFrames cross without row-by-row conversion, and the shared-memory side channel skips the copy entirely.',
+    icon: '<rect x="3.5" y="4" width="4.5" height="16" rx="1.5" fill="currentColor" fill-opacity="0.12"/><rect x="9.75" y="4" width="4.5" height="16" rx="1.5" class="accent" fill="currentColor" fill-opacity="0.18"/><rect x="16" y="4" width="4.5" height="16" rx="1.5" fill="currentColor" fill-opacity="0.12"/><path d="M3.5 8.5h17"/>',
   },
   {
     title: 'Streaming Built-in',
-    description: 'Producer streams for server-push data and exchange streams for lockstep bidirectional communication. Headers supported.',
-    icon: '&#x1F30A;',
+    description: 'Producer streams push batches from the server, and exchange streams trade them in lockstep with the client. Either kind can send a typed header before the data.',
+    icon: '<path d="M3 8c3-2.5 6 2.5 9 0s6 2.5 9 0"/><path class="accent" d="M3 12.5c3-2.5 6 2.5 9 0s6 2.5 9 0"/><path d="M3 17c3-2.5 6 2.5 9 0s6 2.5 9 0"/>',
   },
   {
     title: 'Multi-Language',
-    description: 'Python (reference), TypeScript, Go, Rust, Java, C#, and C++ implementations sharing the same wire protocol. True cross-language RPC.',
-    icon: '&#x1F310;',
+    description: 'Python (the reference), TypeScript, Go, Rust, Java, C#, and C++ share one wire protocol, so a client in one language can call a worker written in another.',
+    icon: '<path d="M4 5.5h9a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2H9l-3 2.5v-2.5H4a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2z" fill="currentColor" fill-opacity="0.12"/><path class="accent" d="M11 16.5v.5a2 2 0 0 0 2 2h4l3 2.5V19h0a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2h-3"/><path d="M5.5 9.5h6"/>',
   },
   {
     title: 'Runtime Reflection',
     description: 'Servers host several protocols side by side. vgi_rpc.Reflection.v1 lists them and describes any one — method kinds, Arrow schemas, and a protocol hash all seven ports compute identically.',
-    icon: '&#x1F50D;',
+    icon: '<circle cx="10.5" cy="10.5" r="6.5" fill="currentColor" fill-opacity="0.12"/><path d="M15.25 15.25 20.5 20.5"/><path class="accent" d="M7.5 8.75h6M7.5 12.25h4"/>',
   },
 ];
 ---
 
-<section id="why" class="py-20 bg-farm-cream-dark/50 dark:bg-farm-dark-card/30
-  border-t border-farm-cream-dark dark:border-farm-dark-border">
+<section id="why" class="py-20 md:py-24 bg-soil-100 dark:bg-rock-950/50">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <h2 class="text-3xl md:text-4xl font-bold text-center
-      text-farm-green-deep dark:text-farm-cream">
+    <h2 class="text-3xl md:text-4xl text-center
+      text-soil-900 dark:text-cream">
       Why <span class="font-mono">vgi-rpc</span>?
     </h2>
-    <p class="mt-3 text-center text-lg text-farm-text-muted dark:text-farm-text-light-muted max-w-2xl mx-auto">
-      Built for developers who want typed RPC without the ceremony.
+    <p class="mt-3 text-center text-lg text-soil-700 dark:text-cream-2 max-w-2xl mx-auto">
+      Typed RPC across seven languages on one Arrow-based wire protocol.
     </p>
 
     <div class="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {features.map(feature => (
-        <div class="p-6 rounded-xl
-          bg-white dark:bg-farm-dark-card
-          border border-farm-cream-dark dark:border-farm-dark-border
-          hover:border-farm-green-field dark:hover:border-farm-green-field
-          transition-colors">
-          <div class="text-3xl mb-3" set:html={feature.icon} />
-          <h3 class="text-lg font-semibold text-farm-green-deep dark:text-farm-cream">
+        <div class="p-6 rounded-xl border shadow-sm
+          bg-white border-soil-300/60
+          dark:bg-rock-800 dark:border-rock-700 dark:shadow-none">
+          <TransportIcon body={feature.icon} class="mb-4" />
+          <h3 class="text-lg text-soil-900 dark:text-cream">
             {feature.title}
           </h3>
-          <p class="mt-2 text-sm text-farm-text-muted dark:text-farm-text-light-muted leading-relaxed">
+          <p class="mt-2 text-sm text-soil-700 dark:text-cream-2 leading-relaxed">
             {feature.description}
           </p>
         </div>

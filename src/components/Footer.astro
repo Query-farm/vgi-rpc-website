@@ -1,93 +1,97 @@
 ---
+import StrataSun from './StrataSun.astro';
+
 const year = new Date().getFullYear();
+
+const columns: { title: string; links: { name: string; href: string; external?: boolean }[] }[] = [
+  {
+    title: 'Resources',
+    links: [
+      { name: 'Wire Protocol', href: '/wire-protocol' },
+      { name: 'Benchmarks', href: '/benchmarks' },
+      { name: 'GitHub', href: 'https://github.com/Query-farm', external: true },
+      { name: 'LLMs', href: '/llms.txt' },
+    ],
+  },
+  {
+    title: 'Implementations',
+    links: [
+      { name: 'Python', href: 'https://vgi-rpc-python.query.farm', external: true },
+      { name: 'TypeScript', href: 'https://vgi-rpc-typescript.query.farm', external: true },
+      { name: 'Go', href: 'https://vgi-rpc-go.query.farm', external: true },
+      { name: 'Rust', href: 'https://docs.rs/vgi-rpc', external: true },
+      { name: 'Java', href: 'https://javadoc.io/doc/farm.query/vgirpc', external: true },
+      { name: 'C#', href: 'https://github.com/Query-farm/vgi-rpc-csharp#readme', external: true },
+      { name: 'C++', href: 'https://vgi-rpc-cpp.query.farm', external: true },
+    ],
+  },
+  {
+    title: 'Query.Farm',
+    links: [
+      { name: 'VGI', href: 'https://query.farm/vgi', external: true },
+      { name: 'Products', href: 'https://query.farm/products', external: true },
+      { name: 'Blog', href: 'https://query.farm/blog', external: true },
+      { name: 'Contact', href: 'https://query.farm/company/contact', external: true },
+    ],
+  },
+];
+
+const linkClass = `text-sm no-underline transition-colors
+  text-soil-700 hover:text-link dark:text-cream-2 dark:hover:text-link-dark`;
 ---
 
-<footer class="border-t border-farm-cream-dark dark:border-farm-dark-border
-  bg-farm-cream-dark/50 dark:bg-farm-dark-card/50">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<footer class="mt-auto border-t border-soil-300 bg-soil-100 dark:border-rock-700 dark:bg-rock-950">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid gap-10 py-12 lg:grid-cols-[1.1fr_2fr] lg:gap-14">
       <!-- Brand -->
       <div>
-        <a href="/" class="font-bold text-lg font-mono text-farm-green-deep dark:text-farm-green-field">
-          vgi-rpc
+        <a href="https://query.farm" target="_blank" rel="noopener noreferrer"
+          class="inline-flex items-center gap-[0.32em] no-underline text-soil-900 dark:text-cream">
+          <StrataSun size={30} animate={false} />
+          <span class="qf-wordmark text-[21px]">Query<span class="text-sun-700 dark:text-sun-400">.</span>Farm</span>
         </a>
-        <p class="mt-2 text-sm text-farm-text-muted dark:text-farm-text-light-muted">
-          Transport-agnostic RPC built on Apache Arrow IPC serialization.
-        </p>
-        <p class="mt-4 text-sm text-farm-text-muted dark:text-farm-text-light-muted">
-          &copy; {year} &#x1F69C; <a href="https://query.farm" target="_blank" rel="noopener noreferrer"
-            class="hover:text-farm-green-deep dark:hover:text-farm-green-field transition-colors">
-            Query.Farm LLC
-          </a>
+        <p class="mt-5 max-w-[40ch] text-sm leading-relaxed text-soil-700 dark:text-cream-2">
+          <span class="font-mono font-semibold text-soil-900 dark:text-cream">vgi-rpc</span> is
+          transport-agnostic RPC built on Apache Arrow IPC serialization, made by Query.Farm.
         </p>
       </div>
 
-      <!-- Links -->
-      <div>
-        <h3 class="font-semibold text-sm uppercase tracking-wider text-farm-text-muted dark:text-farm-text-light-muted mb-3">
-          Resources
-        </h3>
-        <ul class="space-y-2 text-sm">
-          <li><a href="/wire-protocol"
-            class="text-farm-text-muted dark:text-farm-text-light-muted hover:text-farm-green-deep dark:hover:text-farm-green-field transition-colors">
-            Wire Protocol
-          </a></li>
-          <li><a href="/benchmarks"
-            class="text-farm-text-muted dark:text-farm-text-light-muted hover:text-farm-green-deep dark:hover:text-farm-green-field transition-colors">
-            Benchmarks
-          </a></li>
-          <li><a href="https://github.com/Query-farm" target="_blank" rel="noopener noreferrer"
-            class="text-farm-text-muted dark:text-farm-text-light-muted hover:text-farm-green-deep dark:hover:text-farm-green-field transition-colors">
-            GitHub
-          </a></li>
-          <li><a href="/llms.txt"
-            class="text-farm-text-muted dark:text-farm-text-light-muted hover:text-farm-green-deep dark:hover:text-farm-green-field transition-colors">
-            LLMs
-          </a></li>
-        </ul>
-      </div>
+      <!-- Link columns -->
+      <nav class="grid grid-cols-2 gap-x-7 gap-y-9 sm:grid-cols-3" aria-label="Footer">
+        {columns.map(col => (
+          <div>
+            <h2 class="qf-eyebrow mb-3 text-soil-500 dark:text-cream-2">{col.title}</h2>
+            <ul class="flex list-none flex-col gap-[7px]">
+              {col.links.map(link => (
+                <li>
+                  <a
+                    href={link.href}
+                    class={linkClass}
+                    {...(link.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                  >
+                    {link.name}
+                    {link.external && (
+                      <svg class="ml-1 inline-block h-3 w-3 opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                      </svg>
+                    )}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </nav>
+    </div>
 
-      <!-- Languages -->
-      <div>
-        <h3 class="font-semibold text-sm uppercase tracking-wider text-farm-text-muted dark:text-farm-text-light-muted mb-3">
-          Implementations
-        </h3>
-        <ul class="space-y-2 text-sm">
-          <li><a href="https://vgi-rpc-python.query.farm" target="_blank" rel="noopener noreferrer"
-            class="text-farm-text-muted dark:text-farm-text-light-muted hover:text-farm-green-deep dark:hover:text-farm-green-field transition-colors">
-            Python
-          </a></li>
-          <li><a href="https://vgi-rpc-typescript.query.farm" target="_blank" rel="noopener noreferrer"
-            class="text-farm-text-muted dark:text-farm-text-light-muted hover:text-farm-green-deep dark:hover:text-farm-green-field transition-colors">
-            TypeScript
-          </a></li>
-          <li><a href="https://vgi-rpc-go.query.farm" target="_blank" rel="noopener noreferrer"
-            class="text-farm-text-muted dark:text-farm-text-light-muted hover:text-farm-green-deep dark:hover:text-farm-green-field transition-colors">
-            Go
-          </a></li>
-          <li><a href="https://docs.rs/vgi-rpc" target="_blank" rel="noopener noreferrer"
-            class="text-farm-text-muted dark:text-farm-text-light-muted hover:text-farm-green-deep dark:hover:text-farm-green-field transition-colors">
-            Rust
-          </a></li>
-          <li><a href="https://javadoc.io/doc/farm.query/vgirpc" target="_blank" rel="noopener noreferrer"
-            class="text-farm-text-muted dark:text-farm-text-light-muted hover:text-farm-green-deep dark:hover:text-farm-green-field transition-colors">
-            Java
-          </a></li>
-          <li><a href="https://github.com/Query-farm/vgi-rpc-csharp#readme" target="_blank" rel="noopener noreferrer"
-            class="text-farm-text-muted dark:text-farm-text-light-muted hover:text-farm-green-deep dark:hover:text-farm-green-field transition-colors">
-            C#
-          </a></li>
-          <li><a href="https://vgi-rpc-cpp.query.farm" target="_blank" rel="noopener noreferrer"
-            class="text-farm-text-muted dark:text-farm-text-light-muted hover:text-farm-green-deep dark:hover:text-farm-green-field transition-colors">
-            C++
-          </a></li>
-        </ul>
-        <p class="mt-4 text-xs text-farm-text-muted/70 dark:text-farm-text-light-muted/70 leading-relaxed">
-          Apache, Apache Arrow, Arrow, and the Apache Arrow project logo are either registered trademarks or trademarks of{' '}
-          <a href="https://www.apache.org/" target="_blank" rel="noopener noreferrer"
-            class="hover:text-farm-green-deep dark:hover:text-farm-green-field transition-colors">The Apache Software Foundation</a>.
-        </p>
-      </div>
+    <div class="flex flex-col gap-3 border-t border-soil-300 py-5 pb-9 text-[13px] text-soil-600
+      dark:border-rock-700 dark:text-cream-2 md:flex-row md:items-start md:justify-between md:gap-10">
+      <span class="font-medium whitespace-nowrap">&copy; {year} Query Farm LLC &middot; All rights reserved</span>
+      <p class="max-w-[70ch] text-xs leading-relaxed md:text-right">
+        Apache, Apache Arrow, Arrow, and the Apache Arrow project logo are either registered trademarks or trademarks of{' '}
+        <a href="https://www.apache.org/" target="_blank" rel="noopener noreferrer"
+          class="no-underline transition-colors hover:text-link dark:hover:text-link-dark">The Apache Software Foundation</a>.
+      </p>
     </div>
   </div>
 </footer>

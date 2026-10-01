@@ -1,47 +1,206 @@
 @import "tailwindcss";
 
+/* Query.Farm Strata Sun palette, ported from query-farm-astro/src/styles/global.css.
+   Its DESIGN_BRIEF.md is the authority: gold is identity, green is interaction;
+   sun-700 is the only gold that may carry text on a light ground; code blocks
+   always sit on rock-900; the MID band (soil-400) takes ink, never cream. */
 @theme {
-  --color-farm-green-deep: #2d5016;
-  --color-farm-green-field: #4a7c23;
-  --color-farm-green-light: #6ba034;
-  --color-farm-gold: #c8a43a;
-  --color-farm-gold-light: #d4b64e;
-  --color-farm-brown: #6b4423;
-  --color-farm-brown-light: #8b6340;
-  --color-farm-cream: #faf8f0;
-  --color-farm-cream-dark: #f0ece0;
-  --color-farm-dark: #1a1a0e;
-  --color-farm-dark-card: #252518;
-  --color-farm-dark-border: #3a3a28;
-  --color-farm-text: #2c2c1e;
-  --color-farm-text-muted: #6b6b5a;
-  --color-farm-text-light: #f5f0e0;
-  --color-farm-text-light-muted: #b8b0a0;
+  /* sun — the mark's bands, display + accent */
+  --color-sun-200: #f6ddab;
+  --color-sun-300: #f0c877;   /* mark band 1 */
+  --color-sun-400: #d9a441;   /* mark band 2 — brand gold; text on DARK only */
+  --color-sun-500: #c08e2f;
+  --color-sun-600: #a9762e;   /* mark band 3 */
+  --color-sun-700: #7d5714;   /* accent text on light, 5.8:1 on soil-50 */
+  --color-sun-800: #7a5230;   /* mark band 4 */
+  --color-sun-900: #5a3c22;
+
+  /* soil — grounds and text on light */
+  --color-soil-50:  #f7f3ea;  /* paper — the page ground */
+  --color-soil-100: #efe9db;
+  --color-soil-200: #e6dbc2;
+  --color-soil-300: #cfc4ad;  /* rules on paper */
+  --color-soil-400: #a9825a;  /* MID band — takes INK text, not cream */
+  --color-soil-500: #8a5f38;
+  --color-soil-600: #7a5230;
+  --color-soil-700: #5d4632;
+  --color-soil-800: #3b2e22;
+  --color-soil-900: #211a12;  /* ink — body text on paper */
+
+  /* rock — code surfaces and the dark end */
+  --color-rock-700: #5f5750;
+  --color-rock-800: #2a2420;
+  --color-rock-900: #1a1512;  /* code ground — always */
+  --color-rock-950: #100d0a;
+
+  /* field — the one cool note: CTAs and interaction */
+  --color-field-400: #7a9a54;
+  --color-field-600: #5f7a3c;
+  --color-field-700: #45632f;  /* CTA fill, white label 6.8:1 */
+  --color-field-800: #33501f;  /* hover darkens */
+
+  /* links — prose links are always underlined; colour alone is not enough */
+  --color-link:            #45632f;
+  --color-link-hover:      #33501f;
+  --color-link-dark:       #8cb878;
+  --color-link-dark-hover: #aecb84;
+
+  /* pipe — six-stage run; here only as the hairband */
+  --color-pipe-1: #eef0e6;
+  --color-pipe-2: #e0e5d3;
+  --color-pipe-3: #8a9a6b;
+  --color-pipe-4: #5d6b46;
+  --color-pipe-5: #3b4630;
+  --color-pipe-6: #242b1d;
+
+  /* text on dark */
+  --color-cream:   #f4ece0;
+  --color-cream-2: #c6b8a2;
+
+  /* category tints — only where hue carries information; chips need a hairline border */
+  --color-cat-gold:  #f3e4c4;  --color-cat-gold-ink:  #6d4718;
+  --color-cat-field: #dee8d1;  --color-cat-field-ink: #3b5626;
+  --color-cat-clay:  #f2ded4;  --color-cat-clay-ink:  #7d4028;
+  --color-cat-slate: #d8e3e8;  --color-cat-slate-ink: #2f5058;
+  --color-cat-plum:  #e7dbe6;  --color-cat-plum-ink:  #59385a;
+  --color-cat-moss:  #e3e6d2;  --color-cat-moss-ink:  #4a5526;
+
+  /* Tailwind v4 builds font-* utilities from --font-*, not --font-family-* */
+  --font-sans:    'Noto Sans', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-display: 'Petrona', Georgia, serif;
+  --font-mono:    'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
 }
 
-html {
-  scroll-behavior: smooth;
+:root {
+  /* Sticky nav height (58px bar + 5px hairband); in-page anchors clear it. */
+  --qf-nav-h: 63px;
 }
 
-body {
-  font-family: "Inter", system-ui, -apple-system, sans-serif;
-  background-color: var(--color-farm-cream);
-  color: var(--color-farm-text);
-}
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: calc(var(--qf-nav-h) + 16px);
+  }
 
-@media (prefers-color-scheme: dark) {
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  /* Visible keyboard focus everywhere; mouse clicks don't trigger it. */
+  :focus-visible {
+    outline: 2px solid var(--color-link);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :focus-visible {
+      outline-color: var(--color-link-dark);
+    }
+  }
+
   body {
-    background-color: var(--color-farm-dark);
-    color: var(--color-farm-text-light);
+    font-family: var(--font-sans);
+    background-color: var(--color-soil-50);
+    color: var(--color-soil-900);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body {
+      background-color: var(--color-rock-900);
+      color: var(--color-cream);
+    }
+  }
+
+  /* Headings set in Petrona 600 at every level; size comes from the Tailwind ladder. */
+  h1, h2, h3 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.022em;
+  }
+
+  /* Figures come from the sans, tabular. Never put this on prose. */
+  .qf-figure,
+  td[data-numeric],
+  th[data-numeric] {
+    font-family: var(--font-sans);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+  }
+
+  /* The 5px six-colour strip under the page header (brief §5). */
+  .hairband {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    height: 5px;
+  }
+
+  /* Code blocks */
+  code {
+    font-family: var(--font-mono);
+    font-size: 0.875em;
+  }
+
+  pre code {
+    font-size: 0.8125em;
   }
 }
 
-/* Code blocks */
-code {
-  font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
-  font-size: 0.875em;
+/* The Query.Farm wordmark: Petrona 700, slightly tighter than headings. */
+@utility qf-wordmark {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.018em;
+  line-height: 1;
+  white-space: nowrap;
 }
 
-pre code {
-  font-size: 0.8125em;
+/* Small section label (footer column heads, eyebrows). */
+@utility qf-eyebrow {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 0.8125rem;
+  letter-spacing: 0;
 }
+
+/* Prose links (brief §3): green, ALWAYS underlined — colour alone can't
+   separate a link from ink text. Opt in per anchor with `qf-link`, or wrap
+   running text in `qf-prose` to underline every plain <a> inside it.
+   Nav, buttons, cards and chips stay un-underlined by not using either. */
+@utility qf-link {
+  color: var(--color-link);
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+  text-decoration-color: color-mix(in srgb, currentColor 45%, transparent);
+  transition: color 150ms, text-decoration-color 150ms;
+
+  &:hover {
+    color: var(--color-link-hover);
+    text-decoration-color: currentColor;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    color: var(--color-link-dark);
+
+    &:hover {
+      color: var(--color-link-dark-hover);
+    }
+  }
+}
+
+@layer components {
+  .qf-prose a:not([class*="no-underline"]) {
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.18em;
+    text-decoration-color: color-mix(in srgb, currentColor 45%, transparent);
+  }
+
+  .qf-prose a:not([class*="no-underline"]):hover {
+    text-decoration-color: currentColor;
+  }
+}
+

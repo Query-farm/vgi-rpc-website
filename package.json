@@ -13,7 +13,8 @@
     "benchmark:verify": "python3 benchmarks/run.py verify",
     "benchmark:quick": "python3 benchmarks/run.py quick",
     "benchmark:full": "python3 benchmarks/run.py full",
-    "benchmark:publish": "python3 benchmarks/run.py publish"
+    "benchmark:publish": "python3 benchmarks/run.py publish",
+    "og": "node scripts/generate-og-images.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",
@@ -21,5 +22,9 @@
     "@tailwindcss/vite": "^4.3.3",
     "astro": "^7.3.5",
     "tailwindcss": "^4.3.3"
+  },
+  "devDependencies": {
+    "@resvg/resvg-js": "^2.6.2",
+    "satori": "^0.33.5"
   }
 }

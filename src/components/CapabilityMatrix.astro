@@ -111,63 +111,63 @@ const workerFeatureRows = rowsFor({
 }, (language, key) => language.features[key]);
 ---
 
-<section id="capabilities" class="py-20 border-t border-farm-cream-dark dark:border-farm-dark-border">
+<section id="capabilities" class="py-20 md:py-24 bg-soil-50 dark:bg-rock-900">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <h2 class="text-3xl md:text-4xl font-bold text-center text-farm-green-deep dark:text-farm-cream">
+    <h2 class="text-3xl md:text-4xl text-center text-soil-900 dark:text-cream">
       Capability Matrix
     </h2>
-    <p class="mt-3 text-center text-lg text-farm-text-muted dark:text-farm-text-light-muted max-w-2xl mx-auto">
+    <p class="mt-3 text-center text-lg text-soil-700 dark:text-cream-2 max-w-2xl mx-auto">
       Reviewed SDK capabilities, with native clients listed separately from workers. These declarations describe documented support; they are not a fresh cross-language conformance run.
     </p>
 
     <div class="mt-10">
-      <h3 class="text-lg font-semibold text-farm-green-deep dark:text-farm-cream">Client Implementations</h3>
-      <p class="mt-1 mb-4 text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+      <h3 class="text-lg text-soil-900 dark:text-cream">Client Implementations</h3>
+      <p class="mt-1 mb-4 text-sm text-soil-700 dark:text-cream-2">
         All maintained ports ship a native client surface, but their API scope and supported call patterns differ.
       </p>
       <CapabilityTable firstColumnLabel="Client Surface" {languages} languageLabels={langLabels} rows={clientImplementationRows} />
     </div>
 
     <div class="mt-8">
-      <h3 class="text-lg font-semibold text-farm-green-deep dark:text-farm-cream mb-4">Client Connections &amp; Orchestration</h3>
+      <h3 class="text-lg text-soil-900 dark:text-cream mb-4">Client Connections &amp; Orchestration</h3>
       <CapabilityTable firstColumnLabel="Client Capability" {languages} languageLabels={langLabels} rows={clientConnectionTableRows} />
     </div>
 
     <div class="mt-8">
-      <h3 class="text-lg font-semibold text-farm-green-deep dark:text-farm-cream mb-4">Client Services</h3>
+      <h3 class="text-lg text-soil-900 dark:text-cream mb-4">Client Services</h3>
       <CapabilityTable firstColumnLabel="Client Capability" {languages} languageLabels={langLabels} rows={clientServiceRows} />
-      <p class="mt-3 text-xs text-farm-text-muted dark:text-farm-text-light-muted">
+      <p class="mt-3 text-xs text-soil-700 dark:text-cream-2">
         <strong>Optional native</strong> requires the language’s Iroh binding or build feature. Go requires an explicit provider; no native Go provider is bundled. TypeScript native Iroh targets Node/Bun; browsers require a separate adapter. <strong>Schema-first</strong> means callers invoke reflection through the generic RPC API. Java’s shared-memory entry here describes the native client, separately from its worker-side support.
       </p>
     </div>
 
-    <div class="mt-12 border-t border-farm-cream-dark pt-10 dark:border-farm-dark-border">
-      <h3 class="text-lg font-semibold text-farm-green-deep dark:text-farm-cream">Worker Transports</h3>
-      <p class="mt-1 mb-4 text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+    <div class="mt-12 border-t border-soil-300 pt-10 dark:border-rock-700">
+      <h3 class="text-lg text-soil-900 dark:text-cream">Worker Transports</h3>
+      <p class="mt-1 mb-4 text-sm text-soil-700 dark:text-cream-2">
         Ways each implementation can host a worker. All seven can expose raw or HTTP workers through the standalone Iroh bridge; Rust also offers an embedded native Iroh server. Stdio availability does not imply a native subprocess-launching client.
       </p>
       <CapabilityTable firstColumnLabel="Worker Transport" {languages} languageLabels={langLabels} rows={workerTransportRows} />
     </div>
 
     <div class="mt-8">
-      <h3 class="text-lg font-semibold text-farm-green-deep dark:text-farm-cream mb-4">Worker RPC Patterns</h3>
+      <h3 class="text-lg text-soil-900 dark:text-cream mb-4">Worker RPC Patterns</h3>
       <CapabilityTable firstColumnLabel="Pattern" {languages} languageLabels={langLabels} rows={workerPatternRows} />
     </div>
 
     <div class="mt-8">
-      <h3 class="text-lg font-semibold text-farm-green-deep dark:text-farm-cream mb-4">Worker Features</h3>
+      <h3 class="text-lg text-soil-900 dark:text-cream mb-4">Worker Features</h3>
       <CapabilityTable firstColumnLabel="Feature" {languages} languageLabels={langLabels} rows={workerFeatureRows} />
     </div>
 
-    <div class="mt-6 text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+    <div class="mt-6 text-sm text-soil-700 dark:text-cream-2">
       <p>SDK sources reviewed {reviewedSources.python.reviewed_at}. Benchmark results retain the versions used for their measured runs.</p>
       <ul class="mt-2 flex flex-wrap gap-x-5 gap-y-2">
         {languages.map(language => (
-          <li><a href={reviewedSources[language].source} target="_blank" rel="noopener noreferrer" class="text-farm-gold hover:text-farm-gold-light">{langLabels[language]} {reviewedSources[language].version}</a></li>
+          <li><a href={reviewedSources[language].source} target="_blank" rel="noopener noreferrer" class="qf-link">{langLabels[language]} {reviewedSources[language].version}</a></li>
         ))}
       </ul>
     </div>
-    <p class="mt-6 text-center text-xs text-farm-text-muted dark:text-farm-text-light-muted">
+    <p class="mt-6 text-center text-xs text-soil-700 dark:text-cream-2">
       Last updated: {new Date(capabilities.generated_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
     </p>
   </div>

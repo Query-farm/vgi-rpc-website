@@ -1,4 +1,6 @@
 ---
+import StrataSun from './StrataSun.astro';
+
 interface Props {
   currentPage?: string;
 }
@@ -14,85 +16,100 @@ const navLinks = [
   { href: '/#languages', label: 'Languages' },
   { href: '/wire-protocol', label: 'Wire Protocol' },
 ];
+
+// Primary button (Query.Farm Button.astro): hover darkens on light; on dark
+// the fill lightens away from the ground, so the label flips to ink.
+const ctaClass = `inline-flex items-center justify-center whitespace-nowrap rounded-lg border font-medium leading-tight
+  transition-colors duration-200
+  bg-field-700 border-field-700 text-white hover:bg-field-800 hover:border-field-800
+  dark:bg-field-600 dark:border-field-600 dark:hover:bg-field-400 dark:hover:border-field-400 dark:hover:text-rock-900`;
 ---
 
-<nav class="sticky top-0 z-50 border-b backdrop-blur-md
-  bg-farm-cream/90 border-farm-cream-dark
-  dark:bg-farm-dark/90 dark:border-farm-dark-border">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex items-center justify-between h-16">
-      <a href="/" class="flex items-center gap-2 font-bold text-lg font-mono
-        text-farm-green-deep dark:text-farm-green-field hover:text-farm-green-field dark:hover:text-farm-green-light
-        transition-colors">
-        vgi-rpc
+<header class="sticky top-0 z-50 backdrop-blur-[10px]
+  bg-soil-50/92 dark:bg-rock-900/90">
+  <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-[58px] flex items-center justify-between gap-4" aria-label="Main">
+    <!-- Lockup: Strata Sun + product name, credited to Query.Farm -->
+    <div class="flex flex-none items-center gap-2.5">
+      <a href="/" class="flex items-center gap-2.5 no-underline text-soil-900 dark:text-cream" aria-label="vgi-rpc home">
+        <StrataSun size={28} />
+        <span class="font-mono font-bold text-[17px] tracking-tight">vgi-rpc</span>
       </a>
-
-      <!-- Desktop nav -->
-      <div class="hidden md:flex items-center gap-6">
-        {navLinks.map(link => (
-          <a
-            href={link.href}
-            class:list={[
-              'text-sm font-medium transition-colors',
-              link.href === currentPage
-                ? 'text-farm-green-deep dark:text-farm-green-field'
-                : 'text-farm-text-muted dark:text-farm-text-light-muted hover:text-farm-green-deep dark:hover:text-farm-green-field'
-            ]}
-          >
-            {link.label}
-          </a>
-        ))}
-        <a
-          href="/#get-started"
-          class="text-sm font-medium px-3 py-1.5 rounded-md
-            bg-farm-green-deep text-white hover:bg-farm-green-field
-            dark:bg-farm-green-field dark:hover:bg-farm-green-light
-            transition-colors"
-        >
-          🚀 Get Started
-        </a>
-      </div>
-
-      <!-- Mobile menu button -->
-      <button
-        id="mobile-menu-btn"
-        class="md:hidden p-2 rounded-md text-farm-text-muted dark:text-farm-text-light-muted
-          hover:text-farm-text dark:hover:text-farm-text-light"
-        aria-label="Toggle menu"
-        aria-expanded="false"
-      >
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-        </svg>
-      </button>
+      <span class="h-5 w-px bg-soil-300 dark:bg-rock-700" aria-hidden="true"></span>
+      <a href="https://query.farm" target="_blank" rel="noopener noreferrer"
+        class="no-underline text-[13px] text-soil-700 dark:text-cream-2 hover:text-soil-900 dark:hover:text-cream transition-colors">
+        by <span class="qf-wordmark text-[15px] text-soil-900 dark:text-cream">Query<span class="text-sun-700 dark:text-sun-400">.</span>Farm</span>
+      </a>
     </div>
-  </div>
 
-  <!-- Mobile menu -->
-  <div id="mobile-menu" class="hidden md:hidden border-t border-farm-cream-dark dark:border-farm-dark-border">
-    <div class="px-4 py-3 space-y-2">
+    <!-- Desktop nav -->
+    <div class="hidden xl:flex items-center gap-[18px] text-[14px]">
       {navLinks.map(link => (
         <a
           href={link.href}
-          class="block px-3 py-2 rounded-md text-sm font-medium
-            text-farm-text-muted dark:text-farm-text-light-muted
-            hover:text-farm-green-deep hover:bg-farm-cream-dark
-            dark:hover:text-farm-green-field dark:hover:bg-farm-dark-card
-            transition-colors"
+          aria-current={link.href === currentPage ? 'page' : undefined}
+          class:list={[
+            'block whitespace-nowrap border-b-[1.5px] pb-0.5 no-underline transition-colors',
+            link.href === currentPage
+              ? 'border-link text-link dark:border-link-dark dark:text-link-dark'
+              : 'border-transparent text-soil-700 hover:border-link hover:text-link dark:text-cream-2 dark:hover:border-link-dark dark:hover:text-link-dark'
+          ]}
         >
           {link.label}
         </a>
       ))}
-      <a
-        href="/#get-started"
-        class="block px-3 py-2 rounded-md text-sm font-medium
-          text-farm-green-deep dark:text-farm-green-field"
-      >
+      <a href="/#get-started" class:list={[ctaClass, 'gap-1.5 px-[15px] py-[7px] text-[12.5px]']}>
         Get Started
       </a>
     </div>
+
+    <!-- Mobile menu button -->
+    <button
+      id="mobile-menu-btn"
+      class="xl:hidden rounded-lg border p-2 transition-colors
+        border-soil-300 text-soil-700 hover:border-soil-900 hover:text-soil-900
+        dark:border-rock-700 dark:text-cream-2 dark:hover:border-cream-2 dark:hover:text-cream"
+      aria-label="Toggle menu"
+      aria-controls="mobile-menu"
+      aria-expanded="false"
+    >
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+    </button>
+  </nav>
+
+  <!-- Mobile menu -->
+  <div id="mobile-menu" class="hidden xl:hidden border-t border-soil-300 dark:border-rock-700">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 space-y-1">
+      {navLinks.map(link => (
+        <a
+          href={link.href}
+          aria-current={link.href === currentPage ? 'page' : undefined}
+          class="block px-3 py-2 rounded-md text-sm no-underline transition-colors
+            text-soil-700 hover:text-soil-900 hover:bg-soil-100
+            dark:text-cream-2 dark:hover:text-cream dark:hover:bg-rock-800"
+        >
+          {link.label}
+        </a>
+      ))}
+      <div class="pt-2 pb-1 px-3">
+        <a href="/#get-started" class:list={[ctaClass, 'w-full px-[22px] py-[11px] text-[14px]']}>
+          Get Started
+        </a>
+      </div>
+    </div>
   </div>
-</nav>
+
+  <!-- Hairband: the six-stage strip beneath the shell (brief §5) -->
+  <div class="hairband" aria-hidden="true">
+    <i class="block bg-pipe-1"></i>
+    <i class="block bg-pipe-2"></i>
+    <i class="block bg-pipe-3"></i>
+    <i class="block bg-pipe-4"></i>
+    <i class="block bg-pipe-5"></i>
+    <i class="block bg-pipe-6"></i>
+  </div>
+</header>
 
 <script>
   const btn = document.getElementById('mobile-menu-btn');

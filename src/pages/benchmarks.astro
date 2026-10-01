@@ -36,7 +36,7 @@ const concurrencies = [...new Set(controlled.map(result => result.concurrency ??
 const benchmarkImplementations = benchmarkData.implementations as BenchmarkImplementation[];
 const implementations = new Map(benchmarkImplementations.map(item => [item.id, item]));
 const pendingImplementations = benchmarkImplementations.filter(item => item.benchmark_status === 'awaiting_canonical_run');
-const filterButtonClass = 'rounded-full border border-farm-cream-dark bg-white px-3 py-1.5 text-xs font-medium text-farm-text-muted transition-colors hover:border-farm-green-field hover:text-farm-green-deep aria-pressed:border-farm-green-field aria-pressed:bg-farm-green-deep aria-pressed:text-white disabled:cursor-not-allowed disabled:opacity-40 dark:border-farm-dark-border dark:bg-farm-dark-card dark:text-farm-text-light-muted dark:hover:text-farm-green-field dark:aria-pressed:bg-farm-green-field dark:aria-pressed:text-farm-dark';
+const filterButtonClass = 'rounded-full border border-soil-300 bg-white px-3 py-1.5 text-xs font-medium text-soil-700 transition-colors hover:border-field-600 hover:text-link-hover aria-pressed:border-field-600 aria-pressed:bg-field-700 aria-pressed:text-white disabled:cursor-not-allowed disabled:opacity-40 dark:border-rock-700 dark:bg-rock-800 dark:text-cream-2 dark:hover:text-link-dark-hover dark:aria-pressed:bg-field-700 dark:aria-pressed:text-white';
 
 const transportNames: Record<string, string> = {
   stdio: 'Subprocess / stdio', unix: 'Unix socket', tcp: 'TCP loopback',
@@ -99,7 +99,8 @@ const jsonLd = {
   description={description}
   currentPage="/benchmarks"
   ogType="article"
-  ogImageAlt="vgi-rpc cross-language latency, scaling, and transport benchmark results"
+  ogImage="/og/benchmarks.png"
+  ogImageAlt="Query.Farm card for vgi-rpc benchmarks: release-pinned servers measured over real transports"
   dateModified={benchmarkData.generated_at}
   articleSection="Benchmarks"
   articleTags={['RPC benchmarks', 'Apache Arrow', 'Transport performance', 'Cross-language performance']}
@@ -108,38 +109,38 @@ const jsonLd = {
   <article class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
     <div class="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
       <div>
-        <h1 class="text-4xl font-bold text-farm-green-deep dark:text-farm-cream">Benchmarks</h1>
-        <p class="mt-3 max-w-3xl text-farm-text-muted dark:text-farm-text-light-muted">
+        <h1 class="text-4xl font-semibold text-soil-900 dark:text-cream">Benchmarks</h1>
+        <p class="mt-3 max-w-3xl text-soil-700 dark:text-cream-2">
           One release-built Rust client measures every server on the same machine and workloads,
           separating server and transport costs from language-specific client overhead.
         </p>
       </div>
       <div class="flex gap-3 text-sm">
-        <a href="/benchmarks/latest.json" class="text-farm-gold hover:text-farm-gold-light">Download JSON</a>
-        {benchmarkData.status === 'published' && <a href="/benchmarks/latest.csv" class="text-farm-gold hover:text-farm-gold-light">Download CSV</a>}
+        <a href="/benchmarks/latest.json" class="qf-link">Download JSON</a>
+        {benchmarkData.status === 'published' && <a href="/benchmarks/latest.csv" class="qf-link">Download CSV</a>}
       </div>
     </div>
 
     {benchmarkData.status !== 'published' ? (
-      <section class="mt-10 rounded-xl border border-farm-gold/40 bg-farm-gold/5 p-6">
-        <p class="text-xs font-bold uppercase tracking-wider text-farm-gold">Awaiting verified release run</p>
-        <h2 class="mt-2 text-xl font-bold text-farm-green-deep dark:text-farm-cream">Stale figures have been retired</h2>
-        <p class="mt-2 max-w-3xl text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+      <section class="mt-10 border-l-[3px] border-sun-400 bg-white dark:bg-rock-800 rounded-r-lg p-6">
+        <p class="text-xs font-bold uppercase tracking-wider text-sun-700 dark:text-sun-400">Awaiting verified release run</p>
+        <h2 class="mt-2 text-xl font-semibold text-soil-900 dark:text-cream">Stale figures have been retired</h2>
+        <p class="mt-2 max-w-3xl text-sm text-soil-700 dark:text-cream-2">
           The previous numbers primarily measured the Python implementation and in-process shortcuts.
           They will remain hidden until the pinned releases complete the controlled transport matrix on the canonical host.
         </p>
       </section>
     ) : (
-      <p class="mt-6 text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+      <p class="mt-6 text-sm text-soil-700 dark:text-cream-2">
         Latest run: <time datetime={benchmarkData.generated_at ?? undefined}>{benchmarkData.generated_at}</time>
         {' · '}{benchmarkData.host.chip}, {benchmarkData.host.cores} cores, {benchmarkData.host.memory_gb} GB
       </p>
     )}
 
     {pendingImplementations.length > 0 && (
-      <section class="mt-6 rounded-xl border border-farm-gold/40 bg-farm-gold/5 p-5">
-        <p class="text-xs font-bold uppercase tracking-wider text-farm-gold">Canonical results pending</p>
-        <p class="mt-2 max-w-3xl text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+      <section class="mt-6 border-l-[3px] border-sun-400 bg-white dark:bg-rock-800 rounded-r-lg p-5">
+        <p class="text-xs font-bold uppercase tracking-wider text-sun-700 dark:text-sun-400">Canonical results pending</p>
+        <p class="mt-2 max-w-3xl text-sm text-soil-700 dark:text-cream-2">
           {pendingImplementations.map(item => item.name).join(', ')} has been added to the release-pinned benchmark matrix.
           Its performance figures will appear after a full run on the canonical c9gd.8xlarge host; the published charts below remain the prior comparable snapshot.
         </p>
@@ -147,23 +148,23 @@ const jsonLd = {
     )}
 
     <section class="mt-12">
-      <h2 class="text-2xl font-bold text-farm-green-deep dark:text-farm-cream">Release inputs</h2>
-      <p class="mt-2 text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+      <h2 class="text-2xl font-semibold text-soil-900 dark:text-cream">Release inputs</h2>
+      <p class="mt-2 text-sm text-soil-700 dark:text-cream-2">
         Every run is bound to the full commit ID behind the release tag selected for that run. These historical measurements may predate the SDK versions in the capability matrix; Iroh has not been measured in this snapshot.
       </p>
-      <div class="mt-4 overflow-x-auto rounded-xl border border-farm-cream-dark dark:border-farm-dark-border">
+      <div class="mt-4 overflow-x-auto rounded-xl border border-soil-300 dark:border-rock-700">
         <table class="w-full text-sm">
-          <thead class="bg-farm-cream-dark dark:bg-farm-dark-card"><tr>
+          <thead class="bg-soil-100 dark:bg-rock-800"><tr>
             <th class="px-4 py-3 text-left">Implementation</th><th class="px-4 py-3 text-left">Release</th>
             <th class="px-4 py-3 text-left">Commit</th><th class="px-4 py-3 text-left">Status</th>
           </tr></thead>
-          <tbody class="divide-y divide-farm-cream-dark dark:divide-farm-dark-border">
+          <tbody class="divide-y divide-soil-200 dark:divide-rock-700">
             {benchmarkImplementations.map(item => (
-              <tr class="bg-white dark:bg-farm-dark">
-                <td class="px-4 py-3 font-semibold text-farm-text dark:text-farm-text-light">{item.name}</td>
-                <td class="px-4 py-3 font-mono text-farm-gold">{item.release}</td>
-                <td class="px-4 py-3 font-mono text-xs text-farm-text-muted dark:text-farm-text-light-muted">{item.sha.slice(0, 12)}</td>
-                <td class="px-4 py-3 text-farm-text-muted dark:text-farm-text-light-muted">
+              <tr class="bg-white dark:bg-rock-900">
+                <td class="px-4 py-3 font-semibold text-soil-900 dark:text-cream">{item.name}</td>
+                <td class="px-4 py-3 qf-figure text-soil-900 dark:text-cream">{item.release}</td>
+                <td class="px-4 py-3 font-mono text-xs text-soil-700 dark:text-cream-2">{item.sha.slice(0, 12)}</td>
+                <td class="px-4 py-3 text-soil-700 dark:text-cream-2">
                   {item.benchmark_status === 'awaiting_canonical_run' ? 'Canonical benchmark pending' : item.release_status === 'published' ? 'Published release' : 'Latest main snapshot'}
                 </td>
               </tr>
@@ -176,12 +177,12 @@ const jsonLd = {
     {measured.length > 0 && <BenchmarkVisuals />}
 
     {failures.length > 0 && (
-      <section class="mt-12 rounded-xl border border-amber-500/40 bg-amber-500/5 p-6">
-        <p class="text-xs font-bold uppercase tracking-wider text-amber-700 dark:text-amber-400">Measured compatibility gaps</p>
-        <h2 class="mt-2 text-xl font-bold text-farm-green-deep dark:text-farm-cream">{failures.length} scenarios did not complete</h2>
-        <p class="mt-2 text-sm text-farm-text-muted dark:text-farm-text-light-muted">Failures are part of the reproducible matrix and are published instead of being omitted or converted into performance numbers.</p>
+      <section class="mt-12 border-l-[3px] border-cat-clay-ink dark:border-cat-clay bg-white dark:bg-rock-800 rounded-r-lg p-6">
+        <p class="text-xs font-bold uppercase tracking-wider text-cat-clay-ink dark:text-cat-clay">Measured compatibility gaps</p>
+        <h2 class="mt-2 text-xl font-semibold text-soil-900 dark:text-cream">{failures.length} scenarios did not complete</h2>
+        <p class="mt-2 text-sm text-soil-700 dark:text-cream-2">Failures are part of the reproducible matrix and are published instead of being omitted or converted into performance numbers.</p>
         <ul class="mt-4 space-y-2 text-sm">
-          {failures.map(result => <li><span class="font-semibold text-farm-text dark:text-farm-text-light">{implementations.get(result.server)?.name ?? result.server}</span>{' · '}{transportNames[result.transport] ?? result.transport}{' · '}{workloadNames[result.workload] ?? result.workload}<span class="block font-mono text-xs text-farm-text-muted dark:text-farm-text-light-muted">{result.error ?? 'Worker failed'}</span></li>)}
+          {failures.map(result => <li><span class="font-semibold text-soil-900 dark:text-cream">{implementations.get(result.server)?.name ?? result.server}</span>{' · '}{transportNames[result.transport] ?? result.transport}{' · '}{workloadNames[result.workload] ?? result.workload}<span class="block font-mono text-xs text-soil-700 dark:text-cream-2">{result.error ?? 'Worker failed'}</span></li>)}
         </ul>
       </section>
     )}
@@ -190,47 +191,47 @@ const jsonLd = {
       <section class="mt-12" data-benchmark-table>
         <div>
           <div>
-            <h2 class="text-2xl font-bold text-farm-green-deep dark:text-farm-cream">Detailed results</h2>
-            <p class="mt-2 text-sm text-farm-text-muted dark:text-farm-text-light-muted">Rust client → release server. Choose a workload, transport, and available client count to inspect percentiles, CPU, and quality.</p>
+            <h2 class="text-2xl font-semibold text-soil-900 dark:text-cream">Detailed results</h2>
+            <p class="mt-2 text-sm text-soil-700 dark:text-cream-2">Rust client → release server. Choose a workload, transport, and available client count to inspect percentiles, CPU, and quality.</p>
           </div>
           <div class="mt-5">
-            <p class="text-xs font-bold uppercase tracking-wider text-farm-text-muted dark:text-farm-text-light-muted">Workload</p>
+            <p class="text-xs font-bold uppercase tracking-wider text-soil-700 dark:text-cream-2">Workload</p>
             <div class="mt-2 flex flex-wrap gap-2" role="group" aria-label="Benchmark workload">
               {workloads.map(workload => <button type="button" data-workload-option={workload} aria-pressed="false" class={filterButtonClass}>{workloadNames[workload] ?? workload}</button>)}
             </div>
           </div>
           <div class="mt-4">
-            <p class="text-xs font-bold uppercase tracking-wider text-farm-text-muted dark:text-farm-text-light-muted">Transport</p>
+            <p class="text-xs font-bold uppercase tracking-wider text-soil-700 dark:text-cream-2">Transport</p>
             <div class="mt-2 flex flex-wrap gap-2" role="group" aria-label="Benchmark transport">
               {transports.map(transport => <button type="button" data-transport-option={transport} aria-pressed="false" class={filterButtonClass}>{transportNames[transport] ?? transport}</button>)}
             </div>
           </div>
           <div class="mt-4">
-            <p class="text-xs font-bold uppercase tracking-wider text-farm-text-muted dark:text-farm-text-light-muted">Clients</p>
+            <p class="text-xs font-bold uppercase tracking-wider text-soil-700 dark:text-cream-2">Clients</p>
             <div class="mt-2 flex flex-wrap gap-2" role="group" aria-label="Concurrent benchmark clients">
               {concurrencies.map(concurrency => <button type="button" data-concurrency-option={concurrency} aria-pressed="false" class={filterButtonClass}>{concurrency}</button>)}
             </div>
-            <p class="mt-2 text-[11px] text-farm-text-muted dark:text-farm-text-light-muted">Single-call workloads have one client; load workloads expose 1, 2, 4, 8, and 16.</p>
+            <p class="mt-2 text-[11px] text-soil-700 dark:text-cream-2">Single-call workloads have one client; load workloads expose 1, 2, 4, 8, and 16.</p>
           </div>
         </div>
-        <div class="mt-5 overflow-x-auto rounded-xl border border-farm-cream-dark dark:border-farm-dark-border">
+        <div class="mt-5 overflow-x-auto rounded-xl border border-soil-300 dark:border-rock-700">
           <table class="w-full text-sm">
-            <thead class="bg-farm-cream-dark dark:bg-farm-dark-card"><tr>
+            <thead class="bg-soil-100 dark:bg-rock-800"><tr>
               <th class="px-4 py-3 text-left">Server</th><th class="px-4 py-3 text-right">Clients</th><th class="px-4 py-3 text-right">Mean</th><th class="px-4 py-3 text-right">P50</th>
               <th class="px-4 py-3 text-right">P95</th><th class="px-4 py-3 text-right">P99</th>
               <th class="px-4 py-3 text-right">Calls</th><th class="px-4 py-3 text-right">Payload</th><th class="px-4 py-3 text-right">Host CPU</th><th class="px-4 py-3 text-right">Quality</th>
             </tr></thead>
-            <tbody class="divide-y divide-farm-cream-dark dark:divide-farm-dark-border">
+            <tbody class="divide-y divide-soil-200 dark:divide-rock-700">
               {controlled.map(result => (
-                <tr class="hidden bg-white dark:bg-farm-dark" data-row data-workload={result.workload} data-transport={result.transport} data-concurrency={result.concurrency ?? 1}>
-                  <td class="px-4 py-3 font-semibold text-farm-text dark:text-farm-text-light">{implementations.get(result.server)?.name ?? result.server}</td>
-                  <td class="px-4 py-3 text-right font-mono">{result.concurrency ?? 1}</td>
-                  <td class="px-4 py-3 text-right font-mono text-farm-gold">{latency(result.mean_ns)}</td>
-                  <td class="px-4 py-3 text-right font-mono">{latency(result.p50_ns)}</td>
-                  <td class="px-4 py-3 text-right font-mono">{latency(result.p95_ns)}</td><td class="px-4 py-3 text-right font-mono">{latency(result.p99_ns)}</td>
-                  <td class="px-4 py-3 text-right font-mono">{rate(result.operations_per_second)}</td><td class="px-4 py-3 text-right font-mono">{bytes(result.payload_bytes_per_second)}</td>
-                  <td class="px-4 py-3 text-right font-mono">{result.cpu_utilization_percent === undefined ? '—' : `${result.cpu_utilization_percent.toFixed(1)}%`}</td>
-                  <td class:list={['px-4 py-3 text-right', result.status === 'noisy' ? 'text-amber-600' : 'text-farm-text-muted dark:text-farm-text-light-muted']}>
+                <tr class="hidden bg-white dark:bg-rock-900" data-row data-workload={result.workload} data-transport={result.transport} data-concurrency={result.concurrency ?? 1}>
+                  <td class="px-4 py-3 font-semibold text-soil-900 dark:text-cream">{implementations.get(result.server)?.name ?? result.server}</td>
+                  <td data-numeric class="px-4 py-3 text-right">{result.concurrency ?? 1}</td>
+                  <td data-numeric class="px-4 py-3 text-right font-semibold text-soil-900 dark:text-cream">{latency(result.mean_ns)}</td>
+                  <td data-numeric class="px-4 py-3 text-right">{latency(result.p50_ns)}</td>
+                  <td data-numeric class="px-4 py-3 text-right">{latency(result.p95_ns)}</td><td data-numeric class="px-4 py-3 text-right">{latency(result.p99_ns)}</td>
+                  <td data-numeric class="px-4 py-3 text-right">{rate(result.operations_per_second)}</td><td data-numeric class="px-4 py-3 text-right">{bytes(result.payload_bytes_per_second)}</td>
+                  <td data-numeric class="px-4 py-3 text-right">{result.cpu_utilization_percent === undefined ? '—' : `${result.cpu_utilization_percent.toFixed(1)}%`}</td>
+                  <td class:list={['px-4 py-3 text-right', result.status === 'noisy' ? 'text-cat-clay-ink dark:text-cat-clay' : 'text-soil-700 dark:text-cream-2']}>
                     {result.status === 'noisy' ? `Noisy (${((result.round_cv ?? 0) * 100).toFixed(1)}% CV)` : result.status}
                   </td>
                 </tr>
@@ -242,25 +243,25 @@ const jsonLd = {
     )}
 
     <section class="mt-12">
-      <div class="rounded-xl border border-farm-cream-dark p-6 dark:border-farm-dark-border">
-        <h2 class="text-xl font-bold text-farm-green-deep dark:text-farm-cream">What is excluded</h2>
-        <p class="mt-2 text-sm text-farm-text-muted dark:text-farm-text-light-muted">In-process pipes, WSGI test clients, debug builds, unpinned working trees, first-call startup time, and results from shared CI hosts are not used for cross-language claims.</p>
+      <div class="rounded-xl border border-soil-300 p-6 dark:border-rock-700">
+        <h2 class="text-xl font-semibold text-soil-900 dark:text-cream">What is excluded</h2>
+        <p class="mt-2 text-sm text-soil-700 dark:text-cream-2">In-process pipes, WSGI test clients, debug builds, unpinned working trees, first-call startup time, and results from shared CI hosts are not used for cross-language claims.</p>
       </div>
     </section>
 
-    <section class="mt-12 rounded-xl border border-farm-cream-dark bg-farm-cream-dark/30 p-6 dark:border-farm-dark-border dark:bg-farm-dark-card/50">
-      <h2 class="text-xl font-bold text-farm-green-deep dark:text-farm-cream">Methodology</h2>
-      <ul class="mt-4 grid gap-3 text-sm text-farm-text-muted dark:text-farm-text-light-muted md:grid-cols-2">
+    <section class="mt-12 rounded-xl border border-soil-300 bg-soil-100/30 p-6 dark:border-rock-700 dark:bg-rock-800/50">
+      <h2 class="text-xl font-semibold text-soil-900 dark:text-cream">Methodology</h2>
+      <ul class="mt-4 grid gap-3 text-sm text-soil-700 dark:text-cream-2 md:grid-cols-2">
         <li>Release builds from isolated checkouts pinned to the commits above.</li><li>Python HTTP uses pinned Granian 2.8.1 with 16 worker processes and one blocking thread each.</li><li>Java runs on Amazon Corretto 25.0.4 so negotiated shared memory uses the JDK 22+ FFM implementation.</li><li>Latency uses a one-second warm-up and five one-second rounds; unstable cases receive two extension rounds.</li>
         <li>Mean, P50, P95, and P99 use all steady-state wall-clock samples—not the fastest sample.</li><li>Scaling uses fresh servers at 1, 2, 4, 8, and 16 clients, with three two-second rounds and two extensions when noisy.</li>
         <li>Scaling records call rate, latency, and whole-host CPU utilization for unary and 1 MiB echo workloads.</li><li>Binary echo throughput counts application payload in both request and response directions.</li>
         <li>Publishable runs require an approved ARM64 host and a pre-run load average below 2.0.</li><li>Quick and partial matrices are rejected; failed scenarios remain visible with their captured errors.</li>
       </ul>
-      <p class="mt-4 text-xs text-farm-text-muted dark:text-farm-text-light-muted">Results compare only within one snapshot, host, workload, and benchmark layer. They are not universal hardware-independent rankings.</p>
+      <p class="mt-4 text-xs text-soil-700 dark:text-cream-2">Results compare only within one snapshot, host, workload, and benchmark layer. They are not universal hardware-independent rankings.</p>
     </section>
 
-    <div class="mt-16 border-t border-farm-cream-dark pt-8 text-center dark:border-farm-dark-border">
-      <a href="/" class="text-sm font-medium text-farm-gold hover:text-farm-gold-light">&larr; Back to home</a>
+    <div class="mt-16 border-t border-soil-300 pt-8 text-center dark:border-rock-700">
+      <a href="/" class="text-sm font-medium text-link hover:text-link-hover dark:text-link-dark dark:hover:text-link-dark-hover">&larr; Back to home</a>
     </div>
   </article>
 

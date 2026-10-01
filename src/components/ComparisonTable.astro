@@ -73,66 +73,65 @@ const frameworks = [
 ];
 ---
 
-<section id="comparison" class="py-20 bg-farm-cream-dark/50 dark:bg-farm-dark-card/30
-  border-t border-farm-cream-dark dark:border-farm-dark-border">
+<section id="comparison" class="py-20 md:py-24 bg-soil-100 dark:bg-rock-950/50">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <h2 class="text-3xl md:text-4xl font-bold text-center
-      text-farm-green-deep dark:text-farm-cream">
+    <h2 class="text-3xl md:text-4xl text-center
+      text-soil-900 dark:text-cream">
       Framework Comparison
     </h2>
-    <p class="mt-3 text-center text-lg text-farm-text-muted dark:text-farm-text-light-muted max-w-2xl mx-auto">
+    <p class="mt-3 text-center text-lg text-soil-700 dark:text-cream-2 max-w-2xl mx-auto">
       How <span class="font-mono">vgi-rpc</span> compares to other RPC frameworks.
     </p>
 
-    <div class="mt-10 overflow-x-auto rounded-xl border border-farm-cream-dark dark:border-farm-dark-border">
-      <table class="w-full text-sm">
+    <div class="mt-10 overflow-x-auto rounded-xl border border-soil-300 bg-white shadow-sm dark:border-rock-700 dark:bg-rock-800 dark:shadow-none">
+      <table class="w-full border-collapse text-[14px]">
         <thead>
-          <tr class="bg-farm-cream-dark dark:bg-farm-dark-card">
-            <th class="px-4 py-3 text-left font-semibold text-farm-text dark:text-farm-text-light">Framework</th>
-            <th class="px-4 py-3 text-left font-semibold text-farm-text dark:text-farm-text-light">Serialization</th>
-            <th class="px-4 py-3 text-left font-semibold text-farm-text dark:text-farm-text-light">IDL Required</th>
-            <th class="px-4 py-3 text-left font-semibold text-farm-text dark:text-farm-text-light">Streaming</th>
-            <th class="px-4 py-3 text-left font-semibold text-farm-text dark:text-farm-text-light">Typed Proxies</th>
-            <th class="px-4 py-3 text-left font-semibold text-farm-text dark:text-farm-text-light">Transports</th>
+          <tr class="border-b border-soil-300 bg-[#fbf7ee] dark:border-rock-700 dark:bg-rock-950/40">
+            <th class="text-left px-[14px] py-2.5 text-[12.5px] font-semibold whitespace-nowrap text-soil-600 dark:text-cream-2">Framework</th>
+            <th class="text-left px-[14px] py-2.5 text-[12.5px] font-semibold whitespace-nowrap text-soil-600 dark:text-cream-2">Serialization</th>
+            <th class="text-left px-[14px] py-2.5 text-[12.5px] font-semibold whitespace-nowrap text-soil-600 dark:text-cream-2">IDL Required</th>
+            <th class="text-left px-[14px] py-2.5 text-[12.5px] font-semibold whitespace-nowrap text-soil-600 dark:text-cream-2">Streaming</th>
+            <th class="text-left px-[14px] py-2.5 text-[12.5px] font-semibold whitespace-nowrap text-soil-600 dark:text-cream-2">Typed Proxies</th>
+            <th class="text-left px-[14px] py-2.5 text-[12.5px] font-semibold whitespace-nowrap text-soil-600 dark:text-cream-2">Transports</th>
           </tr>
         </thead>
-        <tbody class="divide-y divide-farm-cream-dark dark:divide-farm-dark-border">
+        <tbody class="divide-y divide-soil-200 dark:divide-rock-700">
           {frameworks.map(fw => (
             <tr class:list={[
               fw.highlight
-                ? 'bg-farm-green-deep/5 dark:bg-farm-green-field/10'
-                : 'bg-white dark:bg-farm-dark',
+                ? 'bg-sun-200/30 dark:bg-sun-400/10'
+                : '',
             ]}>
               <td class:list={[
-                'px-4 py-3 font-medium whitespace-nowrap',
+                'px-[14px] py-[11px] font-medium whitespace-nowrap',
                 fw.highlight
-                  ? 'text-farm-green-deep dark:text-farm-green-field font-bold'
-                  : 'text-farm-text dark:text-farm-text-light'
+                  ? 'font-mono font-semibold text-soil-900 dark:text-sun-300 border-l-2 border-sun-400'
+                  : 'text-soil-900 dark:text-cream'
               ]}>
                 {fw.highlight ? (
-                  <a href={fw.url}>{fw.name}</a>
+                  <a href={fw.url} class="no-underline">{fw.name}</a>
                 ) : (
                   <a href={fw.url} target="_blank" rel="noopener noreferrer"
-                    class="hover:text-farm-green-deep dark:hover:text-farm-green-field transition-colors underline decoration-farm-cream-dark dark:decoration-farm-dark-border hover:decoration-current">
+                    class="qf-link">
                     {fw.name}
                   </a>
                 )}
               </td>
-              <td class="px-4 py-3 text-farm-text-muted dark:text-farm-text-light-muted">{fw.serialization}</td>
-              <td class="px-4 py-3 text-farm-text-muted dark:text-farm-text-light-muted">{fw.idl}</td>
-              <td class="px-4 py-3 text-farm-text-muted dark:text-farm-text-light-muted">{fw.streaming}</td>
-              <td class="px-4 py-3 text-farm-text-muted dark:text-farm-text-light-muted">{fw.typedProxies}</td>
-              <td class="px-4 py-3 text-farm-text-muted dark:text-farm-text-light-muted">{fw.transports}</td>
+              <td class="px-[14px] py-[11px] text-soil-700 dark:text-cream-2">{fw.serialization}</td>
+              <td class="px-[14px] py-[11px] text-soil-700 dark:text-cream-2">{fw.idl}</td>
+              <td class="px-[14px] py-[11px] text-soil-700 dark:text-cream-2">{fw.streaming}</td>
+              <td class="px-[14px] py-[11px] text-soil-700 dark:text-cream-2">{fw.typedProxies}</td>
+              <td class="px-[14px] py-[11px] text-soil-700 dark:text-cream-2">{fw.transports}</td>
             </tr>
           ))}
         </tbody>
       </table>
     </div>
 
-    <p class="mt-4 text-center text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+    <p class="mt-4 text-center text-sm text-soil-700 dark:text-cream-2">
       See the <a href="https://vgi-rpc-python.query.farm/comparison/"
         target="_blank" rel="noopener noreferrer"
-        class="text-farm-gold hover:text-farm-gold-light transition-colors">
+        class="qf-link">
         detailed comparison
       </a> for an in-depth analysis of each framework.
     </p>

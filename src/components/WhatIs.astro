@@ -1,40 +1,35 @@
 ---
 ---
 
-<section id="what-is" class="py-20 border-t border-farm-cream-dark dark:border-farm-dark-border">
+<section id="what-is" class="py-20 md:py-24 bg-soil-100 dark:bg-rock-950/50">
   <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-    <h2 class="text-3xl md:text-4xl font-bold text-center
-      text-farm-green-deep dark:text-farm-cream">
+    <h2 class="text-3xl md:text-4xl text-center
+      text-soil-900 dark:text-cream">
       What is <span class="font-mono">vgi-rpc</span>?
     </h2>
 
-    <div class="mt-8 space-y-5 text-lg leading-relaxed text-farm-text dark:text-farm-text-light">
+    <div class="mt-8 space-y-5 text-lg leading-relaxed text-soil-900 dark:text-cream">
       <p>
         <strong class="font-mono">vgi-rpc</strong> is an RPC framework where you define services as{' '}
         <strong>typed interfaces</strong> &mdash; the framework automatically derives{' '}
         <a href="https://arrow.apache.org/" target="_blank" rel="noopener noreferrer"
-          class="text-farm-gold hover:text-farm-gold-light transition-colors font-medium">
+          class="qf-link">
           Apache Arrow
         </a> schemas from your type annotations and handles all serialization.
       </p>
 
       <p>
-        There are <strong>no <code class="px-1.5 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card">.proto</code> files</strong>{' '}
-        and no IDL to learn.
-        Write a Protocol class in Python (or the equivalent interface in Go, TypeScript, Rust, Java, C#, or C++), and you get
-        a fully typed RPC service.
+        You write a Protocol class in Python, or the equivalent interface in Go, TypeScript, Rust, Java, C#, or C++.
+        There are <strong>no <code class="rounded border border-soil-300/70 bg-white/70 px-1.5 py-0.5 text-[0.85em] dark:border-rock-700 dark:bg-rock-800">.proto</code> files</strong>{' '}
+        and no separate IDL; the class is the contract. The <strong>same interface works across every transport</strong>:
+        in-process pipes, subprocess stdin/stdout, Unix and TCP sockets, shared memory, HTTP, and authenticated Iroh/QUIC.
+        Moving a service from a subprocess to HTTP changes only the address the client passes to{' '}
+        <code class="rounded border border-soil-300/70 bg-white/70 px-1.5 py-0.5 text-[0.85em] dark:border-rock-700 dark:bg-rock-800">connect()</code>.
       </p>
 
       <p>
-        The <strong>same interface works across every transport</strong>: in-process pipes,
-        subprocess stdin/stdout, Unix and TCP sockets, shared memory, HTTP, and authenticated Iroh/QUIC.
-        Switch transports without changing a line of service code.
-      </p>
-
-      <p>
-        <span class="font-mono">vgi-rpc</span> supports <strong>unary calls</strong>, <strong>producer streams</strong> (server pushes data),
-        and <strong>exchange streams</strong> (lockstep bidirectional), with built-in
-        error propagation, logging, introspection, and OpenTelemetry tracing.
+        Calls are <strong>unary</strong>, <strong>producer streams</strong> (the server pushes batches),
+        or <strong>exchange streams</strong> (lockstep bidirectional). Errors, logs, and OpenTelemetry traces travel with them.
       </p>
     </div>
   </div>

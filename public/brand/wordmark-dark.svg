@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 336 64" role="img" aria-label="Query.Farm">
+  <title>Query.Farm — for dark backgrounds</title>
+  <defs><clipPath id="qf-disc-wd"><circle cx="32" cy="32" r="32"/></clipPath></defs>
+  <g clip-path="url(#qf-disc-wd)">
+    <rect x="0" y="0"  width="64" height="16" fill="#F0C877"/>
+    <rect x="0" y="16" width="64" height="16" fill="#D9A441"/>
+    <rect x="0" y="32" width="64" height="16" fill="#A9762E"/>
+    <rect x="0" y="48" width="64" height="16" fill="#7A5230"/>
+  </g>
+  <text x="80" y="45" font-family="Petrona, Georgia, serif" font-weight="700" font-size="42" letter-spacing="-0.7" fill="#F4ECE0">Query<tspan fill="#D9A441">.</tspan>Farm</text>
+</svg>

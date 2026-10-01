@@ -1,0 +1,79 @@
+---
+/**
+ * Strata Sun — the Query.Farm mark, ported from query-farm-astro
+ * (src/components/ui/StrataSun.astro; DESIGN_BRIEF.md §1).
+ *
+ * Four hard horizontal bands, palest at top, clipped to a circle. The disc
+ * comes from `border-radius: 50%; overflow: hidden` rather than a <clipPath>,
+ * so repeated marks on one page never collide on ids.
+ *
+ * Band count reduces with size, or four bands turn to mud:
+ *   > 22px → 4 bands · ≤ 22px → 3 bands · ≤ 16px → 2 bands
+ *
+ * The bands settle in top-down once on load (60ms stagger, never looping),
+ * and only when the visitor has not asked for reduced motion.
+ */
+interface Props {
+  /** Rendered edge length in px. Drives band count. */
+  size?: number;
+  /** Accessible name. Omit for a decorative mark paired with a wordmark. */
+  label?: string;
+  animate?: boolean;
+  class?: string;
+}
+
+const { size = 30, label, animate = true, class: className = '' } = Astro.props;
+
+const BANDS_4 = ['#f0c877', '#d9a441', '#a9762e', '#7a5230'];
+const BANDS_3 = ['#f0c877', '#d9a441', '#7a5230'];
+const BANDS_2 = ['#d9a441', '#7a5230'];
+
+const bands = size <= 16 ? BANDS_2 : size <= 22 ? BANDS_3 : BANDS_4;
+const bandHeight = 64 / bands.length;
+---
+
+<svg
+  class:list={['qf-mark', animate && 'qf-mark--settle', className]}
+  viewBox="0 0 64 64"
+  width={size}
+  height={size}
+  style={`width:${size}px;height:${size}px`}
+  role={label ? 'img' : undefined}
+  aria-label={label || undefined}
+  aria-hidden={label ? undefined : 'true'}
+  focusable="false"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  {bands.map((fill, i) => (
+    <rect class:list={['qf-band', `qf-band-${i + 1}`]} x="0" y={i * bandHeight} width="64" height={bandHeight} fill={fill} />
+  ))}
+</svg>
+
+<style>
+  .qf-mark {
+    display: block;
+    flex: none;
+    border-radius: 50%;
+    overflow: hidden;
+  }
+
+  .qf-band {
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .qf-mark--settle .qf-band {
+      animation: qf-settle 0.42s cubic-bezier(0.2, 0.8, 0.3, 1) both;
+    }
+    .qf-mark--settle .qf-band-1 { animation-delay: 0ms; }
+    .qf-mark--settle .qf-band-2 { animation-delay: 60ms; }
+    .qf-mark--settle .qf-band-3 { animation-delay: 120ms; }
+    .qf-mark--settle .qf-band-4 { animation-delay: 180ms; }
+  }
+
+  @keyframes qf-settle {
+    from { transform: translateY(-16px); opacity: 0; }
+    to   { transform: none; opacity: 1; }
+  }
+</style>

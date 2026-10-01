@@ -72,22 +72,22 @@ function format(highlight: typeof highlights[number]): string {
 }
 ---
 
-<section id="benchmarks" class="py-20 border-t border-farm-cream-dark dark:border-farm-dark-border">
+<section id="benchmarks" class="py-20 border-t border-soil-300 dark:border-rock-700">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <h2 class="text-3xl md:text-4xl font-bold text-center text-farm-green-deep dark:text-farm-cream">Measured across implementations</h2>
-    <p class="mt-3 text-center text-lg text-farm-text-muted dark:text-farm-text-light-muted max-w-3xl mx-auto">
+    <h2 class="text-3xl md:text-4xl font-semibold text-center text-soil-900 dark:text-cream">Measured across implementations</h2>
+    <p class="mt-3 text-center text-lg text-soil-700 dark:text-cream-2 max-w-3xl mx-auto">
       A fixed Rust client compares the release-pinned servers over real subprocess, socket, HTTP, and shared-memory transports.
     </p>
 
     {benchmarkData.status === 'published' ? (
       <div class="mt-12 grid grid-cols-1 gap-5 md:grid-cols-3">
         {highlights.map(highlight => (
-          <div class="rounded-xl border border-farm-cream-dark bg-white p-6 dark:border-farm-dark-border dark:bg-farm-dark-card">
-            <p class="text-xs font-bold uppercase tracking-wider text-farm-text-muted dark:text-farm-text-light-muted">{highlight.title}</p>
-            <p class="mt-3 font-mono text-3xl font-bold text-farm-gold">{format(highlight)}</p>
-            <p class="mt-2 text-sm text-farm-text-muted dark:text-farm-text-light-muted">{detail(highlight)}</p>
+          <div class="rounded-xl border border-soil-300 bg-white p-6 dark:border-rock-700 dark:bg-rock-800">
+            <p class="text-xs font-bold uppercase tracking-wider text-soil-700 dark:text-cream-2">{highlight.title}</p>
+            <p class="mt-3 qf-figure text-3xl font-semibold text-sun-700 dark:text-sun-400">{format(highlight)}</p>
+            <p class="mt-2 text-sm text-soil-700 dark:text-cream-2">{detail(highlight)}</p>
             {highlight.count > 0 && (
-              <p class="mt-3 text-xs text-farm-text-muted dark:text-farm-text-light-muted">
+              <p class="mt-3 text-xs text-soil-700 dark:text-cream-2">
                 {highlight.aggregation === 'max'
                   ? `Peak single-server-core result on ${benchmarkData.host.chip}; one outstanding call`
                   : `Median of ${highlight.count} stable release-pinned servers`}
@@ -97,14 +97,14 @@ function format(highlight: typeof highlights[number]): string {
         ))}
       </div>
     ) : (
-      <div class="mx-auto mt-10 max-w-3xl rounded-xl border border-farm-gold/40 bg-farm-gold/5 p-6 text-center">
-        <p class="font-semibold text-farm-green-deep dark:text-farm-cream">Verified release measurements are pending</p>
-        <p class="mt-2 text-sm text-farm-text-muted dark:text-farm-text-light-muted">The old Python-only and in-process figures were removed instead of being presented as current cross-language results.</p>
+      <div class="mx-auto mt-10 max-w-3xl border-l-[3px] border-sun-400 bg-white dark:bg-rock-800 rounded-r-lg p-6 text-center">
+        <p class="font-semibold text-soil-900 dark:text-cream">Verified release measurements are pending</p>
+        <p class="mt-2 text-sm text-soil-700 dark:text-cream-2">The old Python-only and in-process figures were removed instead of being presented as current cross-language results.</p>
       </div>
     )}
 
     <div class="mt-8 text-center">
-      <a href="/benchmarks" class="inline-flex items-center gap-1 text-sm font-medium text-farm-gold hover:text-farm-gold-light transition-colors">Methodology and release pins &rarr;</a>
+      <a href="/benchmarks" class="inline-flex items-center gap-1 text-sm font-medium text-link hover:text-link-hover transition-colors dark:text-link-dark dark:hover:text-link-dark-hover">Methodology and release pins &rarr;</a>
     </div>
   </div>
 </section>

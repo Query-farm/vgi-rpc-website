@@ -28,6 +28,7 @@ const installs = [
     lang: 'Java',
     logo: '/logos/java.svg',
     command: 'implementation("farm.query:vgirpc:0.27.1")',
+    shell: false,
     docs: 'https://javadoc.io/doc/farm.query/vgirpc',
   },
   {
@@ -45,44 +46,38 @@ const installs = [
 ];
 ---
 
-<section id="get-started" class="py-20 bg-farm-cream-dark/50 dark:bg-farm-dark-card/30
-  border-t border-farm-cream-dark dark:border-farm-dark-border">
+<section id="get-started" class="py-20 md:py-24 bg-pipe-6 text-cream">
   <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-    <h2 class="text-3xl md:text-4xl font-bold text-center
-      text-farm-green-deep dark:text-farm-cream">
+    <h2 class="text-3xl md:text-4xl text-center text-cream">
       Get Started
     </h2>
-    <p class="mt-3 text-center text-lg text-farm-text-muted dark:text-farm-text-light-muted max-w-2xl mx-auto">
-      Install in your language and define your first service in minutes.
+    <p class="mt-3 text-center text-lg text-cream-2 max-w-2xl mx-auto">
+      Install the package for your language, then adapt the three-file example above.
     </p>
 
-    <div class="mt-10 space-y-4">
+    <div class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-4">
       {installs.map(install => (
-        <div class="p-4 rounded-xl bg-white dark:bg-farm-dark-card
-          border border-farm-cream-dark dark:border-farm-dark-border">
-          <div class="flex items-center justify-between mb-2">
-            <span class="flex items-center gap-2 font-semibold text-farm-green-deep dark:text-farm-cream">
-              <img src={install.logo} alt={`${install.lang} logo`} class:list={['w-5 h-5', install.lang === 'Rust' && 'dark:invert']} />
+        <div class="flex flex-col gap-3 rounded-xl border border-white/10 bg-white/5 p-4">
+          <div class="flex items-center justify-between">
+            <span class="flex items-center gap-2 font-medium text-cream">
+              <img src={install.logo} alt={`${install.lang} logo`} class:list={['w-5 h-5', (install.lang === 'Rust' || install.lang === 'Java') && 'invert']} />
               {install.lang}
             </span>
             <a href={install.docs} target="_blank" rel="noopener noreferrer"
-              class="text-sm text-farm-gold hover:text-farm-gold-light transition-colors">
+              class="text-sm text-link-dark underline decoration-link-dark/40 underline-offset-2 hover:text-link-dark-hover hover:decoration-link-dark-hover transition-colors">
               Docs &rarr;
             </a>
           </div>
-          <code class="block w-full px-3 py-2 rounded-lg text-sm font-mono
-            bg-farm-cream-dark dark:bg-farm-dark
-            text-farm-text dark:text-farm-text-light">
-            {install.command}
+          <code class="block w-full break-all rounded-lg border border-rock-800 bg-rock-900 px-3 py-2 text-[13px] font-mono text-cream">
+            {install.shell !== false && <span class="select-none text-sun-400" aria-hidden="true">$ </span>}{install.command}
           </code>
         </div>
       ))}
     </div>
-    <p class="mt-6 text-sm text-farm-text-muted dark:text-farm-text-light-muted">
-      Python Iroh clients: <code>pip install 'vgi-rpc[iroh]'</code>.
-      C# callers also install <code>QueryFarm.VgiRpc.Client</code> or <code>QueryFarm.VgiRpc.Client.Http</code>.<br />
-      <a href="/wire-protocol#iroh" class="text-farm-gold hover:text-farm-gold-light">See Iroh setup for each language &rarr;</a>
+    <p class="mt-8 text-sm leading-relaxed text-cream-2">
+      Python Iroh clients: <code class="rounded bg-rock-900 px-1.5 py-0.5 text-cream">pip install 'vgi-rpc[iroh]'</code>.
+      C# callers also install <code class="rounded bg-rock-900 px-1.5 py-0.5 text-cream">QueryFarm.VgiRpc.Client</code> or <code class="rounded bg-rock-900 px-1.5 py-0.5 text-cream">QueryFarm.VgiRpc.Client.Http</code>.<br />
+      <a href="/wire-protocol#iroh" class="text-link-dark underline decoration-link-dark/40 underline-offset-2 hover:text-link-dark-hover hover:decoration-link-dark-hover">See Iroh setup for each language &rarr;</a>
     </p>
-
   </div>
 </section>

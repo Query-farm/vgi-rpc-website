@@ -32,6 +32,7 @@ const icon = iconSet.icons[iconKeys[language] as keyof typeof iconSet.icons];
   <svg
     viewBox={`0 0 ${iconSet.width ?? 24} ${iconSet.height ?? 24}`}
     class={className}
+    fill="currentColor"
     role="img"
     aria-label={`${languageNames[language] ?? language} logo`}
     set:html={icon.body}

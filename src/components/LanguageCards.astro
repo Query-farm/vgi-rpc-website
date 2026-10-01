@@ -3,7 +3,6 @@ const languages = [
   {
     name: 'Python',
     status: 'Reference Implementation',
-    statusColor: 'text-farm-green-field',
     description: "The Python reference with typed proxies, streaming, reflection, shared memory, worker pooling, and OpenTelemetry. Optional iroh extra provides native raw Iroh and HTTP-over-Iroh clients.",
     repo: 'https://github.com/Query-farm/vgi-rpc-python',
     ghSlug: 'Query-farm/vgi-rpc-python',
@@ -75,32 +74,32 @@ const languages = [
 ];
 ---
 
-<section id="languages" class="py-20 bg-farm-cream-dark/50 dark:bg-farm-dark-card/30
-  border-t border-farm-cream-dark dark:border-farm-dark-border">
+<section id="languages" class="py-20 md:py-24 bg-soil-100 dark:bg-rock-950/50">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <h2 class="text-3xl md:text-4xl font-bold text-center
-      text-farm-green-deep dark:text-farm-cream">
+    <h2 class="text-3xl md:text-4xl text-center
+      text-soil-900 dark:text-cream">
       Language Implementations
     </h2>
-    <p class="mt-3 text-center text-lg text-farm-text-muted dark:text-farm-text-light-muted max-w-2xl mx-auto">
+    <p class="mt-3 text-center text-lg text-soil-700 dark:text-cream-2 max-w-2xl mx-auto">
       One wire protocol, multiple languages. All implementations interoperate via subprocess transport.
     </p>
 
     <div class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-6">
       {languages.map(lang => (
-        <div class="p-6 rounded-xl bg-white dark:bg-farm-dark-card
-          border border-farm-cream-dark dark:border-farm-dark-border
-          hover:border-farm-green-field dark:hover:border-farm-green-field
-          transition-colors">
+        <div class="flex flex-col p-6 rounded-xl border shadow-sm
+          bg-white border-soil-300/60
+          dark:bg-rock-800 dark:border-rock-700 dark:shadow-none">
           <div class="flex items-start justify-between">
             <div class="flex items-center gap-3">
-              <img src={lang.logo} alt={`${lang.name} logo`} class:list={['w-8 h-8', lang.name === 'Rust' && 'dark:invert']} />
+              <img src={lang.logo} alt={`${lang.name} logo`} class:list={['w-8 h-8', (lang.name === 'Rust' || lang.name === 'Java') && 'dark:invert']} />
               <div>
-                <h3 class="text-lg font-bold text-farm-green-deep dark:text-farm-cream">
+                <h3 class="text-xl text-soil-900 dark:text-cream">
                   {lang.name}
                 </h3>
                 {lang.status && (
-                  <span class:list={['text-xs font-medium', lang.statusColor]}>
+                  <span class="mt-1 inline-flex items-center rounded-full border px-2.5 py-0.5 text-[12.5px] font-medium leading-normal
+                    border-field-600/45 bg-field-600/10 text-field-700
+                    dark:border-field-400/40 dark:bg-field-400/10 dark:text-field-400">
                     {lang.status}
                   </span>
                 )}
@@ -108,7 +107,7 @@ const languages = [
             </div>
           </div>
 
-          <p class="mt-3 text-sm text-farm-text-muted dark:text-farm-text-light-muted leading-relaxed">
+          <p class="mt-3 text-sm text-soil-700 dark:text-cream-2 leading-relaxed">
             {lang.description}
           </p>
 
@@ -139,42 +138,37 @@ const languages = [
             </a>
           </div>
 
-          <div class="mt-4 flex flex-wrap gap-2">
+          <div class="mt-auto pt-5 flex flex-wrap gap-2">
             <a href={lang.repo} target="_blank" rel="noopener noreferrer"
-              class="inline-flex items-center gap-1 px-3 py-1.5 rounded-md text-xs font-medium
-                bg-farm-cream-dark dark:bg-farm-dark
-                text-farm-text-muted dark:text-farm-text-light-muted
-                hover:text-farm-green-deep dark:hover:text-farm-green-field
+              class="inline-flex items-center gap-1 rounded-lg border px-[13px] py-[6px] text-[12.5px] font-medium leading-tight
+                border-soil-300 text-soil-700 hover:border-soil-900 hover:text-soil-900
+                dark:border-white/25 dark:text-cream dark:hover:border-white/45 dark:hover:bg-white/10
                 transition-colors">
-              GitHub
+              GitHub <span aria-hidden="true">&nearr;</span>
             </a>
             {lang.docs && (
               <a href={lang.docs} target="_blank" rel="noopener noreferrer"
-                class="inline-flex items-center gap-1 px-3 py-1.5 rounded-md text-xs font-medium
-                  bg-farm-cream-dark dark:bg-farm-dark
-                  text-farm-text-muted dark:text-farm-text-light-muted
-                  hover:text-farm-green-deep dark:hover:text-farm-green-field
-                  transition-colors">
-                Docs
+                class="inline-flex items-center gap-1 rounded-lg border px-[13px] py-[6px] text-[12.5px] font-medium leading-tight
+                border-soil-300 text-soil-700 hover:border-soil-900 hover:text-soil-900
+                dark:border-white/25 dark:text-cream dark:hover:border-white/45 dark:hover:bg-white/10
+                transition-colors">
+                Docs <span aria-hidden="true">&nearr;</span>
               </a>
             )}
             {lang.package && (
               <a href={lang.package} target="_blank" rel="noopener noreferrer"
-                class="inline-flex items-center gap-1 px-3 py-1.5 rounded-md text-xs font-medium
-                  bg-farm-cream-dark dark:bg-farm-dark
-                  text-farm-text-muted dark:text-farm-text-light-muted
-                  hover:text-farm-green-deep dark:hover:text-farm-green-field
-                  transition-colors">
-                Package
+                class="inline-flex items-center gap-1 rounded-lg border px-[13px] py-[6px] text-[12.5px] font-medium leading-tight
+                border-soil-300 text-soil-700 hover:border-soil-900 hover:text-soil-900
+                dark:border-white/25 dark:text-cream dark:hover:border-white/45 dark:hover:bg-white/10
+                transition-colors">
+                Package <span aria-hidden="true">&nearr;</span>
               </a>
             )}
           </div>
 
           {lang.packageLabel && (
             <div class="mt-3">
-              <code class="text-xs px-2 py-1 rounded
-                bg-farm-cream-dark dark:bg-farm-dark
-                text-farm-text-muted dark:text-farm-text-light-muted">
+              <code class="block break-all rounded-lg border border-rock-800 bg-rock-900 px-3 py-2 text-[13px] text-cream">
                 {lang.packageLabel}
               </code>
             </div>

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Query.Farm">
+  <title>Query.Farm — Strata Sun mark (2-band, for small sizes)</title>
+  <!-- Explicit circular slices keep the mark round even in favicon renderers
+       that do not honor SVG clip paths. Use this variant at 16-22px; the
+       4-band mark turns to mud below that. -->
+  <circle cx="32" cy="32" r="32" fill="#7A5230"/>
+  <path d="M0 32A32 32 0 0 1 64 32Z" fill="#D9A441"/>
+</svg>

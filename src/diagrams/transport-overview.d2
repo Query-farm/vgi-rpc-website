@@ -1,10 +1,20 @@
+# Strata Sun palette (query-farm-astro DESIGN_BRIEF §10): soil-50 ground,
+# field for the endpoints, sun for the transport.
+vars: {
+  d2-config: {
+    theme-overrides: {
+      N7: "#f7f3ea"
+    }
+  }
+}
+
 shape: sequence_diagram
 
 client: Client (Typed Proxy) {
   style: {
-    fill: "#e8f0d8"
-    stroke: "#4a7c23"
-    font-color: "#2d5016"
+    fill: "#dee8d1"
+    stroke: "#45632f"
+    font-color: "#211a12"
     bold: true
     font-size: 15
   }
@@ -12,9 +22,9 @@ client: Client (Typed Proxy) {
 
 transport: RpcTransport {
   style: {
-    fill: "#f5ecd0"
-    stroke: "#c8a43a"
-    font-color: "#6b4423"
+    fill: "#f3e4c4"
+    stroke: "#a9762e"
+    font-color: "#6d4718"
     bold: true
     font-size: 15
   }
@@ -22,40 +32,40 @@ transport: RpcTransport {
 
 server: Server (Implementation) {
   style: {
-    fill: "#e8f0d8"
-    stroke: "#4a7c23"
-    font-color: "#2d5016"
+    fill: "#dee8d1"
+    stroke: "#45632f"
+    font-color: "#211a12"
     bold: true
     font-size: 15
   }
 }
 
 client -> transport: Arrow IPC Request {
-  style.stroke: "#c8a43a"
-  style.font-color: "#6b4423"
+  style.stroke: "#a9762e"
+  style.font-color: "#6d4718"
   style.font-size: 13
 }
 transport -> server: dispatch(protocol, method, batch) {
-  style.stroke: "#4a7c23"
-  style.font-color: "#2d5016"
+  style.stroke: "#45632f"
+  style.font-color: "#211a12"
   style.font-size: 13
 }
 server -> transport: Arrow IPC Response {
-  style.stroke: "#4a7c23"
-  style.font-color: "#2d5016"
+  style.stroke: "#45632f"
+  style.font-color: "#211a12"
   style.font-size: 13
 }
 transport -> client: typed result {
-  style.stroke: "#c8a43a"
-  style.font-color: "#6b4423"
+  style.stroke: "#a9762e"
+  style.font-color: "#6d4718"
   style.font-size: 13
 }
 
 transport."Pipe | Subprocess | Unix Socket | TCP | SHM | HTTP | Iroh / HTTP over Iroh" {
   style: {
-    fill: "#faf8f0"
-    stroke: "#c8a43a"
-    font-color: "#6b4423"
+    fill: "#f7f3ea"
+    stroke: "#a9762e"
+    font-color: "#6d4718"
     font-size: 12
     bold: true
   }
