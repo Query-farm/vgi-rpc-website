@@ -29,6 +29,7 @@ const columns: { title: string; links: { name: string; href: string; external?: 
     title: 'Query.Farm',
     links: [
       { name: 'VGI', href: 'https://query.farm/vgi', external: true },
+      { name: 'Grainlift', href: 'https://query.farm/products/grainlift/', external: true },
       { name: 'Products', href: 'https://query.farm/products', external: true },
       { name: 'Blog', href: 'https://query.farm/blog', external: true },
       { name: 'Contact', href: 'https://query.farm/company/contact', external: true },
@@ -54,6 +55,15 @@ const linkClass = `text-sm no-underline transition-colors
           <span class="font-mono font-semibold text-soil-900 dark:text-cream">vgi-rpc</span> is
           transport-agnostic RPC built on Apache Arrow IPC serialization, made by Query.Farm.
         </p>
+        <div class="arrow-acknowledgment">
+          <p>Built on Apache Arrow</p>
+          <a href="https://arrow.apache.org/" target="_blank" rel="noopener noreferrer" aria-label="Visit the Apache Arrow project">
+            <picture>
+              <source srcset="/logos/apache-arrow-dark.svg" media="(prefers-color-scheme: dark)" />
+              <img src="/logos/apache-arrow-light.svg" alt="Apache Arrow" width="135" height="70" loading="lazy" />
+            </picture>
+          </a>
+        </div>
       </div>
 
       <!-- Link columns -->
@@ -87,11 +97,15 @@ const linkClass = `text-sm no-underline transition-colors
     <div class="flex flex-col gap-3 border-t border-soil-300 py-5 pb-9 text-[13px] text-soil-600
       dark:border-rock-700 dark:text-cream-2 md:flex-row md:items-start md:justify-between md:gap-10">
       <span class="font-medium whitespace-nowrap">&copy; {year} Query Farm LLC &middot; All rights reserved</span>
-      <p class="max-w-[70ch] text-xs leading-relaxed md:text-right">
-        Apache, Apache Arrow, Arrow, and the Apache Arrow project logo are either registered trademarks or trademarks of{' '}
-        <a href="https://www.apache.org/" target="_blank" rel="noopener noreferrer"
-          class="no-underline transition-colors hover:text-link dark:hover:text-link-dark">The Apache Software Foundation</a>.
-      </p>
+      <div class="max-w-[70ch] text-xs leading-relaxed md:text-right">
+        <h2 class="qf-eyebrow mb-2 text-soil-900 dark:text-cream">Apache Arrow trademarks</h2>
+        <p>
+          The Apache Software Foundation owns the Apache Arrow, Arrow, and Apache trademarks,
+          including the Apache Arrow project logo and its triple-chevron mark.{' '}
+          <a href="https://arrow.apache.org/visual_identity/" target="_blank" rel="noopener noreferrer"
+            class="qf-link">Apache Arrow visual identity and trademark information &nearr;</a>
+        </p>
+      </div>
     </div>
   </div>
 </footer>

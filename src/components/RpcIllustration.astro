@@ -1,0 +1,103 @@
+---
+interface Props {
+  variant: 'hero' | 'schema' | 'exchange' | 'network' | 'languages' | 'launch';
+  class?: string;
+}
+const { variant, class: className } = Astro.props;
+const colors = ['#f0c877', '#d9a441', '#a9762e', '#7a5230'];
+---
+
+<!-- Original Query.Farm artwork: columnar batches and routed streams. -->
+<svg class:list={['rpc-illustration', `illustration-${variant}`, className]} viewBox={variant === 'hero' ? '0 0 540 510' : '0 0 400 220'} aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+  {variant === 'hero' ? <>
+    <g class="illustration-grid" fill="none" stroke="currentColor" stroke-width=".65">
+      <path d="M20 94H520M20 200H520M20 306H520M20 412H520M94 24V476M200 24V476M306 24V476M412 24V476" />
+      <circle cx="405" cy="113" r="93" stroke-dasharray="2 7" />
+    </g>
+    <defs><clipPath id="rpc-hero-sun"><circle cx="405" cy="113" r="74" /></clipPath></defs>
+    <g clip-path="url(#rpc-hero-sun)">
+      {colors.map((fill, i) => <rect x="331" y={39 + i * 37} width="148" height="37" fill={fill} />)}
+    </g>
+    <g class="illustration-lines" fill="none" stroke="currentColor" stroke-width="1.2">
+      {Array.from({length: 9}, (_, i) => <path d={`M ${28 + i * 13} 468 C ${28 + i * 13} 358, ${170 + i * 13} 450, ${170 + i * 13} 333`} />)}
+      {Array.from({length: 7}, (_, i) => <path d={`M ${302 + i * 12} 260 C ${302 + i * 12} 341, ${444 + i * 10} 288, ${444 + i * 10} 390`} />)}
+    </g>
+    <g transform="translate(118 169) rotate(-12 110 95)">
+      {[2, 1, 0].map(layer => <g transform={`translate(${layer * 18} ${layer * 19})`}>
+        <rect class="batch-paper" width="208" height="180" fill="var(--illustration-paper)" stroke="currentColor" stroke-width="1" />
+        <path d="M0 26H208" stroke="currentColor" stroke-width=".7" />
+        <g fill="currentColor"><circle cx="13" cy="13" r="2" /><circle cx="23" cy="13" r="2" /></g>
+        {layer === 0 && colors.map((fill, col) => <g>
+          {Array.from({length: 5}, (_, row) => <rect x={14 + col * 48} y={40 + row * 25} width="36" height="19" fill={fill} opacity={1 - row * .09} />)}
+        </g>)}
+      </g>)}
+    </g>
+    <g fill="var(--illustration-paper)" stroke="currentColor" stroke-width="1.2"><circle cx="28" cy="468" r="4" /><circle cx="504" cy="390" r="4" /></g>
+    <g fill="#d9a441"><circle cx="78" cy="404" r="4" /><circle cx="461" cy="323" r="4" /></g>
+    <g fill="currentColor" class="illustration-detail"><text x="26" y="112">TYPED COLUMNS</text><text x="358" y="448">BATCHES IN MOTION</text></g>
+  </> : variant === 'schema' ? <>
+    <g class="illustration-grid" stroke="currentColor" fill="none"><path d="M10 186H385M30 30V186M370 30V186" /></g>
+    {colors.map((fill, col) => <g>
+      {Array.from({length: 4}, (_, row) => <rect x={24 + col * 31} y={38 + col * 10 + row * 26} width="22" height="20" fill={fill} opacity={1 - row * .13} />)}
+      <path d={`M${35 + col * 31} ${146 + col * 10}C${35 + col * 31} 193 ${257 + col * 29} 194 ${257 + col * 29} 148`} fill="none" stroke="currentColor" stroke-width=".7" />
+    </g>)}
+    <rect x="244" y="44" width="112" height="108" fill="var(--illustration-paper)" stroke="currentColor" />
+    {colors.map((fill, col) => <g>{[0, 1, 2, 3].map(row => <rect x={253 + col * 25} y={53 + row * 24} width="19" height="18" fill={fill} opacity={1 - row * .13} />)}</g>)}
+    <g fill="currentColor" class="illustration-detail"><text x="24" y="210">TYPED COLUMNS</text><text x="244" y="210">RECORD BATCH</text></g>
+  </> : variant === 'exchange' ? <>
+    <g class="illustration-grid" fill="none" stroke="currentColor"><circle cx="61" cy="110" r="44" /><circle cx="339" cy="110" r="44" /></g>
+    <path d="M61 110C61 32 339 32 339 110S61 188 61 110" fill="none" stroke="currentColor" stroke-width="1.1" />
+    <g fill="var(--illustration-paper)" stroke="currentColor"><circle cx="61" cy="110" r="9" /><circle cx="339" cy="110" r="9" /></g>
+    {[{x:137,y:40,angle:-6}, {x:225,y:143,angle:-6}].map((packet, index) => <g transform={`translate(${packet.x} ${packet.y}) rotate(${packet.angle} 18 15)`}>
+      <rect width="40" height="30" fill="var(--illustration-paper)" stroke="currentColor" />
+      {[0,1,2,3].map(i => <rect x={5 + i * 8} y="5" width="5" height="20" fill={colors[(i + index) % 4]} />)}
+    </g>)}
+    <g fill="currentColor" class="illustration-detail"><text x="39" y="207">CLIENT</text><text x="317" y="207">WORKER</text></g>
+  </> : variant === 'network' ? <>
+    <g fill="none" stroke="currentColor" class="illustration-lines">
+      {[40, 110, 180].map(y => <path d={`M42 110H104C166 110 170 ${y} 240 ${y}H357`} />)}
+      <circle cx="42" cy="110" r="17" />
+    </g>
+    {[40, 110, 180].map((y, index) => <g>
+      <circle cx="357" cy={y} r="12" fill="var(--illustration-paper)" stroke="currentColor" />
+      <circle cx="357" cy={y} r="5" fill={colors[index]} />
+      <rect x={214 + index * 20} y={y - 8} width="25" height="16" fill={colors[index]} />
+      <path d={`M${222 + index * 20} ${y - 8}v16M${230 + index * 20} ${y - 8}v16`} stroke="var(--illustration-paper)" />
+    </g>)}
+    <g fill="currentColor" class="illustration-detail"><text x="284" y="24">PROCESS</text><text x="284" y="94">MACHINE</text><text x="284" y="164">NETWORK</text></g>
+  </> : variant === 'languages' ? <>
+    <g fill="none" stroke="currentColor" class="illustration-lines">
+      {Array.from({length: 7}, (_, i) => <path d={`M30 ${32 + i * 25}C137 ${32 + i * 25} 152 ${65 + i * 15} 252 ${65 + i * 15}`} />)}
+    </g>
+    {Array.from({length: 7}, (_, i) => <circle cx="30" cy={32 + i * 25} r="4" fill={colors[i % 4]} />)}
+    <g transform="translate(242 42)">
+      <rect x="12" y="12" width="100" height="136" fill="var(--illustration-paper)" stroke="currentColor" />
+      <rect width="100" height="136" fill="var(--illustration-paper)" stroke="currentColor" />
+      {colors.map((fill, col) => <g>{Array.from({length: 7}, (_, row) => <rect x={10 + col * 21} y={12 + row * 16} width="16" height="11" fill={fill} opacity={1 - row * .08} />)}</g>)}
+    </g>
+  </> : <>
+    <g fill="none" stroke="currentColor" class="illustration-lines">
+      {Array.from({length: 8}, (_, i) => <path d={`M20 ${194 - i * 12}C170 ${194 - i * 12} 122 ${84 - i * 4} 297 ${84 - i * 4}`} />)}
+    </g>
+    <circle cx="314" cy="66" r="37" fill="#d9a441" />
+    <path d="M277 66h74a37 37 0 0 1-74 0" fill="#7a5230" />
+    <g transform="translate(170 72) rotate(-24)">
+      <rect width="54" height="62" fill="var(--illustration-paper)" stroke="currentColor" />
+      {colors.map((fill, col) => <g>{[0,1,2,3].map(row => <rect x={6 + col * 11} y={7 + row * 12} width="8" height="9" fill={fill} />)}</g>)}
+    </g>
+  </>}
+</svg>
+
+<style>
+  .rpc-illustration { --illustration-paper: var(--color-soil-50); display: block; width: 100%; height: auto; color: var(--color-soil-600); }
+  .illustration-grid { opacity: .2; }
+  .illustration-lines { opacity: .8; }
+  .illustration-detail { font-family: var(--font-mono); font-size: 9px; letter-spacing: .09em; }
+  .illustration-exchange { --illustration-paper: var(--color-soil-100); }
+  .illustration-launch { --illustration-paper: var(--color-pipe-6); color: var(--color-soil-300); }
+  @media (prefers-color-scheme: dark) {
+    .rpc-illustration { --illustration-paper: var(--color-rock-900); color: var(--color-soil-300); }
+    .illustration-exchange { --illustration-paper: var(--color-rock-950); }
+    .illustration-launch { --illustration-paper: var(--color-pipe-6); }
+  }
+</style>

@@ -1,30 +1,30 @@
 ---
+import RpcIllustration from './RpcIllustration.astro';
 ---
 
 <section id="what-is" class="py-20 md:py-24 bg-soil-100 dark:bg-rock-950/50">
-  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+  <div class="intro-layout max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="idea-intro">
     <h2 class="text-3xl md:text-4xl text-center
       text-soil-900 dark:text-cream">
-      What is <span class="font-mono">vgi-rpc</span>?
+      Your code is<br /><em>the contract.</em>
     </h2>
+    <RpcIllustration variant="schema" class="idea-illustration" />
+    </div>
 
     <div class="mt-8 space-y-5 text-lg leading-relaxed text-soil-900 dark:text-cream">
       <p>
-        <strong class="font-mono">vgi-rpc</strong> is an RPC framework where you define services as{' '}
-        <strong>typed interfaces</strong> &mdash; the framework automatically derives{' '}
-        <a href="https://arrow.apache.org/" target="_blank" rel="noopener noreferrer"
-          class="qf-link">
-          Apache Arrow
-        </a> schemas from your type annotations and handles all serialization.
+        <strong class="font-mono">vgi-rpc</strong> is an RPC framework that carries method calls and results as{' '}
+        <a href="https://arrow.apache.org/" target="_blank" rel="noopener noreferrer" class="qf-link">Apache Arrow</a>{' '}
+        record batches. Define application services in your language and exchange columnar data across process and network boundaries.
       </p>
 
       <p>
-        You write a Protocol class in Python, or the equivalent interface in Go, TypeScript, Rust, Java, C#, or C++.
-        There are <strong>no <code class="rounded border border-soil-300/70 bg-white/70 px-1.5 py-0.5 text-[0.85em] dark:border-rock-700 dark:bg-rock-800">.proto</code> files</strong>{' '}
-        and no separate IDL; the class is the contract. The <strong>same interface works across every transport</strong>:
-        in-process pipes, subprocess stdin/stdout, Unix and TCP sockets, shared memory, HTTP, and authenticated Iroh/QUIC.
-        Moving a service from a subprocess to HTTP changes only the address the client passes to{' '}
-        <code class="rounded border border-soil-300/70 bg-white/70 px-1.5 py-0.5 text-[0.85em] dark:border-rock-700 dark:bg-rock-800">connect()</code>.
+        In Python, a <strong>Protocol class is the contract</strong>: type annotations become Arrow schemas.
+        Other SDKs use native interfaces, service macros, or explicit schema declarations.
+        There are <strong>no separate .proto files</strong> to maintain.
+        The wire protocol supports pipes, subprocesses, Unix and TCP sockets, HTTP, and authenticated Iroh/QUIC,
+        with a shared-memory side channel for local batches. Transport support varies by SDK.
       </p>
 
       <p>

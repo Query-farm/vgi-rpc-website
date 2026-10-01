@@ -110,8 +110,9 @@ const pageJsonLd = jsonLd === undefined ? [] : (Array.isArray(jsonLd) ? jsonLd :
     <title>{title}</title>
   </head>
   <body class="min-h-screen flex flex-col antialiased">
+    <a class="skip-link" href="#main-content">Skip to content</a>
     <Nav currentPage={currentPage} />
-    <main class="flex-1">
+    <main id="main-content" class="flex-1">
       <slot />
     </main>
     <Footer />

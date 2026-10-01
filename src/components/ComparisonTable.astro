@@ -1,139 +1,129 @@
 ---
-const frameworks = [
+import { Code } from 'astro:components';
+import { farmTheme } from '../lib/farm-shiki-theme.mjs';
+
+const rows = [
   {
-    name: 'vgi-rpc',
-    url: '/',
-    serialization: 'Arrow IPC',
-    idl: 'No (Protocol classes)',
-    streaming: 'Producer + Exchange',
-    typedProxies: 'Yes (mypy strict)',
-    transports: 'Pipe, subprocess, Unix/TCP, shm, HTTP',
-    highlight: true,
+    label: 'Service model',
+    vgi: 'Application-defined methods; native types or Arrow schemas in code',
+    grpc: 'Application-defined methods; .proto definitions and generated stubs by default',
+    flight: 'Standard data-service API: discovery, get, put, exchange, and custom actions',
   },
   {
-    name: 'Arrow Flight',
-    url: 'https://arrow.apache.org/docs/format/Flight.html',
-    serialization: 'Arrow IPC + gRPC',
-    idl: 'No (fixed API)',
-    streaming: 'get/put/exchange',
-    typedProxies: 'No (generic client)',
-    transports: 'gRPC (HTTP/2)',
-    highlight: false,
+    label: 'Payload format',
+    vgi: 'Apache Arrow IPC record batches',
+    grpc: 'Protocol Buffers by default; custom serializers are possible',
+    flight: 'Arrow IPC data with Protobuf-defined Flight messages',
   },
   {
-    name: 'gRPC',
-    url: 'https://grpc.io/',
-    serialization: 'Protobuf',
-    idl: 'Yes (.proto)',
-    streaming: 'All 4 patterns',
-    typedProxies: 'Partial',
-    transports: 'HTTP/2',
-    highlight: false,
+    label: 'Transport',
+    vgi: 'Pipes, subprocesses, Unix/TCP, HTTP, Iroh; shared-memory side channel',
+    grpc: 'HTTP/2-based gRPC',
+    flight: 'gRPC by default; the specification also allows alternative transports',
   },
   {
-    name: 'Apache Thrift',
-    url: 'https://thrift.apache.org/',
-    serialization: 'Thrift binary/compact',
-    idl: 'Yes (.thrift)',
-    streaming: 'No',
-    typedProxies: 'No',
-    transports: 'TCP, HTTP',
-    highlight: false,
+    label: 'Browser access',
+    vgi: 'TypeScript client calls the HTTP endpoint directly with fetch',
+    grpc: 'gRPC-Web client plus a compatible endpoint or translating proxy',
+    flight: 'The standard gRPC endpoint needs a browser-compatible client and gateway or adapter',
   },
   {
-    name: 'ConnectRPC',
-    url: 'https://connectrpc.com/',
-    serialization: 'Protobuf',
-    idl: 'Yes (.proto)',
-    streaming: 'All 4 patterns',
-    typedProxies: 'Yes',
-    transports: 'HTTP/1.1 + HTTP/2',
-    highlight: false,
+    label: 'WebAssembly',
+    vgi: 'Rust HTTP client supports a host-provided executor, including Emscripten integration',
+    grpc: 'Depends on the client and runtime; browser WASM still needs browser-compatible networking',
+    flight: 'Depends on the client and runtime; compiling to WASM alone does not adapt gRPC for browsers',
   },
   {
-    name: "Cap'n Proto",
-    url: 'https://capnproto.org/',
-    serialization: "Cap'n Proto",
-    idl: 'Yes (.capnp)',
-    streaming: 'Promise pipelining',
-    typedProxies: 'No',
-    transports: 'TCP',
-    highlight: false,
-  },
-  {
-    name: 'JSON-RPC',
-    url: 'https://www.jsonrpc.org/',
-    serialization: 'JSON',
-    idl: 'No',
-    streaming: 'No',
-    typedProxies: 'No',
-    transports: 'HTTP',
-    highlight: false,
+    label: 'Streaming model',
+    vgi: 'Producer streams and lockstep request/response exchange',
+    grpc: 'Unary, client, server, and bidirectional streaming; gRPC-Web has a smaller supported subset',
+    flight: 'DoGet, DoPut, and DoExchange; browser support depends on the adapter',
   },
 ];
+const browserExample = `import { httpConnect } from "@query-farm/vgi-rpc";
+
+const client = httpConnect("https://api.example.com", {
+  protocol: "Calculator",
+});
+try {
+  const result = await client.call("add", { a: 2, b: 3 });
+  console.log(result); // { result: 5 }
+} finally {
+  client.close();
+}`;
 ---
 
 <section id="comparison" class="py-20 md:py-24 bg-soil-100 dark:bg-rock-950/50">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <h2 class="text-3xl md:text-4xl text-center
-      text-soil-900 dark:text-cream">
-      Framework Comparison
-    </h2>
-    <p class="mt-3 text-center text-lg text-soil-700 dark:text-cream-2 max-w-2xl mx-auto">
-      How <span class="font-mono">vgi-rpc</span> compares to other RPC frameworks.
+    <h2 class="text-3xl md:text-4xl text-soil-900 dark:text-cream">Where vgi-rpc fits.</h2>
+    <p class="mt-3 text-lg text-soil-700 dark:text-cream-2">
+      Arrow-native application RPC, from local workers to browser clients.
+      Here is how the architecture differs from gRPC and Arrow Flight.
     </p>
 
-    <div class="mt-10 overflow-x-auto rounded-xl border border-soil-300 bg-white shadow-sm dark:border-rock-700 dark:bg-rock-800 dark:shadow-none">
-      <table class="w-full border-collapse text-[14px]">
-        <thead>
-          <tr class="border-b border-soil-300 bg-[#fbf7ee] dark:border-rock-700 dark:bg-rock-950/40">
-            <th class="text-left px-[14px] py-2.5 text-[12.5px] font-semibold whitespace-nowrap text-soil-600 dark:text-cream-2">Framework</th>
-            <th class="text-left px-[14px] py-2.5 text-[12.5px] font-semibold whitespace-nowrap text-soil-600 dark:text-cream-2">Serialization</th>
-            <th class="text-left px-[14px] py-2.5 text-[12.5px] font-semibold whitespace-nowrap text-soil-600 dark:text-cream-2">IDL Required</th>
-            <th class="text-left px-[14px] py-2.5 text-[12.5px] font-semibold whitespace-nowrap text-soil-600 dark:text-cream-2">Streaming</th>
-            <th class="text-left px-[14px] py-2.5 text-[12.5px] font-semibold whitespace-nowrap text-soil-600 dark:text-cream-2">Typed Proxies</th>
-            <th class="text-left px-[14px] py-2.5 text-[12.5px] font-semibold whitespace-nowrap text-soil-600 dark:text-cream-2">Transports</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-soil-200 dark:divide-rock-700">
-          {frameworks.map(fw => (
-            <tr class:list={[
-              fw.highlight
-                ? 'bg-sun-200/30 dark:bg-sun-400/10'
-                : '',
-            ]}>
-              <td class:list={[
-                'px-[14px] py-[11px] font-medium whitespace-nowrap',
-                fw.highlight
-                  ? 'font-mono font-semibold text-soil-900 dark:text-sun-300 border-l-2 border-sun-400'
-                  : 'text-soil-900 dark:text-cream'
-              ]}>
-                {fw.highlight ? (
-                  <a href={fw.url} class="no-underline">{fw.name}</a>
-                ) : (
-                  <a href={fw.url} target="_blank" rel="noopener noreferrer"
-                    class="qf-link">
-                    {fw.name}
-                  </a>
-                )}
-              </td>
-              <td class="px-[14px] py-[11px] text-soil-700 dark:text-cream-2">{fw.serialization}</td>
-              <td class="px-[14px] py-[11px] text-soil-700 dark:text-cream-2">{fw.idl}</td>
-              <td class="px-[14px] py-[11px] text-soil-700 dark:text-cream-2">{fw.streaming}</td>
-              <td class="px-[14px] py-[11px] text-soil-700 dark:text-cream-2">{fw.typedProxies}</td>
-              <td class="px-[14px] py-[11px] text-soil-700 dark:text-cream-2">{fw.transports}</td>
-            </tr>
-          ))}
-        </tbody>
+    <div class="comparison-context">
+      <div>
+        <h3>Alongside gRPC</h3>
+        <p>gRPC provides cross-language service calls and generated, typed clients. vgi-rpc makes Arrow batches
+          the native payload and lets the protocol run over a subprocess pipe as well as an HTTP connection.</p>
+        <a class="qf-link" href="https://grpc.io/docs/what-is-grpc/introduction/" target="_blank" rel="noopener noreferrer">gRPC architecture &nearr;</a>
+      </div>
+      <div>
+        <h3>Alongside Arrow Flight</h3>
+        <p>Flight already transfers Arrow batches efficiently over gRPC. vgi-rpc exposes your own application methods
+          over multiple transports, including an HTTP API that a browser client can call directly.</p>
+        <a class="qf-link" href="https://arrow.apache.org/docs/format/Flight.html" target="_blank" rel="noopener noreferrer">Arrow Flight architecture &nearr;</a>
+      </div>
+    </div>
+
+    <div class="comparison-scroll overflow-x-auto" role="region" aria-label="Comparison of vgi-rpc, gRPC, and Arrow Flight" tabindex="0">
+      <table class="rpc-comparison">
+        <caption class="sr-only">Service definitions, payloads, transports, browser and WebAssembly access, and streaming models.</caption>
+        <thead><tr>
+          <th scope="col">Architecture</th>
+          <th scope="col" class="comparison-vgi"><span class="font-mono">vgi-rpc</span></th>
+          <th scope="col">gRPC</th>
+          <th scope="col">Arrow Flight</th>
+        </tr></thead>
+        <tbody>{rows.map(row => <tr>
+          <th scope="row">{row.label}</th>
+          <td class="comparison-vgi">{row.vgi}</td>
+          <td>{row.grpc}</td>
+          <td>{row.flight}</td>
+        </tr>)}</tbody>
       </table>
     </div>
 
-    <p class="mt-4 text-center text-sm text-soil-700 dark:text-cream-2">
-      See the <a href="https://vgi-rpc-python.query.farm/comparison/"
-        target="_blank" rel="noopener noreferrer"
-        class="qf-link">
-        detailed comparison
-      </a> for an in-depth analysis of each framework.
+    <div class="browser-comparison">
+      <div class="browser-comparison-copy">
+        <h3>An HTTP endpoint your browser can call.</h3>
+        <p>The vgi-rpc TypeScript client sends Arrow IPC using browser HTTP APIs.
+          Point it at your service and configure CORS for cross-origin requests.
+          There is no gRPC-Web translation layer to deploy.</p>
+        <p>gRPC and Flight can be reached from browsers through suitable adapters.
+          The distinction is the direct HTTP path: compiling a native gRPC client to WASM
+          does not give it access to networking features the browser does not expose.</p>
+        <a class="qf-link" href="https://github.com/grpc/grpc-web#readme" target="_blank" rel="noopener noreferrer">How gRPC-Web connects browser clients &nearr;</a>
+      </div>
+      <div class="browser-example">
+        <div class="example-file">
+          <div class="example-file-heading"><span class="example-filename">browser.ts</span><span class="example-caption">vgi-rpc over HTTPS</span></div>
+          <Code code={browserExample} lang="typescript" theme={farmTheme} />
+        </div>
+        <p class="example-setup">Calls the Calculator service from the example above once it is hosted over HTTPS.
+          Bundle with Vite, esbuild, or another browser bundler.</p>
+        <a class="qf-link" href="https://github.com/Query-farm/vgi-rpc-typescript#browser-usage" target="_blank" rel="noopener noreferrer">TypeScript browser setup &nearr;</a>
+      </div>
+    </div>
+
+    <p class="comparison-footnote">
+      For WASM hosts, the Rust client accepts a custom HTTP executor; the application supplies its runtime’s networking integration.
+      WASM support depends on the selected SDK and host runtime.{' '}
+      <a class="qf-link" href="https://github.com/Query-farm/vgi-rpc-rust/tree/main/vgi-rpc-client#custom-http-executor" target="_blank" rel="noopener noreferrer">Rust HTTP executor integration &nearr;</a>
+    </p>
+    <p class="comparison-footnote">
+      Transport and feature availability varies by implementation. See the <a class="qf-link" href="#capabilities">SDK capability matrix</a>{' '}
+      and the <a class="qf-link" href="https://vgi-rpc-python.query.farm/comparison/" target="_blank" rel="noopener noreferrer">broader framework comparison &nearr;</a>.
     </p>
   </div>
 </section>

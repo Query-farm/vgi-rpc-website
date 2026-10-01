@@ -1,77 +1,72 @@
 ---
+import { Code } from 'astro:components';
+import { farmTheme } from '../lib/farm-shiki-theme.mjs';
+import examples from '../data/examples.json';
+import RpcIllustration from './RpcIllustration.astro';
 ---
 
 <section id="example" class="py-20 md:py-24 bg-soil-50 dark:bg-rock-900">
-  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-    <h2 class="text-3xl md:text-4xl text-center
-      text-soil-900 dark:text-cream">
-      A Service in Three Files
-    </h2>
-    <p class="mt-3 text-center text-lg text-soil-700 dark:text-cream-2 max-w-2xl mx-auto">
-      An interface, a worker that implements it, and a client that calls it over a subprocess or HTTP.
-    </p>
-
-    <div class="mt-10 space-y-4">
-      <!-- Protocol: protocol.py -->
-      <div class="rounded-xl overflow-hidden border border-rock-800 bg-rock-900 shadow-sm dark:border-rock-700">
-        <div class="flex items-center gap-2 border-b border-rock-800 bg-rock-950 px-4 py-2 text-[13px] font-medium text-cream-2">
-          <img src="/logos/python.svg" alt="Python" class="w-4 h-4" />
-          <span class="font-mono text-cream">protocol.py</span><span aria-hidden="true" class="text-rock-700">·</span>define the interface
-        </div>
-        <pre class="qf-code p-5 overflow-x-auto text-base leading-relaxed"><code><span class="tk-kw">from</span> typing <span class="tk-kw">import</span> Protocol
-
-<span class="tk-kw">class</span> <span class="tk-fn">Calculator</span>(Protocol):
-    <span class="tk-kw">def</span> <span class="tk-fn">add</span>(self, a: <span class="tk-type">float</span>, b: <span class="tk-type">float</span>) -> <span class="tk-type">float</span>: ...
-    <span class="tk-kw">def</span> <span class="tk-fn">greet</span>(self, name: <span class="tk-type">str</span>) -> <span class="tk-type">str</span>: ...</code></pre>
+  <div class="example-layout max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="example-intro">
+      <h2 class="text-3xl md:text-4xl text-soil-900 dark:text-cream">Define. Serve.<br /><em>Call.</em></h2>
+      <p class="text-soil-700 dark:text-cream-2">The same addition, in your language. Define a method, run a worker, and make your first RPC.</p>
+      <RpcIllustration variant="exchange" class="example-illustration" />
+    </div>
+    <div class="example-browser">
+      <div class="example-tabs" role="tablist" aria-label="Example language">
+        {examples.map((example, index) => <button
+          type="button" role="tab" id={`tab-${example.id}`}
+          aria-controls={`example-${example.id}`} aria-selected={index === 0 ? 'true' : 'false'}
+          tabindex={index === 0 ? 0 : -1} data-language={example.id}
+        ><img src={`/logos/${example.id}.svg`} alt="" class:list={[(example.id === 'rust' || example.id === 'java') && 'dark:invert']} />{example.name}</button>)}
       </div>
-
-      <!-- Server: worker.py -->
-      <div class="rounded-xl overflow-hidden border border-rock-800 bg-rock-900 shadow-sm dark:border-rock-700">
-        <div class="flex items-center gap-2 border-b border-rock-800 bg-rock-950 px-4 py-2 text-[13px] font-medium text-cream-2">
-          <img src="/logos/python.svg" alt="Python" class="w-4 h-4" />
-          <span class="font-mono text-cream">worker.py</span><span aria-hidden="true" class="text-rock-700">·</span>implement and serve
+      {examples.map((example, index) => <div
+        id={`example-${example.id}`} role="tabpanel" aria-labelledby={`tab-${example.id}`}
+        hidden={index !== 0} tabindex="0" class="example-panel"
+      >
+        <div class="example-files">
+          {example.files.map((file, fileIndex) => <div class="example-file">
+            <div class="example-file-heading">
+              <span class="example-step" aria-hidden="true">{String(fileIndex + 1).padStart(2, '0')}</span>
+              <span class="example-filename">{file.name}</span>
+              <span class="example-caption">{file.caption}</span>
+            </div>
+            <Code code={file.code} lang={example.syntax} theme={farmTheme} />
+          </div>)}
         </div>
-        <pre class="qf-code p-5 overflow-x-auto text-base leading-relaxed"><code><span class="tk-kw">from</span> protocol <span class="tk-kw">import</span> Calculator
-<span class="tk-kw">from</span> vgi_rpc <span class="tk-kw">import</span> run_server
-
-<span class="tk-kw">class</span> <span class="tk-fn">CalculatorImpl</span>:
-    <span class="tk-kw">def</span> <span class="tk-fn">add</span>(self, a: <span class="tk-type">float</span>, b: <span class="tk-type">float</span>) -> <span class="tk-type">float</span>:
-        <span class="tk-kw">return</span> a + b
-    <span class="tk-kw">def</span> <span class="tk-fn">greet</span>(self, name: <span class="tk-type">str</span>) -> <span class="tk-type">str</span>:
-        <span class="tk-kw">return</span> <span class="tk-str">f"Hello, {'{'}name{'}'}!"</span>
-
-run_server(Calculator, CalculatorImpl())</code></pre>
-      </div>
-
-      <!-- Client: client.py -->
-      <div class="rounded-xl overflow-hidden border border-rock-800 bg-rock-900 shadow-sm dark:border-rock-700">
-        <div class="flex items-center gap-2 border-b border-rock-800 bg-rock-950 px-4 py-2 text-[13px] font-medium text-cream-2">
-          <img src="/logos/python.svg" alt="Python" class="w-4 h-4" />
-          <span class="font-mono text-cream">client.py</span><span aria-hidden="true" class="text-rock-700">·</span>connect over subprocess or HTTP
-        </div>
-        <pre class="qf-code p-5 overflow-x-auto text-base leading-relaxed"><code><span class="tk-kw">from</span> protocol <span class="tk-kw">import</span> Calculator
-<span class="tk-kw">from</span> vgi_rpc <span class="tk-kw">import</span> connect
-
-<span class="tk-com"># Subprocess — launches worker.py automatically</span>
-<span class="tk-kw">with</span> connect(Calculator, [<span class="tk-str">"python"</span>, <span class="tk-str">"worker.py"</span>]) <span class="tk-kw">as</span> calc:
-    print(calc.add(a=<span class="tk-num">2.0</span>, b=<span class="tk-num">3.0</span>))    <span class="tk-com"># 5.0</span>
-    print(calc.greet(name=<span class="tk-str">"World"</span>))  <span class="tk-com"># Hello, World!</span>
-
-<span class="tk-com"># HTTP — connect to a running server</span>
-<span class="tk-kw">with</span> connect(Calculator, <span class="tk-str">"https://localhost:8000"</span>) <span class="tk-kw">as</span> calc:
-    print(calc.add(a=<span class="tk-num">2.0</span>, b=<span class="tk-num">3.0</span>))    <span class="tk-com"># 5.0</span></code></pre>
-      </div>
+        <p class="example-setup">{example.note}</p>
+        <a class="qf-link example-guide" href={example.docs} target="_blank" rel="noopener noreferrer">{example.name} SDK guide <span aria-hidden="true">↗</span></a>
+      </div>)}
+      <noscript><p class="example-setup">Enable JavaScript to switch languages. The Python example is shown above; all seven SDK guides are linked in <a class="qf-link" href="#languages">Language Implementations</a>.</p></noscript>
     </div>
   </div>
 </section>
 
-<style is:global>
-  /* Strata Sun syntax theme (query-farm-astro CodeBlock .farm-theme). Ground is rock-900, always. */
-  .qf-code { background: #1a1512; color: #e9e1d3; tab-size: 4; }
-  .qf-code code { background: transparent; color: inherit; }
-  .qf-code .tk-kw { color: #d9a441; font-weight: 600; }
-  .qf-code .tk-str, .qf-code .tk-type { color: #9fc48c; }
-  .qf-code .tk-fn { color: #d3a6e0; }
-  .qf-code .tk-num { color: #8fc7d8; }
-  .qf-code .tk-com { color: #8b8073; font-style: italic; }
-</style>
+<script>
+  const tabs = Array.from(document.querySelectorAll<HTMLButtonElement>('.example-tabs [role="tab"]'));
+  const panels = Array.from(document.querySelectorAll<HTMLElement>('.example-panel'));
+  const selectLanguage = (tab: HTMLButtonElement, focus = false) => {
+    tabs.forEach(item => {
+      const selected = item === tab;
+      item.setAttribute('aria-selected', String(selected));
+      item.tabIndex = selected ? 0 : -1;
+    });
+    panels.forEach(panel => { panel.hidden = panel.id !== tab.getAttribute('aria-controls'); });
+    if (focus) tab.focus();
+  };
+  tabs.forEach((tab, index) => {
+    tab.addEventListener('click', () => selectLanguage(tab));
+    tab.addEventListener('keydown', event => {
+      let nextIndex: number;
+      switch (event.key) {
+        case 'ArrowRight': nextIndex = (index + 1) % tabs.length; break;
+        case 'ArrowLeft': nextIndex = (index - 1 + tabs.length) % tabs.length; break;
+        case 'Home': nextIndex = 0; break;
+        case 'End': nextIndex = tabs.length - 1; break;
+        default: return;
+      }
+      event.preventDefault();
+      selectLanguage(tabs[nextIndex], true);
+    });
+  });
+</script>

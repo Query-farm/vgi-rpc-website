@@ -1,4 +1,5 @@
 ---
+import RpcIllustration from './RpcIllustration.astro';
 import TransportIcon from './TransportIcon.astro';
 
 const transports = [
@@ -62,10 +63,11 @@ const transports = [
 ---
 
 <section id="transports" class="py-20 md:py-24 bg-soil-50 dark:bg-rock-900">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <div class="illustrated-section max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <RpcIllustration variant="network" class="section-illustration" />
     <h2 class="text-3xl md:text-4xl text-center
       text-soil-900 dark:text-cream">
-      Transports and Side Channels
+      Start local. Go further.
     </h2>
     <p class="mt-3 text-center text-lg text-soil-700 dark:text-cream-2 max-w-2xl mx-auto">
       Pick a transport by how far the caller sits from the worker: the same process, the same machine, or across a network.
@@ -79,7 +81,7 @@ const transports = [
 
     <div class="mt-12 space-y-4">
       {transports.map(transport => (
-        <div class="flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-6 p-5 rounded-xl border shadow-sm
+        <div class="transport-entry flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-6 p-5 rounded-xl border shadow-sm
           bg-white border-soil-300/60
           dark:bg-rock-800 dark:border-rock-700 dark:shadow-none">
           <div class="flex-shrink-0 flex items-center gap-4 w-full md:w-64">

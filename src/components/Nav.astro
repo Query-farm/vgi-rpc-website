@@ -9,9 +9,8 @@ const { currentPage = '/' } = Astro.props;
 
 const navLinks = [
   { href: '/#what-is', label: 'About' },
-  { href: '/#why', label: 'Why vgi-rpc' },
+  { href: '/#built-with', label: 'Built with' },
   { href: '/#transports', label: 'Transports' },
-  { href: '/#comparison', label: 'Comparison' },
   { href: '/#benchmarks', label: 'Benchmarks' },
   { href: '/#languages', label: 'Languages' },
   { href: '/wire-protocol', label: 'Wire Protocol' },
@@ -19,7 +18,7 @@ const navLinks = [
 
 // Primary button (Query.Farm Button.astro): hover darkens on light; on dark
 // the fill lightens away from the ground, so the label flips to ink.
-const ctaClass = `inline-flex items-center justify-center whitespace-nowrap rounded-lg border font-medium leading-tight
+const ctaClass = `inline-flex items-center justify-center whitespace-nowrap rounded-none border font-medium leading-tight
   transition-colors duration-200
   bg-field-700 border-field-700 text-white hover:bg-field-800 hover:border-field-800
   dark:bg-field-600 dark:border-field-600 dark:hover:bg-field-400 dark:hover:border-field-400 dark:hover:text-rock-900`;

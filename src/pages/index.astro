@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
+import BuiltWith from '../components/BuiltWith.astro';
 import WhatIs from '../components/WhatIs.astro';
 import WhyVgiRpc from '../components/WhyVgiRpc.astro';
 import TransportOverview from '../components/TransportOverview.astro';
@@ -38,8 +39,10 @@ const jsonLd = {
   ogImageAlt="Query.Farm card for vgi-rpc: transport-agnostic RPC on Apache Arrow, in seven languages"
   jsonLd={jsonLd}
 >
+  <div class="rpc-home">
   <Hero />
   <WhatIs />
+  <BuiltWith />
   <SimpleExample />
   <WhyVgiRpc />
   <TransportOverview />
@@ -48,4 +51,5 @@ const jsonLd = {
   <LanguageCards />
   <CapabilityMatrix />
   <GetStarted />
+  </div>
 </BaseLayout>

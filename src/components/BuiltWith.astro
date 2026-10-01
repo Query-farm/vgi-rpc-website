@@ -1,0 +1,55 @@
+---
+// Product descriptions and marks follow query-farm-astro's VGI and Grainlift pages.
+const products = [
+  {
+    name: 'VGI',
+    subtitle: 'External data and functions, inside DuckDB.',
+    image: '/products/vgi-emblem.webp',
+    imageWidth: 96,
+    imageHeight: 71,
+    href: 'https://query.farm/vgi/',
+    description: 'The Vector Gateway Interface exposes APIs, services, models, and custom code as catalogs, tables, and functions that DuckDB can query and join.',
+    foundation: 'vgi-rpc carries the calls and Arrow record batches between DuckDB’s VGI extension and workers running locally or over the network.',
+    audience: 'For DuckDB and Haybarn',
+    preview: false,
+  },
+  {
+    name: 'Grainlift',
+    subtitle: 'Your data service, behind an ADBC interface.',
+    image: '/products/grainlift-mark.svg',
+    imageWidth: 71,
+    imageHeight: 71,
+    href: 'https://query.farm/products/grainlift/',
+    description: 'Proxy existing databases or build custom data services in Rust, Go, Python, or TypeScript. Applications connect through Arrow Database Connectivity (ADBC).',
+    foundation: 'vgi-rpc connects the Grainlift client driver to its services, carrying requests and Arrow results across the same RPC foundation.',
+    audience: 'For ADBC applications',
+    preview: true,
+  },
+];
+---
+
+<section id="built-with" aria-labelledby="built-with-title">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="built-with-layout">
+      <header class="built-with-intro">
+        <p class="built-with-label">Built with vgi-rpc</p>
+        <h2 id="built-with-title">Our products.<br /><em>A shared foundation.</em></h2>
+        <p>We built vgi-rpc into the core of VGI and Grainlift. Two Query.Farm products that put the protocol to work.</p>
+      </header>
+      {products.map(product => <article class="built-product" aria-labelledby={`product-${product.name.toLowerCase()}`}>
+        <div class="built-product-heading">
+          <img src={product.image} alt="" width={product.imageWidth} height={product.imageHeight} loading="lazy" />
+          <div>
+            <h3 id={`product-${product.name.toLowerCase()}`}><a href={product.href} target="_blank" rel="noopener noreferrer">{product.name}</a></h3>
+            <p>{product.audience}</p>
+            {product.preview && <span class="product-preview">Developer preview</span>}
+          </div>
+        </div>
+        <p class="built-product-subtitle">{product.subtitle}</p>
+        <p class="built-product-description">{product.description}</p>
+        <p class="built-product-foundation">{product.foundation}</p>
+        <a class="qf-link built-product-link" href={product.href} target="_blank" rel="noopener noreferrer">Explore {product.name} <span aria-hidden="true">↗</span></a>
+      </article>)}
+    </div>
+  </div>
+</section>

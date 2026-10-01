@@ -1,80 +1,35 @@
 ---
+import RpcIllustration from './RpcIllustration.astro';
+const languages = [
+  { name: 'Python', url: 'https://vgi-rpc-python.query.farm', logo: 'python' },
+  { name: 'TypeScript', url: 'https://vgi-rpc-typescript.query.farm', logo: 'typescript' },
+  { name: 'Go', url: 'https://vgi-rpc-go.query.farm', logo: 'go' },
+  { name: 'Rust', url: 'https://docs.rs/vgi-rpc', logo: 'rust' },
+  { name: 'Java', url: 'https://javadoc.io/doc/farm.query/vgirpc', logo: 'java' },
+  { name: 'C#', url: 'https://github.com/Query-farm/vgi-rpc-csharp#readme', logo: 'csharp' },
+  { name: 'C++', url: 'https://vgi-rpc-cpp.query.farm', logo: 'cpp' },
+];
 ---
 
-<section class="relative overflow-hidden bg-soil-50 dark:bg-rock-900">
-
-  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32">
-    <div class="text-center">
-      <img
-        src="/logo-hero.png"
-        alt="vgi-rpc logo"
-        class="mx-auto h-32 md:h-40 mb-8"
-      />
-
-      <h1 class="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight font-mono
-        text-soil-900 dark:text-cream">
-        vgi-rpc
-      </h1>
-
-      <p class="mt-5 font-display text-2xl md:text-3xl max-w-2xl mx-auto tracking-tight
-        text-soil-900 dark:text-cream">
-        Transport-agnostic RPC built on{' '}
-        <a href="https://arrow.apache.org/" target="_blank" rel="noopener noreferrer"
-          class="qf-link italic">Apache Arrow</a>
-      </p>
-
-      <p class="mt-4 text-base md:text-lg max-w-xl mx-auto
-        text-soil-700 dark:text-cream-2">
-        Define typed interfaces. One protocol across pipes,
-        subprocesses, Unix/TCP sockets, shared memory, and HTTP.
-      </p>
-
-      <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
-        <a
-          href="#get-started"
-          class="inline-flex items-center justify-center gap-2 rounded-lg border px-7 py-3.5 text-base font-medium leading-tight
-            bg-field-700 border-field-700 text-white hover:bg-field-800 hover:border-field-800
-            dark:bg-field-600 dark:border-field-600 dark:hover:bg-field-400 dark:hover:border-field-400 dark:hover:text-rock-900
-            focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-link dark:focus-visible:outline-sun-400
-            transition-colors duration-200"
-        >
-          Get Started <span aria-hidden="true">&rarr;</span>
-        </a>
-        <a
-          href="/wire-protocol"
-          class="inline-flex items-center justify-center rounded-lg border px-7 py-3.5 text-base font-medium leading-tight
-            bg-white/70 border-soil-900 text-soil-900 hover:bg-white
-            dark:bg-white/10 dark:border-white/30 dark:text-cream dark:hover:bg-white/20
-            focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-link dark:focus-visible:outline-sun-400
-            transition-colors duration-200"
-        >
-          How It Works
-        </a>
+<section class="rpc-hero">
+  <div class="hero-layout">
+    <div class="hero-copy">
+      <p class="edition-label"><span class="font-mono">vgi-rpc</span><span class="edition-rule"></span>From Query.Farm</p>
+      <h1 class="hero-heading-rpc">Arrow-native RPC.<br /><span>From subprocess<br /><em>to service.</em></span></h1>
+      <p class="hero-description">Define services in code. Exchange <a class="qf-link" href="https://arrow.apache.org/" target="_blank" rel="noopener noreferrer">Apache Arrow</a> record batches across languages over subprocesses, sockets, or HTTP. Call your HTTP service directly from the browser.</p>
+      <div class="hero-actions">
+        <a class="start-link" href="#get-started">Start building <span aria-hidden="true">↗</span></a>
+        <a class="qf-link" href="/wire-protocol">Explore the protocol <span aria-hidden="true">→</span></a>
       </div>
-
-      <!-- Language badges -->
-      <div class="mt-10 flex flex-wrap items-center justify-center gap-3">
-        {[
-          { name: 'Python', url: 'https://vgi-rpc-python.query.farm', logo: '/logos/python.svg' },
-          { name: 'TypeScript', url: 'https://vgi-rpc-typescript.query.farm', logo: '/logos/typescript.svg' },
-          { name: 'Go', url: 'https://vgi-rpc-go.query.farm', logo: '/logos/go.svg' },
-          { name: 'Rust', url: 'https://docs.rs/vgi-rpc', logo: '/logos/rust.svg' },
-          { name: 'Java', url: 'https://javadoc.io/doc/farm.query/vgirpc', logo: '/logos/java.svg' },
-          { name: 'C#', url: 'https://github.com/Query-farm/vgi-rpc-csharp#readme', logo: '/logos/csharp.svg' },
-          { name: 'C++', url: 'https://vgi-rpc-cpp.query.farm', logo: '/logos/cpp.svg' },
-        ].map(lang => (
-          <a href={lang.url} target="_blank" rel="noopener noreferrer"
-            class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[13.5px] font-medium leading-normal
-            border-soil-300 bg-soil-100/70 text-soil-700
-            hover:border-soil-900 hover:text-soil-900
-            dark:border-rock-700 dark:bg-rock-800 dark:text-cream-2
-            dark:hover:border-cream-2 dark:hover:text-cream
-            transition-colors">
-            <img src={lang.logo} alt={`${lang.name} logo`} class:list={['w-4 h-4', (lang.name === 'Rust' || lang.name === 'Java') && 'dark:invert']} />
-            {lang.name}
-          </a>
-        ))}
-      </div>
+      <p class="hero-built-with">At the core of <a href="#built-with">VGI and Grainlift <span aria-hidden="true">↓</span></a></p>
     </div>
+    <figure class="hero-plate">
+      <RpcIllustration variant="hero" />
+      <figcaption><span>Different routes. The same wire protocol.</span><span aria-hidden="true">↗</span></figcaption>
+    </figure>
+  </div>
+  <div class="hero-languages">
+    <p>Seven languages.<br /><span>Common ground.</span></p>
+    <div>{languages.map(lang => <a href={lang.url} target="_blank" rel="noopener noreferrer"><img src={`/logos/${lang.logo}.svg`} alt="" class:list={[(lang.name === 'Rust' || lang.name === 'Java') && 'dark:invert']} />{lang.name}<span aria-hidden="true">↗</span></a>)}</div>
   </div>
 </section>

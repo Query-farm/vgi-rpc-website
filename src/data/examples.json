@@ -1,0 +1,170 @@
+[
+  {
+    "id": "python",
+    "name": "Python",
+    "syntax": "python",
+    "docs": "https://vgi-rpc-python.query.farm/quickstart/",
+    "note": "Install vgi-rpc, save these three files together, then run python client.py.",
+    "files": [
+      {
+        "name": "protocol.py",
+        "caption": "Define the interface",
+        "code": "from typing import Protocol\n\nclass Calculator(Protocol):\n    def add(self, a: float, b: float) -> float: ..."
+      },
+      {
+        "name": "worker.py",
+        "caption": "Implement and serve",
+        "code": "from protocol import Calculator\nfrom vgi_rpc import run_server\n\nclass CalculatorImpl:\n    def add(self, a: float, b: float) -> float:\n        return a + b\n\nrun_server(Calculator, CalculatorImpl())"
+      },
+      {
+        "name": "client.py",
+        "caption": "Call over a subprocess",
+        "code": "from protocol import Calculator\nfrom vgi_rpc import connect\n\nwith connect(Calculator, [\"python\", \"worker.py\"]) as calc:\n    print(calc.add(a=2.0, b=3.0))  # 5.0"
+      }
+    ]
+  },
+  {
+    "id": "typescript",
+    "name": "TypeScript",
+    "syntax": "typescript",
+    "docs": "https://vgi-rpc-typescript.query.farm",
+    "note": "Install @query-farm/vgi-rpc. This example uses Bun: save the files together and run bun client.ts.",
+    "files": [
+      {
+        "name": "protocol.ts",
+        "caption": "Declare the method and handler",
+        "code": "import { Protocol, float } from \"@query-farm/vgi-rpc\";\n\nexport const calculator = new Protocol(\"Calculator\");\ncalculator.unary(\"add\", {\n  params: { a: float, b: float },\n  result: { result: float },\n  handler: async ({ a, b }) => ({ result: a + b }),\n});"
+      },
+      {
+        "name": "worker.ts",
+        "caption": "Serve over standard input/output",
+        "code": "import { VgiRpcServer } from \"@query-farm/vgi-rpc\";\nimport { calculator } from \"./protocol\";\n\nconst server = new VgiRpcServer(calculator);\nserver.run();"
+      },
+      {
+        "name": "client.ts",
+        "caption": "Launch the worker and call it",
+        "code": "import { subprocessConnect } from \"@query-farm/vgi-rpc\";\n\nconst client = subprocessConnect(\n  [\"bun\", \"run\", \"worker.ts\"],\n  { protocol: \"Calculator\" },\n);\ntry {\n  console.log(await client.call(\"add\", { a: 2, b: 3 }));\n  // { result: 5 }\n} finally {\n  client.close();\n}"
+      }
+    ]
+  },
+  {
+    "id": "go",
+    "name": "Go",
+    "syntax": "go",
+    "docs": "https://vgi-rpc-go.query.farm",
+    "note": "Core Go snippets: a typed server handler and a schema-first HTTP client. The client uses Apache Arrow Go v18; see the guide for project setup and imports.",
+    "files": [
+      {
+        "name": "types.go",
+        "caption": "Define parameters and wire schemas",
+        "code": "type AddParams struct {\n    A float64 `vgirpc:\"a\"`\n    B float64 `vgirpc:\"b\"`\n}\n\nvar paramsSchema = arrow.NewSchema([]arrow.Field{\n    {Name: \"a\", Type: arrow.PrimitiveTypes.Float64},\n    {Name: \"b\", Type: arrow.PrimitiveTypes.Float64},\n}, nil)\nvar resultSchema = arrow.NewSchema([]arrow.Field{\n    {Name: \"result\", Type: arrow.PrimitiveTypes.Float64},\n}, nil)"
+      },
+      {
+        "name": "worker.go",
+        "caption": "Register a handler and serve HTTP",
+        "code": "server := vgirpc.NewServer()\nserver.SetServiceName(\"Calculator\")\nvgirpc.Unary(server, \"add\", func(\n    _ context.Context, _ *vgirpc.CallContext, p AddParams,\n) (float64, error) {\n    return p.A + p.B, nil\n})\n\nlog.Fatal(http.ListenAndServe(\n    \"127.0.0.1:8080\", vgirpc.NewHttpServer(server),\n))"
+      },
+      {
+        "name": "client.go",
+        "caption": "Build a batch and call the running server",
+        "code": "client, err := vgirpc.NewHttpClient(\n    \"http://127.0.0.1:8080\",\n    vgirpc.WithClientProtocol(\"Calculator\"),\n)\nif err != nil { log.Fatal(err) }\ndefer client.Close()\n\nbuilder := array.NewRecordBuilder(memory.DefaultAllocator, paramsSchema)\ndefer builder.Release()\nbuilder.Field(0).(*array.Float64Builder).Append(2)\nbuilder.Field(1).(*array.Float64Builder).Append(3)\nparams := builder.NewRecordBatch()\ndefer params.Release()\n\nresult, err := client.CallUnary(\n    context.Background(), \"add\", params, resultSchema,\n)\nif err != nil { log.Fatal(err) }\ndefer result.Release()\nfmt.Println(result.Batch.Column(0).(*array.Float64).Value(0)) // 5"
+      }
+    ]
+  },
+  {
+    "id": "rust",
+    "name": "Rust",
+    "syntax": "rust",
+    "docs": "https://docs.rs/vgi-rpc",
+    "note": "Use vgi-rpc for the worker, vgi-rpc-client for the client, and matching arrow-array / arrow-schema versions. Build the worker binary before running the client.",
+    "files": [
+      {
+        "name": "protocol.rs",
+        "caption": "Derive schemas from a service",
+        "code": "use vgi_rpc::{service, Result};\n\npub struct Calculator;\n\n#[service]\nimpl Calculator {\n    #[unary]\n    fn add(&self, a: f64, b: f64) -> Result<f64> {\n        Ok(a + b)\n    }\n}"
+      },
+      {
+        "name": "worker.rs",
+        "caption": "Register and serve the implementation",
+        "code": "mod protocol;\nuse protocol::Calculator;\nuse std::{io, sync::Arc};\nuse vgi_rpc::RpcServer;\n\nfn main() {\n    let mut server = RpcServer::builder()\n        .protocol_name(\"Calculator\")\n        .build();\n    Calculator::register_with(&mut server, Arc::new(Calculator));\n    server.serve(io::stdin().lock(), io::stdout().lock());\n}"
+      },
+      {
+        "name": "client.rs",
+        "caption": "Call with a native Arrow record batch",
+        "code": "use std::sync::Arc;\nuse arrow_array::{Float64Array, RecordBatch};\nuse arrow_schema::{DataType, Field, Schema};\nuse vgi_rpc_client::RpcClient;\n\nfn main() -> vgi_rpc_client::Result<()> {\n    let mut client = RpcClient::connect(&[\"./target/debug/worker\"])?\n        .protocol(\"Calculator\");\n    let schema = Arc::new(Schema::new(vec![\n        Field::new(\"a\", DataType::Float64, false),\n        Field::new(\"b\", DataType::Float64, false),\n    ]));\n    let params = RecordBatch::try_new(schema, vec![\n        Arc::new(Float64Array::from(vec![2.0])),\n        Arc::new(Float64Array::from(vec![3.0])),\n    ])?;\n    let (result, _) = client.call_unary(\"add\", &params, None)?;\n    println!(\"{:?}\", result.column(0)); // [5.0]\n    Ok(())\n}"
+      }
+    ]
+  },
+  {
+    "id": "java",
+    "name": "Java",
+    "syntax": "java",
+    "docs": "https://javadoc.io/doc/farm.query/vgirpc",
+    "note": "Compile with -parameters and include SDK dependencies in the classpath. Run both JVMs with --add-opens=java.base/java.nio=ALL-UNNAMED and -Dio.netty.noUnsafe=false. Here worker.jar includes the worker and its dependencies.",
+    "files": [
+      {
+        "name": "Calculator.java",
+        "caption": "Share a typed interface",
+        "code": "public interface Calculator {\n    double add(double a, double b);\n}"
+      },
+      {
+        "name": "CalculatorWorker.java",
+        "caption": "Implement and serve",
+        "code": "import farm.query.vgirpc.RpcServer;\nimport farm.query.vgirpc.transport.StdioTransport;\n\npublic final class CalculatorWorker {\n    public static void main(String[] args) {\n        Calculator impl = (a, b) -> a + b;\n        var server = new RpcServer(Calculator.class, impl);\n        try (var transport = new StdioTransport()) {\n            server.serve(transport);\n        }\n    }\n}"
+      },
+      {
+        "name": "Client.java",
+        "caption": "Get a typed proxy to the worker",
+        "code": "import farm.query.vgirpc.RpcConnection;\nimport farm.query.vgirpc.transport.SubprocessTransport;\nimport java.util.List;\n\npublic final class Client {\n    public static void main(String[] args) {\n        var transport = new SubprocessTransport(List.of(\n            \"java\", \"--add-opens=java.base/java.nio=ALL-UNNAMED\",\n            \"-Dio.netty.noUnsafe=false\",\n            \"-cp\", \"worker.jar\", \"CalculatorWorker\"));\n        try (var conn = new RpcConnection(transport)) {\n            Calculator calc = conn.proxy(Calculator.class);\n            System.out.println(calc.add(2.0, 3.0)); // 5.0\n        }\n    }\n}"
+      }
+    ]
+  },
+  {
+    "id": "csharp",
+    "name": "C#",
+    "syntax": "csharp",
+    "docs": "https://github.com/Query-farm/vgi-rpc-csharp/tree/main/examples/03-subprocess",
+    "note": "Use separate .NET 10 worker and client projects with implicit usings enabled. Share the interface, add QueryFarm.VgiRpc to the worker and QueryFarm.VgiRpc.Client to the client, then build Worker.dll.",
+    "files": [
+      {
+        "name": "ICalculator.cs",
+        "caption": "Share an asynchronous interface",
+        "code": "public interface ICalculator\n{\n    Task<double> AddAsync(double a, double b);\n}"
+      },
+      {
+        "name": "Worker/Program.cs",
+        "caption": "Serve the implementation over stdio",
+        "code": "using QueryFarm.VgiRpc.Server;\nusing QueryFarm.VgiRpc.Transport;\n\nvar server = new RpcServer(typeof(ICalculator), new Calculator());\nawait server.ServeAsync(new StdioTransport());\n\npublic sealed class Calculator : ICalculator\n{\n    public Task<double> AddAsync(double a, double b) =>\n        Task.FromResult(a + b);\n}"
+      },
+      {
+        "name": "Client/Program.cs",
+        "caption": "Spawn the worker and call the proxy",
+        "code": "using QueryFarm.VgiRpc.Client;\n\nawait using var client = RpcClient.StartSubprocess(\n    [\"dotnet\", \"Worker.dll\"]);\nvar calc = client.CreateProxy<ICalculator>();\n\nConsole.WriteLine(await calc.AddAsync(2, 3)); // 5"
+      }
+    ]
+  },
+  {
+    "id": "cpp",
+    "name": "C++",
+    "syntax": "cpp",
+    "docs": "https://vgi-rpc-cpp.query.farm/getting-started/",
+    "note": "Build with C++20, Apache Arrow, and vgi-rpc. These files share protocol.h; compile the worker as ./worker. The SDK guide covers CMake and linking.",
+    "files": [
+      {
+        "name": "protocol.h",
+        "caption": "Define schemas and an Arrow array helper",
+        "code": "#pragma once\n#include <arrow/api.h>\n#include <vgi_rpc/arrow_utils.h>\n\ninline auto params_schema() {\n    return arrow::schema({\n        arrow::field(\"a\", arrow::float64(), false),\n        arrow::field(\"b\", arrow::float64(), false),\n    });\n}\ninline auto result_schema() {\n    return arrow::schema({\n        arrow::field(\"result\", arrow::float64(), false),\n    });\n}\ninline auto values(double value) {\n    arrow::DoubleBuilder builder;\n    VGI_RPC_THROW_NOT_OK(builder.Append(value));\n    return vgi_rpc::unwrap(builder.Finish());\n}"
+      },
+      {
+        "name": "worker.cpp",
+        "caption": "Register a unary method and serve",
+        "code": "#include \"protocol.h\"\n#include <vgi_rpc/server.h>\n#include <vgi_rpc/request.h>\n#include <vgi_rpc/result.h>\n\nint main() {\n    auto server = vgi_rpc::ServerBuilder()\n        .protocol(\"Calculator\")\n        .add_unary(\"add\", params_schema(), result_schema(),\n            [](const vgi_rpc::Request& req, vgi_rpc::CallContext&) {\n                auto sum = req.get<double>(\"a\") + req.get<double>(\"b\");\n                return vgi_rpc::Result::value(result_schema(), {values(sum)});\n            })\n        .build();\n    server->run();\n}"
+      },
+      {
+        "name": "client.cpp",
+        "caption": "Send and receive Arrow batches",
+        "code": "#include \"protocol.h\"\n#include <vgi_rpc/client.h>\n#include <iostream>\n\nint main() {\n    vgi_rpc::RpcClientOptions options;\n    options.protocol = \"Calculator\";\n    auto client = vgi_rpc::RpcClient::spawn({\"./worker\"}, options);\n    auto params = arrow::RecordBatch::Make(\n        params_schema(), 1, {values(2), values(3)});\n    auto result = client.call_unary(\"add\", params);\n    auto sum = std::static_pointer_cast<arrow::DoubleArray>(\n        result.batch->column(0));\n    std::cout << sum->Value(0) << '\\n'; // 5\n    client.close();\n}"
+      }
+    ]
+  }
+]
