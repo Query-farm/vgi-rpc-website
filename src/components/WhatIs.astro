@@ -16,20 +16,20 @@ import RpcIllustration from './RpcIllustration.astro';
       <p>
         <strong class="font-mono">vgi-rpc</strong> is an RPC framework that carries method calls and results as{' '}
         <a href="https://arrow.apache.org/" target="_blank" rel="noopener noreferrer" class="qf-link">Apache Arrow</a>{' '}
-        record batches. Define application services in your language and exchange columnar data across process and network boundaries.
+        <a href="https://arrow.apache.org/docs/format/Columnar.html#serialization-and-interprocess-communication-ipc" target="_blank" rel="noopener noreferrer" class="qf-link">record batches</a>: chunks of tabular data stored as typed columns with the same number of rows. Define application services in your language and exchange columnar data across process and network boundaries.
       </p>
 
       <p>
         In Python, a <strong>Protocol class is the contract</strong>: type annotations become Arrow schemas.
         Other SDKs use native interfaces, service macros, or explicit schema declarations.
         There are <strong>no separate .proto files</strong> to maintain.
-        The wire protocol supports pipes, subprocesses, Unix and TCP sockets, HTTP, and authenticated Iroh/QUIC,
+        The wire protocol supports pipes, subprocesses, Unix and TCP sockets, HTTP, and authenticated <a href="https://docs.iroh.computer/" target="_blank" rel="noopener noreferrer" class="qf-link">Iroh</a>/<a href="https://www.rfc-editor.org/rfc/rfc9000.html" target="_blank" rel="noopener noreferrer" class="qf-link">QUIC</a>,
         with a shared-memory side channel for local batches. Transport support varies by SDK.
       </p>
 
       <p>
         Calls are <strong>unary</strong>, <strong>producer streams</strong> (the server pushes batches),
-        or <strong>exchange streams</strong> (lockstep bidirectional). Errors, logs, and OpenTelemetry traces travel with them.
+        or <strong>exchange streams</strong> (lockstep bidirectional). Errors, logs, and <a href="https://opentelemetry.io/docs/what-is-opentelemetry/" target="_blank" rel="noopener noreferrer" class="qf-link">OpenTelemetry</a> traces travel with them.
       </p>
     </div>
   </div>

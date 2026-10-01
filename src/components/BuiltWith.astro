@@ -38,7 +38,7 @@ const products = [
       </header>
       {products.map(product => <article class="built-product" aria-labelledby={`product-${product.name.toLowerCase()}`}>
         <div class="built-product-heading">
-          <img src={product.image} alt="" width={product.imageWidth} height={product.imageHeight} loading="lazy" />
+          <a class="shrink-0" href={product.href} target="_blank" rel="noopener noreferrer" aria-label={`Explore ${product.name}`}><img src={product.image} alt="" width={product.imageWidth} height={product.imageHeight} loading="lazy" /></a>
           <div>
             <h3 id={`product-${product.name.toLowerCase()}`}><a href={product.href} target="_blank" rel="noopener noreferrer">{product.name}</a></h3>
             <p>{product.audience}</p>

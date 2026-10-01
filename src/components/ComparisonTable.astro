@@ -63,13 +63,13 @@ try {
 
     <div class="comparison-context">
       <div>
-        <h3>Alongside gRPC</h3>
+        <h3>Alongside <a class="qf-link" href="https://grpc.io/" target="_blank" rel="noopener noreferrer">gRPC</a></h3>
         <p>gRPC provides cross-language service calls and generated, typed clients. vgi-rpc makes Arrow batches
           the native payload and lets the protocol run over a subprocess pipe as well as an HTTP connection.</p>
         <a class="qf-link" href="https://grpc.io/docs/what-is-grpc/introduction/" target="_blank" rel="noopener noreferrer">gRPC architecture &nearr;</a>
       </div>
       <div>
-        <h3>Alongside Arrow Flight</h3>
+        <h3>Alongside <a class="qf-link" href="https://arrow.apache.org/docs/format/Flight.html" target="_blank" rel="noopener noreferrer">Arrow Flight</a></h3>
         <p>Flight already transfers Arrow batches efficiently over gRPC. vgi-rpc exposes your own application methods
           over multiple transports, including an HTTP API that a browser client can call directly.</p>
         <a class="qf-link" href="https://arrow.apache.org/docs/format/Flight.html" target="_blank" rel="noopener noreferrer">Arrow Flight architecture &nearr;</a>
@@ -82,8 +82,8 @@ try {
         <thead><tr>
           <th scope="col">Architecture</th>
           <th scope="col" class="comparison-vgi"><span class="font-mono">vgi-rpc</span></th>
-          <th scope="col">gRPC</th>
-          <th scope="col">Arrow Flight</th>
+          <th scope="col"><a class="qf-link" href="https://grpc.io/" target="_blank" rel="noopener noreferrer">gRPC</a></th>
+          <th scope="col"><a class="qf-link" href="https://arrow.apache.org/docs/format/Flight.html" target="_blank" rel="noopener noreferrer">Arrow Flight</a></th>
         </tr></thead>
         <tbody>{rows.map(row => <tr>
           <th scope="row">{row.label}</th>
