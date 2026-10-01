@@ -1,8 +1,15 @@
 {
-  "generated_at": "2026-08-27T21:10:39.454219+00:00",
+  "generated_at": "2026-10-01T04:46:41.113615+00:00",
   "languages": {
     "python": {
-      "version": "0.43.0",
+      "version": "0.47.2",
+      "source": {
+        "sha": "7f1f40aff9309b680f0aad80cec54161d568962e",
+        "source": "https://github.com/Query-farm/vgi-rpc-python/blob/7f1f40aff9309b680f0aad80cec54161d568962e/README.md",
+        "version": "0.47.2",
+        "reviewed_at": "2026-10-01"
+      },
+      "evidence": "declared",
       "repo": "https://github.com/Query-farm/vgi-rpc-python",
       "docs": "https://vgi-rpc-python.query.farm",
       "package_url": "https://pypi.org/project/vgi-rpc/",
@@ -44,6 +51,8 @@
           "exchange": true
         },
         "transports": {
+          "iroh": "Optional native",
+          "httpi": "Optional native",
           "subprocess": true,
           "unix_socket": true,
           "tcp": true,
@@ -61,7 +70,14 @@
       }
     },
     "typescript": {
-      "version": "0.22.0",
+      "version": "0.25.4",
+      "source": {
+        "sha": "776ec3ee887f3631d5f4fdb4876900a9870e0f35",
+        "source": "https://github.com/Query-farm/vgi-rpc-typescript/blob/776ec3ee887f3631d5f4fdb4876900a9870e0f35/README.md",
+        "version": "0.25.4",
+        "reviewed_at": "2026-10-01"
+      },
+      "evidence": "declared",
       "repo": "https://github.com/Query-farm/vgi-rpc-typescript",
       "docs": "https://vgi-rpc-typescript.query.farm",
       "package_url": "https://www.npmjs.com/package/@query-farm/vgi-rpc",
@@ -102,6 +118,8 @@
           "exchange": true
         },
         "transports": {
+          "iroh": "Optional native",
+          "httpi": "Optional native",
           "subprocess": true,
           "unix_socket": false,
           "tcp": true,
@@ -119,7 +137,14 @@
       }
     },
     "go": {
-      "version": "0.26.1",
+      "version": "0.30.0",
+      "source": {
+        "sha": "701db8aff4e3a54c425c4777d8103a9567244135",
+        "source": "https://github.com/Query-farm/vgi-rpc-go/blob/701db8aff4e3a54c425c4777d8103a9567244135/README.md",
+        "version": "0.30.0",
+        "reviewed_at": "2026-10-01"
+      },
+      "evidence": "declared",
       "repo": "https://github.com/Query-farm/vgi-rpc-go",
       "docs": "https://vgi-rpc-go.query.farm",
       "package_url": "https://pkg.go.dev/github.com/Query-farm/vgi-rpc-go/vgirpc",
@@ -152,7 +177,7 @@
       },
       "client": {
         "available": true,
-        "scope": "HTTP only",
+        "scope": "HTTP + Iroh provider",
         "api_style": "Schema-first",
         "patterns": {
           "unary": true,
@@ -160,11 +185,13 @@
           "exchange": true
         },
         "transports": {
+          "iroh": "Provider required",
+          "httpi": "Provider required",
           "subprocess": false,
           "unix_socket": false,
           "tcp": false,
           "http": true,
-          "http_zstd": "partial",
+          "http_zstd": true,
           "shared_memory": false
         },
         "features": {
@@ -172,12 +199,19 @@
           "introspection": false,
           "authentication": true,
           "client_logging": true,
-          "external_storage": false
+          "external_storage": true
         }
       }
     },
     "rust": {
-      "version": "0.23.2",
+      "version": "0.28.0",
+      "source": {
+        "sha": "97d48df4e04d2aa60c02697350ecfeeb0394d082",
+        "source": "https://github.com/Query-farm/vgi-rpc-rust/blob/97d48df4e04d2aa60c02697350ecfeeb0394d082/README.md",
+        "version": "0.28.0",
+        "reviewed_at": "2026-10-01"
+      },
+      "evidence": "declared",
       "repo": "https://github.com/Query-farm/vgi-rpc-rust",
       "docs": "https://docs.rs/vgi-rpc",
       "package_url": "https://crates.io/crates/vgi-rpc",
@@ -219,6 +253,8 @@
           "exchange": true
         },
         "transports": {
+          "iroh": "Optional native",
+          "httpi": "Optional native",
           "subprocess": true,
           "unix_socket": true,
           "tcp": true,
@@ -236,7 +272,14 @@
       }
     },
     "java": {
-      "version": "0.23.1",
+      "version": "0.27.1",
+      "source": {
+        "sha": "ebde99f632f01af2b6a9ceec9d6210b07c10f882",
+        "source": "https://github.com/Query-farm/vgi-rpc-java/blob/ebde99f632f01af2b6a9ceec9d6210b07c10f882/README.md",
+        "version": "0.27.1",
+        "reviewed_at": "2026-10-01"
+      },
+      "evidence": "declared",
       "repo": "https://github.com/Query-farm/vgi-rpc-java",
       "docs": "https://javadoc.io/doc/farm.query/vgirpc",
       "package_url": "https://central.sonatype.com/artifact/farm.query/vgirpc",
@@ -278,11 +321,13 @@
           "exchange": true
         },
         "transports": {
+          "iroh": "Optional native",
+          "httpi": "Optional native",
           "subprocess": true,
           "unix_socket": true,
           "tcp": true,
           "http": true,
-          "http_zstd": false,
+          "http_zstd": true,
           "shared_memory": false
         },
         "features": {
@@ -290,12 +335,19 @@
           "introspection": true,
           "authentication": true,
           "client_logging": true,
-          "external_storage": "partial"
+          "external_storage": true
         }
       }
     },
     "csharp": {
-      "version": "0.7.0",
+      "version": "0.12.0",
+      "source": {
+        "sha": "a7cc6d55b4b1987faad9fc0191089e542b91272d",
+        "source": "https://github.com/Query-farm/vgi-rpc-csharp/blob/a7cc6d55b4b1987faad9fc0191089e542b91272d/README.md",
+        "version": "0.12.0",
+        "reviewed_at": "2026-10-01"
+      },
+      "evidence": "declared",
       "repo": "https://github.com/Query-farm/vgi-rpc-csharp",
       "docs": "https://github.com/Query-farm/vgi-rpc-csharp#readme",
       "package_url": "https://www.nuget.org/packages/QueryFarm.VgiRpc/",
@@ -329,32 +381,41 @@
       },
       "client": {
         "available": true,
-        "scope": "Unary core",
-        "api_style": "Typed unary proxy",
+        "scope": "Full RPC surface",
+        "api_style": "Typed + schema-first",
         "patterns": {
           "unary": true,
-          "producer": false,
-          "exchange": false
+          "producer": true,
+          "exchange": true
         },
         "transports": {
-          "subprocess": "partial",
+          "iroh": "Optional native",
+          "httpi": "Optional native",
+          "subprocess": true,
           "unix_socket": true,
           "tcp": true,
-          "http": "partial",
-          "http_zstd": false,
-          "shared_memory": false
+          "http": true,
+          "http_zstd": true,
+          "shared_memory": true
         },
         "features": {
-          "worker_pool": false,
-          "introspection": false,
-          "authentication": "partial",
-          "client_logging": false,
-          "external_storage": "partial"
+          "worker_pool": true,
+          "introspection": "Schema-first",
+          "authentication": true,
+          "client_logging": true,
+          "external_storage": true
         }
       }
     },
     "cpp": {
-      "version": "0.1.4",
+      "version": "0.5.0",
+      "source": {
+        "sha": "b1e3326f23dc4f4a16184deb7eb005050e918bc6",
+        "source": "https://github.com/Query-farm/vgi-rpc-cpp/blob/b1e3326f23dc4f4a16184deb7eb005050e918bc6/docs/native-iroh-client.md",
+        "version": "0.5.0",
+        "reviewed_at": "2026-10-01"
+      },
+      "evidence": "declared",
       "repo": "https://github.com/Query-farm/vgi-rpc-cpp",
       "docs": "https://vgi-rpc-cpp.query.farm",
       "package_url": null,
@@ -396,6 +457,8 @@
           "exchange": true
         },
         "transports": {
+          "iroh": "Optional native",
+          "httpi": "Optional native",
           "subprocess": true,
           "unix_socket": true,
           "tcp": true,

@@ -19,9 +19,10 @@ const sections = [
   { id: 'transport-options', label: '15. Transport Capabilities' },
   { id: 'identity', label: '16. Identity Protocol' },
   { id: 'sticky-sessions', label: '17. Sticky Sessions' },
+  { id: 'iroh', label: '18. Iroh & HTTP over Iroh' },
 ];
 
-const description = 'Normative vgi-rpc wire protocol version 1 specification covering Arrow IPC framing, metadata, protocol routing, streaming, HTTP, shared memory, external storage, reflection, identity, and sessions.';
+const description = 'Normative vgi-rpc wire protocol version 1 specification covering Arrow IPC framing, metadata, protocol routing, streaming, HTTP, Iroh/QUIC, shared memory, external storage, reflection, identity, and sessions.';
 const jsonLd = {
   '@type': 'TechArticle',
   '@id': 'https://vgi-rpc.query.farm/wire-protocol/#specification',
@@ -29,7 +30,7 @@ const jsonLd = {
   description,
   url: 'https://vgi-rpc.query.farm/wire-protocol/',
   image: 'https://vgi-rpc.query.farm/social-card.png',
-  dateModified: '2026-09-16',
+  dateModified: '2026-10-01',
   version: '1',
   author: {
     '@type': 'Organization',
@@ -55,7 +56,7 @@ const jsonLd = {
   currentPage="/wire-protocol"
   ogType="article"
   ogImageAlt="vgi-rpc wire protocol version 1 specification for Arrow IPC transports"
-  dateModified="2026-09-16T00:00:00-04:00"
+  dateModified="2026-10-01T00:00:00-04:00"
   articleSection="Technical specification"
   articleTags={['RPC protocol', 'Apache Arrow IPC', 'Shared memory', 'HTTP streaming', 'Protocol reflection']}
   jsonLd={jsonLd}
@@ -93,7 +94,7 @@ const jsonLd = {
           Wire Protocol Specification
         </h1>
         <p class="mt-2 text-farm-text-muted dark:text-farm-text-light-muted">
-          Wire version 1 &mdash; Normative &mdash; Reconciled with vgi-rpc Python 0.45.3
+          Wire version 1 &mdash; Normative &mdash; Reconciled with vgi-rpc Python 0.47.2
         </p>
         <p class="mt-2 text-sm text-farm-text-muted dark:text-farm-text-light-muted">
           This is the web edition of the cross-language contract. The{' '}
@@ -595,7 +596,8 @@ const jsonLd = {
               </p>
               <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
                 Capability headers are stamped on every response and can be discovered cheaply at{' '}
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">OPTIONS {'{prefix}'}/health</code>.
+                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">HEAD {'{prefix}'}/health</code>.
+                Browser clients must use HEAD for discovery so the probe passes the CORS method check. GET and OPTIONS also carry capability headers.
                 There is no <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">__capabilities__</code>{' '}
                 endpoint. An absent capability means unsupported or unconfigured, except that a missing{' '}
                 <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">VGI-Supported-Encodings</code>{' '}
@@ -623,6 +625,14 @@ const jsonLd = {
                   </tbody>
                 </table>
               </div>
+              <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+                Clients can send <code>VGI-Accept-Max-Response-Bytes</code> as one ASCII positive decimal integer
+                from 65536 through 2<sup>53</sup> &minus; 1. Signs, leading zeroes, comma lists, and duplicate values
+                are invalid and receive HTTP 400 before dispatch. The effective decoded response cap is the minimum
+                of the client limit and the application and hosting caps. A batch still too large after externalization
+                produces a cursor-free <code>ResponseTooLargeError</code>. Each HTTP producer turn invokes the producer
+                once; a response target does not combine multiple turns.
+              </p>
               <p class="text-sm text-farm-text-muted dark:text-farm-text-light-muted">
                 Request and response compression are independent. Requests use{' '}
                 <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">Content-Encoding</code>;{' '}
@@ -1021,7 +1031,7 @@ describe(protocol: utf8) -> ServiceDescription`}</pre>
                 It is a framework built-in, resolved before routing and owned by no protocol, so it carries no{' '}
                 <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">vgi_rpc.protocol</code>{' '}
                 routing key. HTTP deployment capabilities use response headers instead; the discovery probe there is{' '}
-                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">OPTIONS {'{prefix}'}/health</code>.
+                <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">HEAD {'{prefix}'}/health</code>.
               </p>
               <pre class="p-4 rounded-lg bg-white dark:bg-farm-dark-card border border-farm-cream-dark dark:border-farm-dark-border overflow-x-auto text-sm font-mono text-farm-text-muted dark:text-farm-text-light-muted">{`shm_enabled = client["vgi_rpc.transport.shm"] == "true"
            && server["vgi_rpc.transport.shm"] == "true"`}</pre>
@@ -1178,6 +1188,87 @@ issue_grant(purpose: utf8, scopes: list<utf8>, ttl_seconds: int64) -> IssuedGran
                 Teardown is an idempotent <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">DELETE {'{prefix}'}/__session__</code>.
                 Lost sessions surface in-band with <code class="px-1 py-0.5 rounded bg-farm-cream-dark dark:bg-farm-dark-card text-xs">error_kind = "session_lost"</code>;
                 frameworks do not retry them transparently.
+              </p>
+            </div>
+          </section>
+
+          <section id="iroh">
+            <h2 class="text-2xl font-bold text-farm-green-deep dark:text-farm-cream border-b border-farm-cream-dark dark:border-farm-dark-border pb-2">
+              18. Iroh &amp; HTTP over Iroh
+            </h2>
+            <div class="mt-4 space-y-4 text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+              <p>
+                Iroh provides encrypted QUIC connections addressed by an EndpointId. The URI scheme selects
+                one of two RPC modes. Both preserve Arrow IPC payloads and the protocol routing described above.
+              </p>
+              <div class="overflow-x-auto rounded-lg border border-farm-cream-dark dark:border-farm-dark-border">
+                <table class="w-full text-sm">
+                  <thead class="bg-farm-cream-dark dark:bg-farm-dark-card"><tr>
+                    <th class="px-4 py-2 text-left" scope="col">Mode</th>
+                    <th class="px-4 py-2 text-left" scope="col">Wire protocol</th>
+                    <th class="px-4 py-2 text-left" scope="col">State and deployment</th>
+                  </tr></thead>
+                  <tbody class="divide-y divide-farm-cream-dark dark:divide-farm-dark-border">
+                    <tr><td class="px-4 py-2"><code>iroh://&lt;endpoint-id&gt;</code></td>
+                      <td class="px-4 py-2"><code>vgi-rpc/arrow-mux/1</code></td>
+                      <td class="px-4 py-2">Each logical RPC transport occupies a long-lived bidirectional QUIC stream. Several independent transports share one connection; stream state stays on the selected worker.</td></tr>
+                    <tr><td class="px-4 py-2"><code>httpi://&lt;endpoint-id&gt;[/prefix]</code></td>
+                      <td class="px-4 py-2"><code>iroh-http/2</code></td>
+                      <td class="px-4 py-2">HTTP request/response semantics, including discovery, compression, authentication, external payloads, and sealed continuation tokens. A bridge forwards to a fixed HTTP origin.</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <h3 class="text-lg font-semibold text-farm-green-deep dark:text-farm-cream">Clients and optional bindings</h3>
+              <p>
+                Python uses the <code>iroh</code> extra; Rust offers <code>vgi-rpc-iroh</code> and the optional
+                HTTP-Iroh client path. TypeScript provides <code>irohConnect</code> and <code>httpiConnect</code>
+                with native Node/Bun bindings. Java adds <code>vgirpc-iroh</code>. C# exposes
+                <code>RpcClient.ConnectIrohAsync</code> and <code>HttpRpcClient.ConnectIroh</code>.
+                C++ enables <code>VGI_RPC_WITH_IROH_CABI=ON</code> with a matching native library.
+                Go requires an explicitly supplied native or community provider. Browser Iroh uses a separate
+                adapter; the Node/Bun native binding cannot be bundled into a browser application.
+              </p>
+              <pre class="p-4 rounded-lg bg-white dark:bg-farm-dark-card border border-farm-cream-dark dark:border-farm-dark-border overflow-x-auto text-sm font-mono">{`# pip install 'vgi-rpc[iroh]'
+from protocol import Calculator
+from vgi_rpc import iroh_connect, httpi_connect
+
+# Replace with the worker bridge's 64-hex EndpointId.
+endpoint_id = "<endpoint-id>"
+with iroh_connect(Calculator, f"iroh://{endpoint_id}") as client:
+    print(client.add(a=2.0, b=3.0))
+
+with httpi_connect(Calculator, f"httpi://{endpoint_id}/vgi") as client:
+    print(client.add(a=2.0, b=3.0))`}</pre>
+              <h3 class="text-lg font-semibold text-farm-green-deep dark:text-farm-cream">Host an existing worker behind the bridge</h3>
+              <p>
+                Rust can embed a native Iroh server. Workers in all seven languages can instead listen on
+                loopback behind <code>vgi-iroh-bridge</code>. Configure the worker’s Iroh bridge trust and
+                issuer, then point the bridge at its raw TCP and/or HTTP listener. For example, with workers
+                already listening on ports 9400 and 9401:
+              </p>
+              <pre class="p-4 rounded-lg bg-white dark:bg-farm-dark-card border border-farm-cream-dark dark:border-farm-dark-border overflow-x-auto text-sm font-mono">{`vgi-iroh-bridge \\
+  --secret-key-file /run/secrets/vgi-iroh-key \\
+  --raw-upstream tcp://127.0.0.1:9400 \\
+  --http-upstream http://127.0.0.1:9401`}</pre>
+              <p>
+                The bridge prints its EndpointId. A persistent key preserves that address across restarts.
+                Peer-key authentication supplies identity evidence; application policy still decides access.
+                The bridge strips incoming identity assertions and forwards the authenticated peer through
+                a dedicated PROXY-v2 identity TLV for raw workers or <code>VGI-Forwarded-Iroh-Endpoint</code>
+                for HTTP workers. Only explicitly trusted bridge peers may supply that evidence.
+              </p>
+              <p>
+                Configure relays and direct-address hints through the client transport options. For raw Iroh,
+                choose among worker EndpointIds on the client and drain existing streams before shutdown.
+                HTTP-Iroh can balance requests behind the bridge’s fixed origin when replicas share the
+                required token keys and external storage.
+              </p>
+              <p>
+                <a href="https://github.com/Query-farm/vgi-rpc-python/blob/main/docs/iroh-framework-operations.md" target="_blank" rel="noopener noreferrer" class="text-farm-gold hover:text-farm-gold-light">Cross-language setup and operations</a>
+                &middot;
+                <a href="https://github.com/Query-farm/vgi-rpc-rust/tree/main/vgi-rpc-iroh" target="_blank" rel="noopener noreferrer" class="text-farm-gold hover:text-farm-gold-light">Native Rust adapter</a>
+                &middot;
+                <a href="https://github.com/Query-farm/vgi-rpc-rust/tree/main/vgi-iroh-bridge" target="_blank" rel="noopener noreferrer" class="text-farm-gold hover:text-farm-gold-light">Bridge configuration</a>
               </p>
             </div>
           </section>

@@ -27,13 +27,13 @@ const installs = [
   {
     lang: 'Java',
     logo: '/logos/java.svg',
-    command: 'implementation("farm.query:vgirpc:0.23.1")',
+    command: 'implementation("farm.query:vgirpc:0.27.1")',
     docs: 'https://javadoc.io/doc/farm.query/vgirpc',
   },
   {
     lang: 'C#',
     logo: '/logos/csharp.svg',
-    command: 'dotnet add package QueryFarm.VgiRpc --version 0.7.0',
+    command: 'dotnet add package QueryFarm.VgiRpc',
     docs: 'https://github.com/Query-farm/vgi-rpc-csharp#readme',
   },
   {
@@ -78,6 +78,11 @@ const installs = [
         </div>
       ))}
     </div>
+    <p class="mt-6 text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+      Python Iroh clients: <code>pip install 'vgi-rpc[iroh]'</code>.
+      C# callers also install <code>QueryFarm.VgiRpc.Client</code> or <code>QueryFarm.VgiRpc.Client.Http</code>.
+      <a href="/wire-protocol#iroh" class="text-farm-gold hover:text-farm-gold-light">See Iroh setup for each language &rarr;</a>
+    </p>
 
   </div>
 </section>

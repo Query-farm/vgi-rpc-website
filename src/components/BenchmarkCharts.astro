@@ -76,7 +76,7 @@ function format(highlight: typeof highlights[number]): string {
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <h2 class="text-3xl md:text-4xl font-bold text-center text-farm-green-deep dark:text-farm-cream">Measured across implementations</h2>
     <p class="mt-3 text-center text-lg text-farm-text-muted dark:text-farm-text-light-muted max-w-3xl mx-auto">
-      A fixed Rust client compares the latest release servers over real subprocess, socket, HTTP, and shared-memory transports.
+      A fixed Rust client compares the release-pinned servers over real subprocess, socket, HTTP, and shared-memory transports.
     </p>
 
     {benchmarkData.status === 'published' ? (
@@ -90,7 +90,7 @@ function format(highlight: typeof highlights[number]): string {
               <p class="mt-3 text-xs text-farm-text-muted dark:text-farm-text-light-muted">
                 {highlight.aggregation === 'max'
                   ? `Peak single-server-core result on ${benchmarkData.host.chip}; one outstanding call`
-                  : `Median of ${highlight.count} stable latest-release servers`}
+                  : `Median of ${highlight.count} stable release-pinned servers`}
               </p>
             )}
           </div>

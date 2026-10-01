@@ -244,6 +244,7 @@ CLIENTS: dict[str, dict[str, Any]] = {
         "api_style": "Typed proxy",
         "patterns": {"unary": True, "producer": True, "exchange": True},
         "transports": {
+            "iroh": "Optional native", "httpi": "Optional native",
             "subprocess": True, "unix_socket": True, "tcp": True,
             "http": True, "http_zstd": True, "shared_memory": True,
         },
@@ -258,6 +259,7 @@ CLIENTS: dict[str, dict[str, Any]] = {
         "api_style": "Dynamic",
         "patterns": {"unary": True, "producer": True, "exchange": True},
         "transports": {
+            "iroh": "Optional native", "httpi": "Optional native",
             "subprocess": True, "unix_socket": False, "tcp": True,
             "http": True, "http_zstd": True, "shared_memory": False,
         },
@@ -268,16 +270,17 @@ CLIENTS: dict[str, dict[str, Any]] = {
     },
     "go": {
         "available": True,
-        "scope": "HTTP only",
+        "scope": "HTTP + Iroh provider",
         "api_style": "Schema-first",
         "patterns": {"unary": True, "producer": True, "exchange": True},
         "transports": {
+            "iroh": "Provider required", "httpi": "Provider required",
             "subprocess": False, "unix_socket": False, "tcp": False,
-            "http": True, "http_zstd": "partial", "shared_memory": False,
+            "http": True, "http_zstd": True, "shared_memory": False,
         },
         "features": {
             "worker_pool": False, "introspection": False, "authentication": True,
-            "client_logging": True, "external_storage": False,
+            "client_logging": True, "external_storage": True,
         },
     },
     "rust": {
@@ -286,6 +289,7 @@ CLIENTS: dict[str, dict[str, Any]] = {
         "api_style": "Schema-first",
         "patterns": {"unary": True, "producer": True, "exchange": True},
         "transports": {
+            "iroh": "Optional native", "httpi": "Optional native",
             "subprocess": True, "unix_socket": True, "tcp": True,
             "http": True, "http_zstd": True, "shared_memory": True,
         },
@@ -300,26 +304,28 @@ CLIENTS: dict[str, dict[str, Any]] = {
         "api_style": "Typed proxy",
         "patterns": {"unary": True, "producer": True, "exchange": True},
         "transports": {
+            "iroh": "Optional native", "httpi": "Optional native",
             "subprocess": True, "unix_socket": True, "tcp": True,
-            "http": True, "http_zstd": False, "shared_memory": False,
+            "http": True, "http_zstd": True, "shared_memory": False,
         },
         "features": {
             "worker_pool": False, "introspection": True, "authentication": True,
-            "client_logging": True, "external_storage": "partial",
+            "client_logging": True, "external_storage": True,
         },
     },
     "csharp": {
         "available": True,
-        "scope": "Unary core",
-        "api_style": "Typed unary proxy",
-        "patterns": {"unary": True, "producer": False, "exchange": False},
+        "scope": "Full RPC surface",
+        "api_style": "Typed + schema-first",
+        "patterns": {"unary": True, "producer": True, "exchange": True},
         "transports": {
-            "subprocess": "partial", "unix_socket": True, "tcp": True,
-            "http": "partial", "http_zstd": False, "shared_memory": False,
+            "iroh": "Optional native", "httpi": "Optional native",
+            "subprocess": True, "unix_socket": True, "tcp": True,
+            "http": True, "http_zstd": True, "shared_memory": True,
         },
         "features": {
-            "worker_pool": False, "introspection": False, "authentication": "partial",
-            "client_logging": False, "external_storage": "partial",
+            "worker_pool": True, "introspection": "Schema-first", "authentication": True,
+            "client_logging": True, "external_storage": True,
         },
     },
     "cpp": {
@@ -328,6 +334,7 @@ CLIENTS: dict[str, dict[str, Any]] = {
         "api_style": "Schema-first",
         "patterns": {"unary": True, "producer": True, "exchange": True},
         "transports": {
+            "iroh": "Optional native", "httpi": "Optional native",
             "subprocess": True, "unix_socket": True, "tcp": True,
             "http": True, "http_zstd": True, "shared_memory": True,
         },
@@ -580,15 +587,9 @@ def test_all_capabilities(
     """Test all language implementations and return capabilities dict."""
     result: dict[str, Any] = json.loads(json.dumps(existing)) if existing else {"languages": {}}
     result["generated_at"] = datetime.now(timezone.utc).isoformat()
-    pinned_versions: dict[str, str] = {}
-    if known_only:
-        manifest_path = Path(__file__).parent.parent / "benchmarks" / "manifest.json"
-        with open(manifest_path, encoding="utf-8") as handle:
-            manifest = json.load(handle)
-        pinned_versions = {
-            lang_name: implementation["version"]
-            for lang_name, implementation in manifest["implementations"].items()
-        }
+    sources_path = Path(__file__).with_name("capability-sources.json")
+    with open(sources_path, encoding="utf-8") as handle:
+        reviewed_sources = json.load(handle)
 
     language_names = selected_languages or list(LANGUAGES)
     for lang_name in language_names:
@@ -596,9 +597,10 @@ def test_all_capabilities(
         print(f"\nTesting {lang_name}...")
 
         if known_only:
-            current = result["languages"].get(lang_name, {})
             result["languages"][lang_name] = {
-                "version": pinned_versions.get(lang_name, current.get("version")),
+                "version": reviewed_sources[lang_name]["version"],
+                "source": reviewed_sources[lang_name],
+                "evidence": "declared",
                 "repo": config["repo"],
                 "docs": config.get("docs"),
                 "package_url": config.get("package_url"),
@@ -704,7 +706,7 @@ def main() -> None:
     parser.add_argument(
         "--known-only",
         action="store_true",
-        help="Refresh declared capabilities at benchmark-pinned releases without building workers",
+        help="Refresh reviewed SDK capabilities without building workers",
     )
     args = parser.parse_args()
 

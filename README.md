@@ -25,8 +25,11 @@ benchmarks/     Python harness that produces the single snapshot published at /b
 ```
 
 The capability matrix separates worker/server conformance from native-client functionality.
-`scripts/test-capabilities.py --known-only` refreshes declared client metadata at the benchmark-pinned
-releases without rebuilding every language worker; normal probes include the same client metadata alongside measured worker support.
+`scripts/test-capabilities.py --known-only` refreshes declared capabilities from reviewed SDK sources
+in `scripts/capability-sources.json` without rebuilding every language worker. Normal probes include
+the same declared client metadata alongside worker probes. Review SDK source and update both the
+declarations and source pins when refreshing the matrix. Benchmark pins and measurements are
+maintained independently.
 
 ## Development
 

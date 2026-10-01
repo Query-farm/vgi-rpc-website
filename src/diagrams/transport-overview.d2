@@ -35,7 +35,7 @@ client -> transport: Arrow IPC Request {
   style.font-color: "#6b4423"
   style.font-size: 13
 }
-transport -> server: dispatch(method, batch) {
+transport -> server: dispatch(protocol, method, batch) {
   style.stroke: "#4a7c23"
   style.font-color: "#2d5016"
   style.font-size: 13
@@ -51,7 +51,7 @@ transport -> client: typed result {
   style.font-size: 13
 }
 
-transport."Pipe | Subprocess | Unix Socket | TCP | Shared Memory | HTTP" {
+transport."Pipe | Subprocess | Unix Socket | TCP | SHM | HTTP | Iroh / HTTP over Iroh" {
   style: {
     fill: "#faf8f0"
     stroke: "#c8a43a"

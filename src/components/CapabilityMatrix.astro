@@ -1,5 +1,6 @@
 ---
 import capabilities from '../data/capabilities.json';
+import reviewedSources from '../../scripts/capability-sources.json';
 import CapabilityTable from './CapabilityTable.astro';
 
 const languages = ['python', 'typescript', 'go', 'rust', 'java', 'csharp', 'cpp'] as const;
@@ -61,6 +62,8 @@ const clientConnectionRows = [
   { group: 'transports', key: 'tcp', label: 'TCP Socket' },
   { group: 'transports', key: 'http', label: 'HTTP' },
   { group: 'transports', key: 'http_zstd', label: 'HTTP zstd' },
+  { group: 'transports', key: 'iroh', label: 'Iroh (iroh://)' },
+  { group: 'transports', key: 'httpi', label: 'HTTP over Iroh (httpi://)' },
   { group: 'transports', key: 'shared_memory', label: 'Shared Memory' },
   { group: 'features', key: 'worker_pool', label: 'Worker Pool' },
 ] as const;
@@ -114,7 +117,7 @@ const workerFeatureRows = rowsFor({
       Capability Matrix
     </h2>
     <p class="mt-3 text-center text-lg text-farm-text-muted dark:text-farm-text-light-muted max-w-2xl mx-auto">
-      Native client coverage is tracked separately from worker/server conformance so client-only features are not mistaken for transports.
+      Reviewed SDK capabilities, with native clients listed separately from workers. These declarations describe documented support; they are not a fresh cross-language conformance run.
     </p>
 
     <div class="mt-10">
@@ -134,14 +137,14 @@ const workerFeatureRows = rowsFor({
       <h3 class="text-lg font-semibold text-farm-green-deep dark:text-farm-cream mb-4">Client Services</h3>
       <CapabilityTable firstColumnLabel="Client Capability" {languages} languageLabels={langLabels} rows={clientServiceRows} />
       <p class="mt-3 text-xs text-farm-text-muted dark:text-farm-text-light-muted">
-        <strong>Partial</strong> denotes a lower-level or transport-limited client surface. Go decodes zstd HTTP responses but sends identity requests; Java resolves external payloads on raw connections but not its HTTP client; C# provides a typed unary client over connected transports plus lower-level subprocess, HTTP, authentication, and external-resolution building blocks.
+        <strong>Optional native</strong> requires the language’s Iroh binding or build feature. Go requires an explicit provider; no native Go provider is bundled. TypeScript native Iroh targets Node/Bun; browsers require a separate adapter. <strong>Schema-first</strong> means callers invoke reflection through the generic RPC API. Java’s shared-memory entry here describes the native client, separately from its worker-side support.
       </p>
     </div>
 
     <div class="mt-12 border-t border-farm-cream-dark pt-10 dark:border-farm-dark-border">
       <h3 class="text-lg font-semibold text-farm-green-deep dark:text-farm-cream">Worker Transports</h3>
       <p class="mt-1 mb-4 text-sm text-farm-text-muted dark:text-farm-text-light-muted">
-        Ways each implementation can host a worker. Stdio availability does not imply a native subprocess-launching client.
+        Ways each implementation can host a worker. All seven can expose raw or HTTP workers through the standalone Iroh bridge; Rust also offers an embedded native Iroh server. Stdio availability does not imply a native subprocess-launching client.
       </p>
       <CapabilityTable firstColumnLabel="Worker Transport" {languages} languageLabels={langLabels} rows={workerTransportRows} />
     </div>
@@ -156,6 +159,14 @@ const workerFeatureRows = rowsFor({
       <CapabilityTable firstColumnLabel="Feature" {languages} languageLabels={langLabels} rows={workerFeatureRows} />
     </div>
 
+    <div class="mt-6 text-sm text-farm-text-muted dark:text-farm-text-light-muted">
+      <p>SDK sources reviewed {reviewedSources.python.reviewed_at}. Benchmark results retain the versions used for their measured runs.</p>
+      <ul class="mt-2 flex flex-wrap gap-x-5 gap-y-2">
+        {languages.map(language => (
+          <li><a href={reviewedSources[language].source} target="_blank" rel="noopener noreferrer" class="text-farm-gold hover:text-farm-gold-light">{langLabels[language]} {reviewedSources[language].version}</a></li>
+        ))}
+      </ul>
+    </div>
     <p class="mt-6 text-center text-xs text-farm-text-muted dark:text-farm-text-light-muted">
       Last updated: {new Date(capabilities.generated_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
     </p>
