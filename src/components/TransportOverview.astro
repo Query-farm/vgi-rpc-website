@@ -41,7 +41,7 @@ const transports = [
   {
     name: 'HTTP',
     icon: 'http',
-    description: 'HTTP transport with authenticated stream state, compression, capability discovery, external payloads, and optional sticky sessions.',
+    description: 'Externalized stream state lets requests move between workers behind an HTTP load balancer. Optional sticky sessions support worker affinity when state needs to stay local.',
     scope: 'Network + HTTP',
     useCase: 'Network services, browsers',
   },

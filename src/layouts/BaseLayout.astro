@@ -18,11 +18,11 @@ interface Props {
 
 const {
   title,
-  description = 'Transport-agnostic RPC built on Apache Arrow IPC serialization. Multi-language: Python, TypeScript, Go, Rust, Java, C#, C++.',
+  description = 'Arrow-native RPC from subprocess to service. Define typed methods, exchange batches of work, and call HTTP services directly from the browser.',
   currentPage = '/',
   ogType = 'website',
   ogImage = '/og/home.png',
-  ogImageAlt = 'Query.Farm card for vgi-rpc: transport-agnostic RPC on Apache Arrow',
+  ogImageAlt = 'vgi-rpc by Query.Farm. Arrow-native RPC. From subprocess to service. Illustrated columnar batches and the four-band sun.',
   dateModified,
   articleSection,
   articleTags = [],
@@ -87,7 +87,7 @@ const pageJsonLd = jsonLd === undefined ? [] : (Array.isArray(jsonLd) ? jsonLd :
           "@type": "WebSite",
           "name": "vgi-rpc",
           "url": Astro.site?.href,
-          "description": "Transport-agnostic RPC built on Apache Arrow IPC serialization. Multi-language: Python, TypeScript, Go, Rust, Java, C#, C++.",
+          "description": "Arrow-native RPC from subprocess to service. Define typed methods, exchange batches of work, and call HTTP services directly from the browser.",
           "publisher": {
             "@type": "Organization",
             "name": "Query.Farm"

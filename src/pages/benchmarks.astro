@@ -65,7 +65,7 @@ function bytes(value?: number): string {
   return gib >= 1 ? `${gib.toFixed(2)} GiB/s` : `${(value / (1024 ** 2)).toFixed(1)} MiB/s`;
 }
 
-const description = 'Reproducible cross-language vgi-rpc benchmarks across subprocess, Unix, TCP, HTTP, and shared-memory transports.';
+const description = 'Reproducible vgi-rpc benchmarks across languages and transports. Compare latency and throughput from release-pinned servers over subprocess, sockets, and HTTP.';
 const jsonLd = {
   '@type': 'Dataset',
   '@id': 'https://vgi-rpc.query.farm/benchmarks/#dataset',
@@ -95,12 +95,12 @@ const jsonLd = {
 ---
 
 <BaseLayout
-  title="Benchmarks — vgi-rpc"
+  title="Benchmarks — Across languages and transports | vgi-rpc"
   description={description}
   currentPage="/benchmarks"
   ogType="article"
   ogImage="/og/benchmarks.png"
-  ogImageAlt="Query.Farm card for vgi-rpc benchmarks: release-pinned servers measured over real transports"
+  ogImageAlt="vgi-rpc by Query.Farm. Measured across languages. Across transports. An illustrative bar chart in Query.Farm earth tones."
   dateModified={benchmarkData.generated_at}
   articleSection="Benchmarks"
   articleTags={['RPC benchmarks', 'Apache Arrow', 'Transport performance', 'Cross-language performance']}

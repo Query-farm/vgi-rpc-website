@@ -29,7 +29,7 @@ import RpcIllustration from './RpcIllustration.astro';
 
       <p>
         Calls are <strong>unary</strong>, <strong>producer streams</strong> (the server pushes batches),
-        or <strong>exchange streams</strong> (lockstep bidirectional). Errors, logs, and <a href="https://opentelemetry.io/docs/what-is-opentelemetry/" target="_blank" rel="noopener noreferrer" class="qf-link">OpenTelemetry</a> traces travel with them.
+        or <strong>exchange streams</strong>, where each turn can process a vector of inputs in one batch instead of requiring a separate RPC per item. Errors, logs, and <a href="https://opentelemetry.io/docs/what-is-opentelemetry/" target="_blank" rel="noopener noreferrer" class="qf-link">OpenTelemetry</a> traces travel with them.
       </p>
     </div>
   </div>

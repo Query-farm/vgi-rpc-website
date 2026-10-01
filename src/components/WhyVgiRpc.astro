@@ -15,16 +15,16 @@ const features = [
     description: 'Arguments and results travel as Arrow record batches. Large DataFrames cross without row-by-row conversion, and the shared-memory side channel skips the copy entirely.',
   },
   {
-    title: 'Streaming Built-in',
-    description: 'Producer streams push batches from the server, and exchange streams trade them in lockstep with the client. Either kind can send a typed header before the data.',
+    title: 'A vector of work per exchange',
+    description: 'Send a batch of inputs to an exchange method and receive a batch of results. Amortize request overhead across many items, instead of making a separate RPC for every item.',
   },
   {
     title: 'Direct from the browser',
     description: 'The TypeScript HTTP client uses browser fetch to send Arrow IPC directly to your service. Cross-origin deployments need CORS configuration; a gRPC-Web proxy is not required.',
   },
   {
-    title: 'Runtime Reflection',
-    description: 'Servers host several protocols side by side. vgi_rpc.Reflection.v1 lists them and describes any one — method kinds, Arrow schemas, and a protocol hash all seven ports compute identically.',
+    title: 'Built for HTTP load balancers',
+    description: 'Externalize stream state so successive requests can reach different workers. Opt into sticky sessions when a cursor, model, or other resource needs worker affinity.',
   },
 ];
 ---
@@ -53,6 +53,38 @@ const features = [
           </p>
         </div>
       ))}
+    </div>
+
+    <div class="rpc-patterns mt-12 grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-16">
+      <article id="batched-exchange" class="border-t border-soil-300 dark:border-rock-700 pt-7">
+        <h3 class="text-2xl text-soil-900 dark:text-cream">A batch of work. One exchange.</h3>
+        <p class="mt-4 text-sm leading-relaxed text-soil-700 dark:text-cream-2">
+          A method that scores 1,000 inputs can accept all 1,000 rows in one Arrow record batch and return a batch of scores.
+          Open the exchange once, then send vectors of inputs through the same method, one batch per turn.
+          This spreads serialization, dispatch, and network overhead across the batch and lets the handler use vectorized operations.
+        </p>
+        <p class="mt-3 font-mono text-sm text-soil-900 dark:text-cream">1,000 inputs → one batch → one exchange turn</p>
+        <p class="mt-3 text-sm leading-relaxed text-soil-700 dark:text-cream-2">
+          Each turn still has a request and response; over HTTP, each continuation is an HTTP request.
+          The saving comes from doing many items of work in that turn. Batch size and processing logic are up to your method.
+        </p>
+        <a class="qf-link inline-block mt-4 text-sm" href="/wire-protocol#stream">How exchange streams work &rarr;</a>
+      </article>
+      <article id="http-state" class="border-t border-soil-300 dark:border-rock-700 pt-7">
+        <h3 class="text-2xl text-soil-900 dark:text-cream">State that can move between workers.</h3>
+        <p class="mt-4 text-sm leading-relaxed text-soil-700 dark:text-cream-2">
+          HTTP stream state can be externalized into encrypted, authenticated continuation tokens that the client returns
+          with its next request. With serializable state, shared token keys, and access to the same backing resources,
+          another worker can resume the stream behind your HTTP load balancer.
+        </p>
+        <p class="mt-3 text-sm leading-relaxed text-soil-700 dark:text-cream-2">
+          When state needs to stay in memory on a particular worker, opt into sticky sessions.
+          Session tokens and echoed routing headers support affinity for resources such as open database cursors or loaded models;
+          configure your load balancer to route those requests to the owning worker.
+        </p>
+        <p class="mt-4 text-sm"><a class="qf-link" href="/wire-protocol#http">HTTP state tokens &rarr;</a><br />
+          <a class="qf-link inline-block mt-2" href="/wire-protocol#sticky-sessions">Sticky sessions and routing &rarr;</a></p>
+      </article>
     </div>
   </div>
 </section>

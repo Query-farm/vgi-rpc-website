@@ -24,7 +24,7 @@ const sections = [
   { id: 'iroh', label: '18. Iroh & HTTP over Iroh' },
 ];
 
-const description = 'Normative vgi-rpc wire protocol version 1 specification covering Arrow IPC framing, metadata, protocol routing, streaming, HTTP, Iroh/QUIC, shared memory, external storage, reflection, identity, and sessions.';
+const description = 'The vgi-rpc wire protocol, specified: Arrow IPC framing, batched exchange streams, HTTP state tokens, transports, and worker affinity. Wire version 1.';
 const jsonLd = {
   '@type': 'TechArticle',
   '@id': 'https://vgi-rpc.query.farm/wire-protocol/#specification',
@@ -53,12 +53,12 @@ const jsonLd = {
 ---
 
 <BaseLayout
-  title="Wire Protocol — vgi-rpc"
+  title="Wire Protocol — Arrow-native RPC | vgi-rpc"
   description={description}
   currentPage="/wire-protocol"
   ogType="article"
   ogImage="/og/wire-protocol.png"
-  ogImageAlt="Query.Farm card for the vgi-rpc wire protocol: the normative spec for wire version 1"
+  ogImageAlt="vgi-rpc by Query.Farm. The wire protocol. Every batch, specified. Columnar batch illustration on a paper background."
   dateModified="2026-10-01T00:00:00-04:00"
   articleSection="Technical specification"
   articleTags={['RPC protocol', 'Apache Arrow IPC', 'Shared memory', 'HTTP streaming', 'Protocol reflection']}

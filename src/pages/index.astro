@@ -12,7 +12,7 @@ import CapabilityMatrix from '../components/CapabilityMatrix.astro';
 import SimpleExample from '../components/SimpleExample.astro';
 import GetStarted from '../components/GetStarted.astro';
 
-const description = 'Transport-agnostic RPC built on Apache Arrow IPC serialization, with interoperable implementations for Python, TypeScript, Go, Rust, Java, C#, and C++.';
+const description = 'Arrow-native RPC from subprocess to service. Define typed methods, exchange batches of work, and call HTTP services directly from the browser.';
 const jsonLd = {
   '@type': 'SoftwareApplication',
   '@id': 'https://vgi-rpc.query.farm/#software',
@@ -27,16 +27,18 @@ const jsonLd = {
     'Apache Arrow IPC serialization',
     'Subprocess, Unix socket, TCP, HTTP, Iroh/QUIC, and shared-memory transports',
     'Python, TypeScript, Go, Rust, Java, C#, and C++ implementations',
-    'Unary, producer-stream, and bidirectional exchange calls',
+    'Unary calls, producer streams, and batched exchange calls',
+    'Direct browser access over HTTP',
+    'Externalized HTTP stream state and optional sticky sessions',
   ],
 };
 ---
 
 <BaseLayout
-  title="vgi-rpc — Transport-agnostic RPC on Apache Arrow"
+  title="vgi-rpc — Arrow-native RPC. From subprocess to service."
   description={description}
   ogImage="/og/home.png"
-  ogImageAlt="Query.Farm card for vgi-rpc: transport-agnostic RPC on Apache Arrow, in seven languages"
+  ogImageAlt="vgi-rpc by Query.Farm. Arrow-native RPC. From subprocess to service. Illustrated columnar batches and the four-band sun."
   jsonLd={jsonLd}
 >
   <div class="rpc-home">
