@@ -1221,8 +1221,8 @@ issue_grant(purpose: utf8, scopes: list<utf8>, ttl_seconds: int64) -> IssuedGran
               <h3 class="text-lg font-semibold text-farm-green-deep dark:text-farm-cream">Clients and optional bindings</h3>
               <p>
                 Python uses the <code>iroh</code> extra; Rust offers <code>vgi-rpc-iroh</code> and the optional
-                HTTP-Iroh client path. TypeScript provides <code>irohConnect</code> and <code>httpiConnect</code>
-                with native Node/Bun bindings. Java adds <code>vgirpc-iroh</code>. C# exposes
+                HTTP-Iroh client path. TypeScript provides <code>irohConnect</code> and <code>httpiConnect</code>{' '}
+                with native Node/Bun bindings. Java adds <code>vgirpc-iroh</code>. C# exposes{' '}
                 <code>RpcClient.ConnectIrohAsync</code> and <code>HttpRpcClient.ConnectIroh</code>.
                 C++ enables <code>VGI_RPC_WITH_IROH_CABI=ON</code> with a matching native library.
                 Go requires an explicitly supplied native or community provider. Browser Iroh uses a separate
@@ -1254,7 +1254,7 @@ with httpi_connect(Calculator, f"httpi://{endpoint_id}/vgi") as client:
                 The bridge prints its EndpointId. A persistent key preserves that address across restarts.
                 Peer-key authentication supplies identity evidence; application policy still decides access.
                 The bridge strips incoming identity assertions and forwards the authenticated peer through
-                a dedicated PROXY-v2 identity TLV for raw workers or <code>VGI-Forwarded-Iroh-Endpoint</code>
+                a dedicated PROXY-v2 identity TLV for raw workers or <code>VGI-Forwarded-Iroh-Endpoint</code>{' '}
                 for HTTP workers. Only explicitly trusted bridge peers may supply that evidence.
               </p>
               <p>
@@ -1265,9 +1265,9 @@ with httpi_connect(Calculator, f"httpi://{endpoint_id}/vgi") as client:
               </p>
               <p>
                 <a href="https://github.com/Query-farm/vgi-rpc-python/blob/main/docs/iroh-framework-operations.md" target="_blank" rel="noopener noreferrer" class="text-farm-gold hover:text-farm-gold-light">Cross-language setup and operations</a>
-                &middot;
+                {' '}&middot;{' '}
                 <a href="https://github.com/Query-farm/vgi-rpc-rust/tree/main/vgi-rpc-iroh" target="_blank" rel="noopener noreferrer" class="text-farm-gold hover:text-farm-gold-light">Native Rust adapter</a>
-                &middot;
+                {' '}&middot;{' '}
                 <a href="https://github.com/Query-farm/vgi-rpc-rust/tree/main/vgi-iroh-bridge" target="_blank" rel="noopener noreferrer" class="text-farm-gold hover:text-farm-gold-light">Bridge configuration</a>
               </p>
             </div>

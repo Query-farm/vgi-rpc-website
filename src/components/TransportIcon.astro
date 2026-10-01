@@ -1,0 +1,40 @@
+---
+import icons from '../data/transport-icons.json';
+
+interface Props {
+  transport: keyof typeof icons;
+  class?: string;
+}
+
+const { transport, class: className = '' } = Astro.props;
+---
+
+<span class:list={[
+  'transport-icon flex-shrink-0 inline-flex items-center justify-center w-14 h-14 rounded-2xl',
+  'bg-linear-to-br from-farm-green-light/10 to-farm-green-field/20 ring-1 ring-farm-green-field/15',
+  'text-farm-green-deep dark:from-farm-green-field/25 dark:to-farm-green-deep/40 dark:ring-farm-green-light/20 dark:text-farm-cream',
+  className,
+]}>
+  <svg
+    viewBox="0 0 24 24"
+    class="w-9 h-9"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.5"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+    set:html={icons[transport]}
+  />
+</span>
+
+<style is:global>
+  .transport-icon .accent {
+    color: var(--color-farm-gold);
+  }
+  @media (prefers-color-scheme: dark) {
+    .transport-icon .accent {
+      color: var(--color-farm-gold-light);
+    }
+  }
+</style>

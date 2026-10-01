@@ -1,6 +1,6 @@
 # vgi-rpc
 
-> Transport-agnostic RPC framework built on Apache Arrow IPC serialization. Multi-language (Python, TypeScript, Go, Rust, Java, C#, C++), no code generation required.
+> Transport-agnostic RPC framework built on Apache Arrow IPC serialization. Multi-language (Python, TypeScript, Go, Rust, Java, C#, C++).
 
 ## Docs
 
@@ -27,7 +27,7 @@
 
 ## Key Concepts
 
-vgi-rpc uses Apache Arrow IPC as its serialization format, giving callers zero-copy access to columnar data without schema negotiation or code generation. Clients create typed proxy objects that mirror the server's service interface; method calls are dispatched over a pluggable transport layer.
+vgi-rpc uses Apache Arrow IPC as its serialization format, giving callers zero-copy access to columnar data without schema negotiation. Clients create typed proxy objects that mirror the server's service interface; method calls are dispatched over a pluggable transport layer.
 
 **Worker transports:** in-process pipe, stdio, Unix socket, TCP, and HTTP, with shared memory as a local side channel. Rust can embed an Iroh listener; all seven languages can host workers behind vgi-iroh-bridge.
 

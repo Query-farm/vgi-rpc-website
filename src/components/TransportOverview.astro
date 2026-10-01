@@ -1,54 +1,64 @@
 ---
+import TransportIcon from './TransportIcon.astro';
+
 const transports = [
   {
     name: 'Pipe',
+    icon: 'pipe',
     description: 'In-process, bidirectional byte stream. Lowest latency — ideal for tests and embedded use.',
     scope: 'In-process',
     useCase: 'Testing, demos',
   },
   {
     name: 'Subprocess',
+    icon: 'subprocess',
     description: 'Spawn a worker process, communicate over stdin/stdout. Process isolation with low overhead.',
     scope: 'Process IPC',
     useCase: 'Isolated workers, CLI tools',
   },
   {
     name: 'Unix Socket',
+    icon: 'unix-socket',
     description: 'Kernel-mediated local IPC. Long-lived connections with per-client threading support.',
     scope: 'Local IPC',
     useCase: 'Local services, daemons',
   },
   {
     name: 'TCP',
+    icon: 'tcp',
     description: 'Lean Arrow IPC framing over a persistent socket. Intended for trusted networks; use HTTP with TLS or Iroh for authenticated network connections.',
     scope: 'Network',
     useCase: 'Trusted network services',
   },
   {
     name: 'Shared Memory',
+    icon: 'shared-memory',
     description: 'Zero-copy Arrow batch transfer via memory-mapped segments. Only pointers cross the pipe.',
     scope: 'Zero-copy side channel',
     useCase: 'Large batches, co-located',
   },
   {
     name: 'HTTP',
+    icon: 'http',
     description: 'HTTP transport with authenticated stream state, compression, capability discovery, external payloads, and optional sticky sessions.',
     scope: 'Network + HTTP',
     useCase: 'Network services, browsers',
   },
   {
     name: 'Iroh',
+    icon: 'iroh',
     description: 'iroh:// carries stateful Arrow RPC over authenticated QUIC. Independent logical streams share a connection while each stream keeps its worker state in memory.',
     scope: 'Peer-to-peer network',
     useCase: 'Persistent streaming services',
   },
   {
     name: 'HTTP over Iroh',
+    icon: 'http-over-iroh',
     description: 'httpi:// carries HTTP request/response semantics over Iroh. Retains capability discovery, sealed continuation tokens, compression, and external payloads.',
     scope: 'HTTP semantics + QUIC',
     useCase: 'HTTP workers behind a bridge',
   },
-];
+] as const;
 ---
 
 <section id="transports" class="py-20 border-t border-farm-cream-dark dark:border-farm-dark-border">
@@ -63,7 +73,7 @@ const transports = [
 
     <p class="mt-4 text-center text-sm text-farm-text-muted dark:text-farm-text-light-muted max-w-3xl mx-auto">
       Rust can host Iroh directly; workers in every language can use the standalone bridge.
-      Native clients require the optional binding or provider for their language.
+      Native clients require the optional binding or provider for their language.{' '}
       <a href="/wire-protocol#iroh" class="text-farm-gold hover:text-farm-gold-light">Iroh modes, setup, and identity &rarr;</a>
     </p>
 
@@ -74,15 +84,18 @@ const transports = [
           border border-farm-cream-dark dark:border-farm-dark-border
           hover:border-farm-green-field dark:hover:border-farm-green-field
           transition-colors">
-          <div class="flex-shrink-0 w-full md:w-40">
-            <h3 class="text-lg font-bold text-farm-green-deep dark:text-farm-cream">
-              {transport.name}
-            </h3>
-            <span class="inline-block mt-1 px-2 py-0.5 text-xs font-mono rounded
-              bg-farm-cream-dark dark:bg-farm-dark
-              text-farm-text-muted dark:text-farm-text-light-muted">
-              {transport.scope}
-            </span>
+          <div class="flex-shrink-0 flex items-center gap-4 w-full md:w-64">
+            <TransportIcon transport={transport.icon} />
+            <div>
+              <h3 class="text-lg font-bold text-farm-green-deep dark:text-farm-cream">
+                {transport.name}
+              </h3>
+              <span class="inline-block mt-1 px-2 py-0.5 text-xs font-mono rounded
+                bg-farm-cream-dark dark:bg-farm-dark
+                text-farm-text-muted dark:text-farm-text-light-muted">
+                {transport.scope}
+              </span>
+            </div>
           </div>
           <p class="flex-1 text-sm text-farm-text-muted dark:text-farm-text-light-muted">
             {transport.description}

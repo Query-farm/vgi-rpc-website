@@ -14,8 +14,6 @@ const languages = [
   },
   {
     name: 'TypeScript',
-    status: 'Worker Feature Parity',
-    statusColor: 'text-farm-green-field',
     description: "TypeScript clients and workers for Bun, Node.js, and Deno. Includes HTTP, raw Iroh, and HTTP over Iroh, external storage, and OpenTelemetry. Native Iroh uses Node/Bun bindings; browser integration needs a separate adapter.",
     repo: 'https://github.com/Query-farm/vgi-rpc-typescript',
     ghSlug: 'Query-farm/vgi-rpc-typescript',
@@ -26,8 +24,6 @@ const languages = [
   },
   {
     name: 'Go',
-    status: 'Worker Feature Parity',
-    statusColor: 'text-farm-green-field',
     description: "Go workers and schema-first clients for HTTP and streaming, with zstd request compression and external payloads. Raw Iroh and HTTP over Iroh use an explicitly supplied native or community provider.",
     repo: 'https://github.com/Query-farm/vgi-rpc-go',
     ghSlug: 'Query-farm/vgi-rpc-go',
@@ -38,8 +34,6 @@ const languages = [
   },
   {
     name: 'Rust',
-    status: 'Worker Feature Parity',
-    statusColor: 'text-farm-green-field',
     description: "Rust clients and servers with derive macros, streaming, shared memory, and HTTP. Optional crates add native Iroh hosting and clients, HTTP over Iroh, and a standalone bridge for other language workers.",
     repo: 'https://github.com/Query-farm/vgi-rpc-rust',
     ghSlug: 'Query-farm/vgi-rpc-rust',
@@ -50,8 +44,6 @@ const languages = [
   },
   {
     name: 'Java',
-    status: 'Worker Feature Parity',
-    statusColor: 'text-farm-green-field',
     description: "Java 21+ typed unary and streaming clients over subprocess, Unix, TCP, and HTTP with compression and external payloads. The optional vgirpc-iroh module adds both Iroh modes; worker shared memory requires JDK 22+.",
     repo: 'https://github.com/Query-farm/vgi-rpc-java',
     ghSlug: 'Query-farm/vgi-rpc-java',
@@ -62,8 +54,6 @@ const languages = [
   },
   {
     name: 'C#',
-    status: 'Worker Feature Parity',
-    statusColor: 'text-farm-green-field',
     description: ".NET 10 typed and schema-first clients with unary and streaming calls, subprocess pooling, shared memory, HTTP compression, external payloads, and Iroh connectors. Client, HTTP client, and OAuth integrations ship as separate packages.",
     repo: 'https://github.com/Query-farm/vgi-rpc-csharp',
     ghSlug: 'Query-farm/vgi-rpc-csharp',
@@ -74,8 +64,6 @@ const languages = [
   },
   {
     name: 'C++',
-    status: 'Worker Feature Parity',
-    statusColor: 'text-farm-green-field',
     description: "C++20 clients and workers with unary and streaming RPCs, shared memory, HTTP compression, and external storage. Build with VGI_RPC_WITH_IROH_CABI for native raw Iroh and HTTP-over-Iroh clients.",
     repo: 'https://github.com/Query-farm/vgi-rpc-cpp',
     ghSlug: 'Query-farm/vgi-rpc-cpp',
@@ -111,9 +99,11 @@ const languages = [
                 <h3 class="text-lg font-bold text-farm-green-deep dark:text-farm-cream">
                   {lang.name}
                 </h3>
-                <span class:list={['text-xs font-medium', lang.statusColor]}>
-                  {lang.status}
-                </span>
+                {lang.status && (
+                  <span class:list={['text-xs font-medium', lang.statusColor]}>
+                    {lang.status}
+                  </span>
+                )}
               </div>
             </div>
           </div>
