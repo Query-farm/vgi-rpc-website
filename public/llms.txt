@@ -41,7 +41,7 @@ vgi-rpc uses Apache Arrow IPC as its serialization format, giving callers zero-c
 
 **Reflection:** introspection is the co-hosted `vgi_rpc.Reflection.v1` protocol — `list_protocols`, then `describe(protocol)`. The older `__describe__` method is retired. Each protocol carries a `protocol_hash`, a SHA-256 over an RFC 8785 canonical JSON description; all eight implementations produce identical digests for the same protocol.
 
-**Identity:** `vgi_rpc.Identity.v1` optionally offers `introspect_token` (resolve an opaque bearer credential to a principal, for a reverse proxy) and `issue_grant` (mint a durable delegation credential for the calling user). A method whose hook a deployment does not configure is not hosted at all, and the protocol's hash narrows with it.
+**Identity:** `vgi_rpc.Identity.v2` optionally offers `introspect_token` (resolve an opaque bearer credential to a principal, for a reverse proxy) and `issue_grant` (mint a durable delegation credential for the calling user). A method whose hook a deployment does not configure is not hosted at all, and the protocol's hash narrows with it.
 
 **Arrow IPC Serialization:** Arguments and return values are encoded as Arrow record batches. Complex types, optional types, and dataclass/struct types are mapped automatically from each language's native type system.
 

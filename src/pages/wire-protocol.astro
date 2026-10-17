@@ -280,7 +280,7 @@ const jsonLd = {
                 <p class="text-sm text-soil-700 dark:text-cream-2">
                   <strong class="text-soil-900 dark:text-cream">The major version is part of the name</strong> &mdash;{' '}
                   <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">vgi_rpc.Reflection.v1</code>,{' '}
-                  <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">vgi_rpc.Identity.v1</code> &mdash; following gRPC (AIP-185), Kubernetes API groups, and
+                  <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">vgi_rpc.Identity.v2</code> &mdash; following gRPC (AIP-185), Kubernetes API groups, and
                   D-Bus. An incompatible major is therefore a <em>different protocol</em>, so addressing it is a routing
                   failure every proxy and load balancer understands without an Arrow parser, and{' '}
                   <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">.v1</code> and <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">.v2</code> can be served side by side while clients migrate.
@@ -494,7 +494,7 @@ const jsonLd = {
                 <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">vgi_rpc.Reflection.v1/list_protocols</code> to learn what the server does host, and MUST
                 surface both what it asked for and what it was told.{' '}
                 <a href="#identity" class="text-link hover:text-link-hover transition-colors dark:text-link-dark dark:hover:text-link-dark-hover">Section 16</a> defines five further kinds specific to{' '}
-                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">vgi_rpc.Identity.v1</code>.
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">vgi_rpc.Identity.v2</code>.
               </p>
             </div>
           </section>
@@ -590,7 +590,7 @@ const jsonLd = {
                 <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">{'{prefix}'}/vgi_rpc.Reflection.v1/list_protocols</code> and{' '}
                 <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">{'{prefix}'}/vgi_rpc.Reflection.v1/describe</code>, reached the same way as anything else,
                 and identity is likewise{' '}
-                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">{'{prefix}'}/vgi_rpc.Identity.v1/introspect_token</code>. The reserved framework
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">{'{prefix}'}/vgi_rpc.Identity.v2/introspect_token</code>. The reserved framework
                 endpoints are deliberately <strong class="text-soil-900 dark:text-cream">not</strong> namespaced: they belong to the server rather
                 than to any one protocol. A GET to a two-segment path whose first segment cannot be a protocol name is
                 404, not 405 &mdash; without that rule any unrelated two-segment path, a{' '}
@@ -1047,8 +1047,8 @@ describe(protocol: utf8) -> ServiceDescription`}</pre>
 
           <!-- Section 16: Identity -->
           <section id="identity">
-            <h2 class="text-2xl font-semibold text-soil-900 dark:text-cream border-b border-soil-300 dark:border-dark-rule pb-2">
-              16. Identity (vgi_rpc.Identity.v1)
+            <h2 class="text-2xl font-semibold text-soil-900 dark:text-cream border-b border-soil-300 dark:border-rock-700 pb-2">
+              16. Identity (vgi_rpc.Identity.v2)
             </h2>
             <div class="mt-4 space-y-3 text-soil-900 dark:text-cream leading-relaxed">
               <p>
@@ -1122,7 +1122,9 @@ issue_grant(purpose: utf8, scopes: list<utf8>, ttl_seconds: int64) -> IssuedGran
               <p class="text-sm text-soil-700 dark:text-cream-2">
                 <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">IssuedGrant</code>{' '}
                 carries <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">token</code>,{' '}
-                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">expires_at</code>, and{' '}
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">expires_at</code>{' '}
+                (<code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">timestamp[us, tz="UTC"]</code>, non-null),
+                and{' '}
                 <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">grant_id</code>.{' '}
                 <strong class="text-soil-900 dark:text-cream">The token format is the worker's entirely</strong> &mdash;
                 a sealed envelope, a database row, or a credential brokered from the IdP are equally valid and equally
