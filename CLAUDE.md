@@ -54,7 +54,7 @@ Copy should read as deliberate, not autopilot (after https://robotsatemyhomework
 
 ## Data flow
 
-- `scripts/test-capabilities.py` probes language repos (Python, TypeScript, Go, Rust, Java, C#, C++) for transport/pattern/feature support.
+- `scripts/test-capabilities.py` probes language repos (Python, TypeScript, Go, Rust, Java, C#, C++, C) for transport/pattern/feature support.
 - Output goes to `src/data/capabilities.json` — consumed by `CapabilityMatrix.astro`. Worker/server conformance and declared native-client capabilities are separate sections of each language entry.
 - Refresh declared capabilities manually with `python3 scripts/test-capabilities.py --known-only`; reviewed SDK versions and source commits live in `scripts/capability-sources.json`, independently of benchmark pins.
 - The deployment workflow does not probe or refresh capabilities.

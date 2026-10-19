@@ -1,6 +1,6 @@
 # vgi-rpc
 
-> Transport-agnostic RPC framework built on Apache Arrow IPC serialization. Multi-language (Python, TypeScript, Go, Rust, Java, C#, C++).
+> Transport-agnostic RPC framework built on Apache Arrow IPC serialization. Multi-language (Python, TypeScript, Go, Rust, Java, C#, C++, C).
 
 ## Docs
 
@@ -11,6 +11,7 @@
 - [Rust API Documentation](https://docs.rs/vgi-rpc): Rust server API reference
 - [Java API Documentation](https://javadoc.io/doc/farm.query/vgirpc): Java API reference
 - [C# Documentation](https://github.com/Query-farm/vgi-rpc-csharp#readme): C# API reference and guides
+- [C Documentation](https://github.com/Query-farm/vgi-rpc-c/tree/main/docs): C11 nanoarrow API and conformance guides
 - [C++ Documentation](https://vgi-rpc-cpp.query.farm): C++ API reference and guides
 - [Wire Protocol](https://vgi-rpc.query.farm/wire-protocol): Binary framing and message format specification
 - [Benchmarks](https://vgi-rpc.query.farm/benchmarks): Performance benchmarks across transports and languages
@@ -23,19 +24,20 @@
 - [vgi-rpc-rust](https://github.com/Query-farm/vgi-rpc-rust): Rust implementation
 - [vgi-rpc-java](https://github.com/Query-farm/vgi-rpc-java): Java implementation
 - [vgi-rpc-csharp](https://github.com/Query-farm/vgi-rpc-csharp): C# implementation
+- [vgi-rpc-c](https://github.com/Query-farm/vgi-rpc-c): C11 clients and servers using nanoarrow
 - [vgi-rpc-cpp](https://github.com/Query-farm/vgi-rpc-cpp): C++ implementation
 
 ## Key Concepts
 
 vgi-rpc uses Apache Arrow IPC as its serialization format, giving callers zero-copy access to columnar data without schema negotiation. Clients create typed proxy objects that mirror the server's service interface; method calls are dispatched over a pluggable transport layer.
 
-**Worker transports:** in-process pipe, stdio, Unix socket, TCP, and HTTP, with shared memory as a local side channel. Rust can embed an Iroh listener; all seven languages can host workers behind vgi-iroh-bridge.
+**Worker transports:** in-process pipe, stdio, Unix socket, TCP, and HTTP, with shared memory as a local side channel. Rust can embed an Iroh listener; all eight languages can host workers behind vgi-iroh-bridge.
 
 **RPC Patterns:** unary (single request/response), unary void (acknowledged call with no return value), producer (server-streaming with optional header), and exchange (bidirectional streaming with optional header).
 
 **Protocol routing:** a server hosts one or more protocols. Every request names the one it addresses via a required `vgi_rpc.protocol` metadata key, and dispatch resolves the pair `(protocol, method)`; method names may collide across protocols. The major version is part of the protocol name (`vgi_rpc.Reflection.v1`), so an incompatible major is a routing failure rather than a parse error. On HTTP, RPC paths are namespaced: `{prefix}/{protocol}/{method}`.
 
-**Reflection:** introspection is the co-hosted `vgi_rpc.Reflection.v1` protocol — `list_protocols`, then `describe(protocol)`. The older `__describe__` method is retired. Each protocol carries a `protocol_hash`, a SHA-256 over an RFC 8785 canonical JSON description; all seven implementations produce identical digests for the same protocol.
+**Reflection:** introspection is the co-hosted `vgi_rpc.Reflection.v1` protocol — `list_protocols`, then `describe(protocol)`. The older `__describe__` method is retired. Each protocol carries a `protocol_hash`, a SHA-256 over an RFC 8785 canonical JSON description; all eight implementations produce identical digests for the same protocol.
 
 **Identity:** `vgi_rpc.Identity.v1` optionally offers `introspect_token` (resolve an opaque bearer credential to a principal, for a reverse proxy) and `issue_grant` (mint a durable delegation credential for the calling user). A method whose hook a deployment does not configure is not hosted at all, and the protocol's hash narrows with it.
 
@@ -53,6 +55,7 @@ Every maintained port ships a native client surface, but worker conformance does
 - **Rust:** Schema-first unary and streaming clients over subprocess, Unix, TCP, HTTP/zstd, shared memory, optional raw Iroh, and HTTP over Iroh. Also ships the native Iroh server and standalone bridge.
 - **Java:** Typed unary and streaming proxies over subprocess, Unix, TCP, and HTTP with compression and external payloads. Optional `vgirpc-iroh` supplies both Iroh modes. Worker shared memory requires JDK 22+; native-client negotiation remains separate.
 - **C#:** Typed and schema-first unary, producer, and exchange clients, subprocess launching and pooling, Unix/TCP/named pipes, negotiated shared memory, HTTP/zstd, log callbacks, external payloads, and raw/HTTP Iroh connectors. Install `QueryFarm.VgiRpc.Client` and/or `QueryFarm.VgiRpc.Client.Http`; OAuth flows use `QueryFarm.VgiRpc.Client.OAuth`.
+- **C:** Arrow C Data unary and streaming clients over subprocess, Unix, TCP, and HTTP/zstd. HTTPS verifies certificate chains and hostnames. Sticky sessions and external payloads are supported; shared memory uses inline fallback.
 - **C++:** Schema-first unary and streaming clients over subprocess, Unix, TCP, HTTP/zstd, and shared memory. `VGI_RPC_WITH_IROH_CABI=ON` enables native raw Iroh and HTTP over Iroh with the matching C ABI library.
 
 Worker pools manage subprocess lifecycles on the client; Python and C# expose them.
@@ -73,7 +76,7 @@ Probe `HEAD {prefix}/health`, including in browsers. Capability headers also acc
 
 ## Worker / Server Capabilities
 
-SDK documentation reviewed October 1, 2026. The website capability matrix links to reviewed source commits. These declarations are independent of the older release-pinned benchmark measurements; that snapshot does not measure Iroh.
+SDK documentation reviewed October 1, 2026; the C implementation was added and reviewed October 19, 2026. The website capability matrix links to reviewed source commits. These declarations are independent of the older release-pinned benchmark measurements; that snapshot does not measure Iroh.
 
 ### Python (v0.47.2)
 - **Transports:** pipe, stdio, Unix socket, TCP, shared memory, HTTP
@@ -113,6 +116,14 @@ SDK documentation reviewed October 1, 2026. The website capability matrix links 
 - **Transports:** pipe, stdio, Unix socket, TCP, HTTP, shared-memory side channel
 - **Patterns:** unary, unary void, producer (with header), exchange (with header)
 - **Features:** native clients and servers, protocol reflection, client logging, error propagation, complex/optional/annotated types, authentication, compression, sticky sessions, external storage
+
+### C (v0.1.0)
+- **Transports:** pipe, stdio, Unix socket, TCP, HTTP; shared-memory peers use inline fallback
+- **Patterns:** unary, unary void, producer (with header), exchange (with header)
+- **Features:** Arrow C Data clients and servers using nanoarrow, protocol reflection, client logging, error propagation, complex/optional/annotated types, authentication, compression, stateless continuations, sticky sessions, external storage, verified HTTPS clients
+- **Scope:** native Iroh, worker pooling, and OpenTelemetry are not implemented. The separate [vgi-c](https://github.com/Query-farm/vgi-c) SDK provides VGI application workers.
+
+Clone https://github.com/Query-farm/vgi-rpc-c, then run `cmake -S . -B build` and `cmake --build build --parallel`. Link `vgi_rpc::vgi_rpc` and include `<vgi_rpc/client.h>` or `<vgi_rpc/rpc.h>`. The compiled calculator examples show schema declaration, a handler, and a native subprocess/HTTP client. Documentation: https://github.com/Query-farm/vgi-rpc-c/tree/main/docs. Validation at the reviewed source commit passed 1,692 shared tests plus a cross-worker test, and 1,397 native-client tests against Python.
 
 ## Optional
 

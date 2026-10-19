@@ -10,7 +10,7 @@ const PAGES = [
     slug: 'home', path: '',
     lines: ['Arrow-native RPC.', 'From subprocess', 'to service.'],
     tagline: 'Typed services. Batched calls. Direct browser access.',
-    detail: 'PYTHON · TYPESCRIPT · GO · RUST · JAVA · C# · C++',
+    detail: 'PYTHON · TYPESCRIPT · GO · RUST · JAVA · C# · C++ · C',
   },
   {
     slug: 'wire-protocol', path: '/wire-protocol',

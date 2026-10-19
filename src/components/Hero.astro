@@ -7,6 +7,7 @@ const languages = [
   { name: 'Rust', url: 'https://docs.rs/vgi-rpc', logo: 'rust' },
   { name: 'Java', url: 'https://javadoc.io/doc/farm.query/vgirpc', logo: 'java' },
   { name: 'C#', url: 'https://github.com/Query-farm/vgi-rpc-csharp#readme', logo: 'csharp' },
+  { name: 'C', url: 'https://github.com/Query-farm/vgi-rpc-c/tree/main/docs', logo: 'c' },
   { name: 'C++', url: 'https://vgi-rpc-cpp.query.farm', logo: 'cpp' },
 ];
 ---
@@ -29,7 +30,7 @@ const languages = [
     </figure>
   </div>
   <div class="hero-languages">
-    <p>Seven languages.<br /><span>Common ground.</span></p>
+    <p>Eight languages.<br /><span>Common ground.</span></p>
     <div>{languages.map(lang => <a href={lang.url} target="_blank" rel="noopener noreferrer"><img src={`/logos/${lang.logo}.svg`} alt="" class:list={[(lang.name === 'Rust' || lang.name === 'Java') && 'dark:invert']} />{lang.name}<span aria-hidden="true">↗</span></a>)}</div>
   </div>
 </section>

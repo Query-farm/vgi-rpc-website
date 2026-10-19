@@ -3,7 +3,7 @@ import capabilities from '../data/capabilities.json';
 import reviewedSources from '../../scripts/capability-sources.json';
 import CapabilityTable from './CapabilityTable.astro';
 
-const languages = ['python', 'typescript', 'go', 'rust', 'java', 'csharp', 'cpp'] as const;
+const languages = ['python', 'typescript', 'go', 'rust', 'java', 'csharp', 'cpp', 'c'] as const;
 type LangKey = typeof languages[number];
 type CellValue = boolean | string;
 
@@ -32,6 +32,7 @@ const langLabels: Record<string, string> = {
   java: 'Java',
   csharp: 'C#',
   cpp: 'C++',
+  c: 'C',
 };
 
 const valuesFor = (select: (language: LanguageCapabilities) => CellValue) =>
@@ -192,7 +193,7 @@ const badgeText: Record<string, string> = {
             </li>
           ))}
         </ul>
-        <p class="mt-5 qf-eyebrow text-soil-600 dark:text-cream-2">Supported by all seven</p>
+        <p class="mt-5 qf-eyebrow text-soil-600 dark:text-cream-2">Supported by all eight</p>
         <ul class="mt-2 flex flex-wrap gap-1.5">
           {workerUniversal.map(row => (
             <li class="rounded-md border border-soil-300 bg-white px-2 py-0.5 text-xs text-soil-700 dark:border-rock-700 dark:bg-rock-800 dark:text-cream-2">{row.label}</li>
@@ -279,7 +280,7 @@ const badgeText: Record<string, string> = {
         <div class="mt-12 border-t border-soil-300 pt-10 dark:border-rock-700">
           <h3 class="text-lg text-soil-900 dark:text-cream">Worker Transports</h3>
           <p class="mt-1 mb-4 text-sm text-soil-700 dark:text-cream-2">
-            Ways each implementation can host a worker. All seven can expose raw or HTTP workers through the standalone Iroh bridge; Rust also offers an embedded native Iroh server. Stdio availability does not imply a native subprocess-launching client.
+            Ways each implementation can host a worker. All eight can expose raw or HTTP workers through the standalone Iroh bridge; Rust also offers an embedded native Iroh server. Stdio availability does not imply a native subprocess-launching client.
           </p>
           <CapabilityTable firstColumnLabel="Worker Transport" {languages} languageLabels={langLabels} rows={workerTransportRows} />
         </div>

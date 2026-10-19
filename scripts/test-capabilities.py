@@ -231,6 +231,28 @@ LANGUAGES: dict[str, dict[str, Any]] = {
             "opentelemetry": False,
         },
     },
+    "c": {
+        "repo": "https://github.com/Query-farm/vgi-rpc-c",
+        "docs": "https://github.com/Query-farm/vgi-rpc-c/tree/main/docs",
+        "package_url": None,
+        "build_cmd": None,
+        "worker_cmd": None,
+        "version_cmd": None,
+        "known_transports": {
+            "pipe": True, "stdio": True, "unix_socket": True, "tcp": True,
+            "shared_memory": False, "http": True,
+        },
+        "known_patterns": {pattern: True for pattern in [
+            "unary", "unary_void", "producer", "producer_with_header",
+            "exchange", "exchange_with_header",
+        ]},
+        "known_features": {
+            "introspection": True, "client_logging": True, "error_propagation": True,
+            "complex_types": True, "optional_types": True, "dataclass_types": True,
+            "annotated_types": True, "authentication": True, "external_storage": True,
+            "opentelemetry": False,
+        },
+    },
 }
 
 # Client capabilities are intentionally tracked separately from worker/server
@@ -337,6 +359,21 @@ CLIENTS: dict[str, dict[str, Any]] = {
             "iroh": "Optional native", "httpi": "Optional native",
             "subprocess": True, "unix_socket": True, "tcp": True,
             "http": True, "http_zstd": True, "shared_memory": True,
+        },
+        "features": {
+            "worker_pool": False, "introspection": True, "authentication": True,
+            "client_logging": True, "external_storage": True,
+        },
+    },
+    "c": {
+        "available": True,
+        "scope": "POSIX + HTTP RPC",
+        "api_style": "Arrow C Data",
+        "patterns": {"unary": True, "producer": True, "exchange": True},
+        "transports": {
+            "iroh": False, "httpi": False,
+            "subprocess": True, "unix_socket": True, "tcp": True,
+            "http": True, "http_zstd": True, "shared_memory": False,
         },
         "features": {
             "worker_pool": False, "introspection": True, "authentication": True,

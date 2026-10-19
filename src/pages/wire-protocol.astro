@@ -950,7 +950,7 @@ describe(protocol: utf8) -> ServiceDescription`}</pre>
                 (JCS)</strong>, chosen for its published test vectors. The structure is restricted to objects, arrays,
                 strings, and booleans: every numeric parameter is folded into a type token, so the preimage contains{' '}
                 <strong class="text-soil-900 dark:text-cream">no JSON numbers</strong> and JCS's
-                number-canonicalisation rule &mdash; its hardest, and the likeliest place for seven ports to diverge
+                number-canonicalisation rule &mdash; its hardest, and the likeliest place for eight ports to diverge
                 &mdash; never applies.
               </p>
               <pre class="p-4 rounded-lg bg-rock-900 border border-rock-800 dark:border-rock-700 overflow-x-auto text-sm leading-relaxed font-mono text-[#e9e1d3]">{`{"protocol":"vgi_rpc.Reflection.v1","methods":[
@@ -970,7 +970,7 @@ describe(protocol: utf8) -> ServiceDescription`}</pre>
               </ul>
               <div class="mt-4 rounded-xl border border-field-600/40 bg-field-700/5 p-5">
                 <p class="text-sm text-soil-900 dark:text-cream">
-                  <strong>All seven ports produce identical digests.</strong> Conformance asserts it and ships the
+                  <strong>All eight ports produce identical digests.</strong> Conformance asserts it and ships the
                   canonical preimage beside each digest so a failing port diffs JSON rather than guessing. The
                   87-method conformance service hashes to{' '}
                   <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-[0.68rem] break-all">5cc768771c2e8a54e19ebb7546c97c119823eb13e20a5ff62ca5ce7ed2a1334e</code>{' '}
@@ -1104,7 +1104,7 @@ issue_grant(purpose: utf8, scopes: list<utf8>, ttl_seconds: int64) -> IssuedGran
                 shortening session lifetime shortens the grant.{' '}
                 <strong class="text-soil-900 dark:text-cream">There is no subject parameter</strong> &mdash;
                 the subject is always the caller's authenticated principal, so cross-subject minting is closed by
-                construction rather than by a check one of seven ports can forget. That is also why this method needs no
+                construction rather than by a check one of eight ports can forget. That is also why this method needs no
                 allowlist and no rate limit while{' '}
                 <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-rock-800 text-xs">introspect_token</code> has both.
               </p>
@@ -1244,7 +1244,7 @@ with httpi_connect(Calculator, f"httpi://{endpoint_id}/vgi") as client:
     print(client.add(a=2.0, b=3.0))`} />
               <h3 class="text-lg font-semibold text-soil-900 dark:text-cream">Host an existing worker behind the bridge</h3>
               <p>
-                Rust can embed a native Iroh server. Workers in all seven languages can instead listen on
+                Rust can embed a native Iroh server. Workers in all eight languages can instead listen on
                 loopback behind <code>vgi-iroh-bridge</code>. Configure the worker’s Iroh bridge trust and
                 issuer, then point the bridge at its raw TCP and/or HTTP listener. For example, with workers
                 already listening on ports 9400 and 9401:

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-01T04:46:41.113615+00:00",
+  "generated_at": "2026-10-19T15:29:17.743615+00:00",
   "languages": {
     "python": {
       "version": "0.47.2",
@@ -465,6 +465,74 @@
           "http": true,
           "http_zstd": true,
           "shared_memory": true
+        },
+        "features": {
+          "worker_pool": false,
+          "introspection": true,
+          "authentication": true,
+          "client_logging": true,
+          "external_storage": true
+        }
+      }
+    },
+    "c": {
+      "version": "0.1.0",
+      "source": {
+        "sha": "32e1ba0637eb46353434cdd05cb0247d5a55e0f9",
+        "source": "https://github.com/Query-farm/vgi-rpc-c/blob/32e1ba0637eb46353434cdd05cb0247d5a55e0f9/docs/conformance.md",
+        "version": "0.1.0",
+        "reviewed_at": "2026-10-19"
+      },
+      "evidence": "declared",
+      "repo": "https://github.com/Query-farm/vgi-rpc-c",
+      "docs": "https://github.com/Query-farm/vgi-rpc-c/tree/main/docs",
+      "package_url": null,
+      "transports": {
+        "pipe": true,
+        "stdio": true,
+        "unix_socket": true,
+        "tcp": true,
+        "shared_memory": false,
+        "http": true
+      },
+      "patterns": {
+        "unary": true,
+        "unary_void": true,
+        "producer": true,
+        "producer_with_header": true,
+        "exchange": true,
+        "exchange_with_header": true
+      },
+      "features": {
+        "introspection": true,
+        "client_logging": true,
+        "error_propagation": true,
+        "complex_types": true,
+        "optional_types": true,
+        "dataclass_types": true,
+        "annotated_types": true,
+        "authentication": true,
+        "external_storage": true,
+        "opentelemetry": false
+      },
+      "client": {
+        "available": true,
+        "scope": "POSIX + HTTP RPC",
+        "api_style": "Arrow C Data",
+        "patterns": {
+          "unary": true,
+          "producer": true,
+          "exchange": true
+        },
+        "transports": {
+          "iroh": false,
+          "httpi": false,
+          "subprocess": true,
+          "unix_socket": true,
+          "tcp": true,
+          "http": true,
+          "http_zstd": true,
+          "shared_memory": false
         },
         "features": {
           "worker_pool": false,
