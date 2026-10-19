@@ -1,0 +1,32 @@
+{
+  "artifact": {
+    "bytes": 16457552,
+    "files": 1,
+    "sha256": "7ce020b3f98c8edf45c52efb27825cdfcfb6d7eeb7ed40bec33e588a1588b094",
+    "inventory": [
+      {
+        "path": "{root}/.footprint-cache/sources/rust/target/release/vgi-rpc-conformance-rust",
+        "bytes": 16457552,
+        "sha256": "909b9640072c396053fc9265476d56e181a2a2c167cf5b5c240e0d6957e491e2"
+      }
+    ]
+  },
+  "app": {
+    "bytes": 16457552,
+    "files": 1,
+    "sha256": "7ce020b3f98c8edf45c52efb27825cdfcfb6d7eeb7ed40bec33e588a1588b094",
+    "inventory": [
+      {
+        "path": "{root}/.footprint-cache/sources/rust/target/release/vgi-rpc-conformance-rust",
+        "bytes": 16457552,
+        "sha256": "909b9640072c396053fc9265476d56e181a2a2c167cf5b5c240e0d6957e491e2"
+      }
+    ]
+  },
+  "runtime": {
+    "bytes": 0,
+    "files": 0,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "inventory": []
+  }
+}

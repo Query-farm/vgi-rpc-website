@@ -1,0 +1,32 @@
+{
+  "artifact": {
+    "bytes": 21334946,
+    "files": 1,
+    "sha256": "82141f1803f8ba5eec243786f84e33af9fdd3b58db42fa76b01ae43ab6ab0898",
+    "inventory": [
+      {
+        "path": "{root}/.footprint-cache/sources/go/conformance-worker",
+        "bytes": 21334946,
+        "sha256": "e71abbb32d53eab191d31af66d682c732988f5df6b30df19ae13b661dc11b7a8"
+      }
+    ]
+  },
+  "app": {
+    "bytes": 21334946,
+    "files": 1,
+    "sha256": "82141f1803f8ba5eec243786f84e33af9fdd3b58db42fa76b01ae43ab6ab0898",
+    "inventory": [
+      {
+        "path": "{root}/.footprint-cache/sources/go/conformance-worker",
+        "bytes": 21334946,
+        "sha256": "e71abbb32d53eab191d31af66d682c732988f5df6b30df19ae13b661dc11b7a8"
+      }
+    ]
+  },
+  "runtime": {
+    "bytes": 0,
+    "files": 0,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "inventory": []
+  }
+}

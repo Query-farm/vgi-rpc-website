@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "description": "Conformance workers at the reviewed capability source revisions; release-optimized builds.",
+  "implementations": {
+    "c": {
+      "name": "C",
+      "repository": "https://github.com/Query-farm/vgi-rpc-c.git",
+      "version": "0.1.0",
+      "sha": "01ab087349a4cf4c733b8fea194858a34c6ecc74",
+      "local_directory": "vgi-rpc-c"
+    },
+    "cpp": {
+      "name": "C++",
+      "repository": "https://github.com/Query-farm/vgi-rpc-cpp.git",
+      "version": "0.5.0",
+      "sha": "b1e3326f23dc4f4a16184deb7eb005050e918bc6",
+      "local_directory": "vgi-rpc-c++"
+    },
+    "rust": {
+      "name": "Rust",
+      "repository": "https://github.com/Query-farm/vgi-rpc-rust.git",
+      "version": "0.28.0",
+      "sha": "97d48df4e04d2aa60c02697350ecfeeb0394d082",
+      "local_directory": "vgi-rpc-rust"
+    },
+    "go": {
+      "name": "Go",
+      "repository": "https://github.com/Query-farm/vgi-rpc-go.git",
+      "version": "0.30.0",
+      "sha": "701db8aff4e3a54c425c4777d8103a9567244135",
+      "local_directory": "vgi-rpc-go"
+    },
+    "python": {
+      "name": "Python",
+      "repository": "https://github.com/Query-farm/vgi-rpc-python.git",
+      "version": "0.47.2",
+      "sha": "7f1f40aff9309b680f0aad80cec54161d568962e",
+      "local_directory": "vgi-rpc-python"
+    },
+    "typescript": {
+      "name": "TypeScript",
+      "repository": "https://github.com/Query-farm/vgi-rpc-typescript.git",
+      "version": "0.25.4",
+      "sha": "776ec3ee887f3631d5f4fdb4876900a9870e0f35",
+      "local_directory": "vgi-rpc-typescript"
+    },
+    "java": {
+      "name": "Java",
+      "repository": "https://github.com/Query-farm/vgi-rpc-java.git",
+      "version": "0.27.1",
+      "sha": "ebde99f632f01af2b6a9ceec9d6210b07c10f882",
+      "local_directory": "vgi-rpc-java"
+    },
+    "csharp": {
+      "name": "C#",
+      "repository": "https://github.com/Query-farm/vgi-rpc-csharp.git",
+      "version": "0.12.0",
+      "sha": "a7cc6d55b4b1987faad9fc0191089e542b91272d",
+      "local_directory": "vgi-rpc-csharp"
+    }
+  },
+  "workload": {
+    "transport": "stdio",
+    "warmup_calls": 1000,
+    "payload_bytes": 1048576,
+    "payload_calls": 200,
+    "rounds": 5,
+    "sample_interval_seconds": 0.01,
+    "idle_seconds": 0.5
+  }
+}

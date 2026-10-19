@@ -1,0 +1,184 @@
+---
+import data from '../data/footprint.json';
+
+const rows = [...data.results].sort((a, b) => a.idle_rss_bytes - b.idle_rss_bytes);
+const mib = (value: number) => (value / 1048576).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const maxIdle = Math.max(...rows.map(row => row.idle_rss_bytes));
+const chartData = rows.map(row => ({ id: row.id, name: row.name, artifact_bytes: row.artifact_bytes,
+  app_bytes: row.app_bytes, runtime_bytes: row.runtime_bytes, total_bytes: row.total_bytes,
+  idle_rss_bytes: row.idle_rss_bytes, peak_rss_bytes: row.peak_rss_bytes }));
+const sourceUrl = (row: typeof rows[number]) => `${row.repository.replace(/\.git$/, '')}/tree/${row.sha}`;
+const measuredDate = data.generated_at.slice(0, 10);
+---
+
+<section id="worker-footprint" class="mt-12 scroll-mt-24 border-y border-soil-300 py-10 dark:border-rock-700" data-worker-footprint data-values={JSON.stringify(chartData)}>
+  <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+    <div>
+      <p class="text-xs font-semibold uppercase tracking-wider text-sun-700 dark:text-cream-2">Binary size &amp; memory</p>
+      <h2 class="mt-2 text-3xl font-semibold text-soil-900 dark:text-cream">What does a worker cost?</h2>
+      <p class="mt-3 max-w-3xl text-sm leading-relaxed text-soil-700 dark:text-cream-2">
+        Eight conformance example workers, each serving the same scalar-add and 1 MiB binary-echo calls over stdio.
+        File sizes include the dependencies recorded in each build. Memory belongs to the worker process tree;
+        the client runs separately.
+      </p>
+    </div>
+    <div class="flex shrink-0 gap-4 text-sm">
+      <a href="/benchmarks/footprint.json" class="qf-link">JSON + raw rounds</a>
+      <a href="/benchmarks/footprint.csv" class="qf-link">CSV</a>
+    </div>
+  </div>
+
+  <p class="mt-4 text-xs text-soil-700 dark:text-cream-2">
+    Measured <time datetime={data.generated_at}>{measuredDate}</time> · {data.host.chip} · macOS ARM64 ·
+    {data.host.memory_bytes / 1073741824} GiB RAM · {data.workload.rounds} fresh-process rounds per language.
+    This snapshot has its own host and source pins, separate from the Linux latency results below.
+  </p>
+
+  <div class="mt-8 rounded-xl border border-soil-300 bg-white p-4 sm:p-6 dark:border-rock-700 dark:bg-rock-900">
+    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <label class="flex items-center gap-3 text-sm font-medium text-soil-900 dark:text-cream">
+        Compare
+        <select data-footprint-metric class="max-w-full rounded-md border border-soil-400 bg-soil-50 px-3 py-2 text-sm text-soil-900 focus:outline-2 focus:outline-field-700 dark:border-rock-600 dark:bg-rock-800 dark:text-cream">
+          <option value="idle_rss_bytes">Warmed worker RSS</option>
+          <option value="peak_rss_bytes">Peak RSS during 1 MiB echo</option>
+          <option value="artifact_bytes">Worker artifact only</option>
+          <option value="app_bytes">Application + dependencies</option>
+          <option value="runtime_bytes">Separate runtime files</option>
+          <option value="total_bytes">Application + runtime files</option>
+        </select>
+      </label>
+      <span class="text-xs text-soil-700 dark:text-cream-2">MiB · smaller values first</span>
+    </div>
+    <p data-footprint-description aria-live="polite" class="mt-3 text-xs leading-relaxed text-soil-700 dark:text-cream-2">
+      Median RSS after 1,000 scalar calls and a 0.5-second idle period. Shared resident pages are included.
+    </p>
+    <ol data-footprint-bars class="mt-6 space-y-3" aria-label="Worker footprint comparison">
+      {rows.map(row => (
+        <li data-footprint-bar={row.id} class="grid grid-cols-[5rem_1fr_5rem] items-center gap-3 text-sm sm:grid-cols-[7rem_1fr_6rem]">
+          <span class="font-medium text-soil-900 dark:text-cream">{row.name}</span>
+          <span class="h-5 overflow-hidden rounded-sm bg-soil-100 dark:bg-rock-800" aria-hidden="true">
+            <span data-bar-fill class="block h-full rounded-sm bg-field-700 dark:bg-field-500" style={`width: ${row.idle_rss_bytes / maxIdle * 100}%`}></span>
+          </span>
+          <span data-bar-value class="qf-figure text-right text-soil-900 dark:text-cream">{mib(row.idle_rss_bytes)}</span>
+        </li>
+      ))}
+    </ol>
+  </div>
+
+  <p class="mt-6 text-xs text-soil-700 dark:text-cream-2 sm:hidden">Scroll the table horizontally for dependency sizes and memory.</p>
+  <div class="mt-3 overflow-x-auto rounded-xl border border-soil-300 sm:mt-6 dark:border-rock-700" role="region" aria-label="Worker file size and memory measurements" tabindex="0">
+    <table class="w-full min-w-[920px] text-sm">
+      <caption class="sr-only">Worker sizes in MiB. Memory values are medians across five fresh processes.</caption>
+      <thead class="bg-soil-100 text-soil-900 dark:bg-rock-800 dark:text-cream">
+        <tr>
+          <th scope="col" class="px-4 py-3 text-left">Implementation</th>
+          <th scope="col" class="px-4 py-3 text-right">Worker artifact</th>
+          <th scope="col" class="px-4 py-3 text-right">App + dependencies</th>
+          <th scope="col" class="px-4 py-3 text-right">Separate runtime</th>
+          <th scope="col" class="px-4 py-3 text-right">Warmed RSS</th>
+          <th scope="col" class="px-4 py-3 text-right">Sampled peak RSS</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-soil-200 dark:divide-rock-700">
+        {rows.map(row => (
+          <tr class="bg-white dark:bg-rock-900">
+            <th scope="row" class="px-4 py-4 text-left font-normal">
+              <span class="font-semibold text-soil-900 dark:text-cream">{row.name}</span>
+              <span class="ml-2 qf-figure text-xs text-soil-700 dark:text-cream-2">{row.version}</span>
+              <div class="mt-1 flex gap-3 text-xs">
+                <a href={sourceUrl(row)} target="_blank" rel="noopener noreferrer" class="qf-link font-mono">{row.sha.slice(0, 8)}</a>
+                <a href={`/benchmarks/footprint-${row.id}-files.json`} class="qf-link">File inventory</a>
+              </div>
+            </th>
+            <td data-numeric class="px-4 py-4 text-right text-soil-900 dark:text-cream">
+              {mib(row.artifact_bytes)}
+              <div class="mt-1 font-sans text-xs font-normal text-soil-700 dark:text-cream-2">{row.artifact_kind}</div>
+            </td>
+            <td data-numeric class="px-4 py-4 text-right text-soil-900 dark:text-cream">{mib(row.app_bytes)}</td>
+            <td data-numeric class="px-4 py-4 text-right text-soil-900 dark:text-cream">
+              {mib(row.runtime_bytes)}
+              <div class="mt-1 font-sans text-xs font-normal text-soil-700 dark:text-cream-2">{row.runtime_label}</div>
+            </td>
+            <td data-numeric class="px-4 py-4 text-right text-soil-900 dark:text-cream">
+              {mib(row.idle_rss_bytes)}
+              <div class="mt-1 text-xs text-soil-700 dark:text-cream-2">{mib(row.idle_rss_bytes_min)}–{mib(row.idle_rss_bytes_max)}</div>
+            </td>
+            <td data-numeric class="px-4 py-4 text-right text-soil-900 dark:text-cream">
+              {mib(row.peak_rss_bytes)}
+              <div class="mt-1 text-xs text-soil-700 dark:text-cream-2">{mib(row.peak_rss_bytes_min)}–{mib(row.peak_rss_bytes_max)}</div>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+  <p class="mt-3 text-xs text-soil-700 dark:text-cream-2">All sizes are MiB (1,048,576 bytes). The smaller figures under memory values show the minimum–maximum across rounds.</p>
+
+  <details class="mt-6 rounded-lg border border-soil-300 p-5 text-sm dark:border-rock-700">
+    <summary class="cursor-pointer font-semibold text-soil-900 dark:text-cream">What is counted, and how to reproduce it</summary>
+    <div class="mt-4 space-y-4 leading-relaxed text-soil-700 dark:text-cream-2">
+      <p>
+        These are the implementations' full conformance services, built at the linked source revisions.
+        Their method sets and optional integrations differ. The results describe these workers and build recipes;
+        they are not minimum-size hello-world programs or a measurement of language overhead alone.
+      </p>
+      <p>
+        <strong class="text-soil-900 dark:text-cream">File size.</strong> Uncompressed regular-file bytes, with symlinks and hard links counted once.
+        C, C++, Rust, and Go use optimized, symbol-stripped native executables. Native shared libraries outside the macOS system cache are included in application dependencies.
+        Python and TypeScript include source and installed production dependencies; Java and C# include their distribution/publish directories.
+        A worker JAR or assembly alone excludes the framework and runtime, so use the app and runtime columns together when comparing disk requirements.
+      </p>
+      <p>
+        <strong class="text-soil-900 dark:text-cream">Runtime files.</strong> CPython's interpreter and standard library, the Bun executable,
+        OpenJDK's full runtime module image and libraries, or the selected .NET and ASP.NET runtimes.
+        These are untrimmed installations; a preinstalled runtime can be shared by many workers.
+        OS libraries and build directories are excluded. Java retains its full installed module image, including development-related modules;
+        no runtime trimming or AOT packaging is applied. Python bytecode caches are excluded.
+        The downloadable inventories give every counted file, size, and SHA-256 digest.
+      </p>
+      <p>
+        <strong class="text-soil-900 dark:text-cream">Memory.</strong> Five fresh processes in deterministically shuffled order, one client and one outstanding call.
+        Every process completes 1,000 validated <code>add_floats</code> calls, rests for 0.5 seconds, then completes 200 validated
+        <code>echo_large_binary</code> calls carrying 1 MiB. RSS is sampled at a target 10 ms interval.
+        The displayed peak is the median of each process's maximum observed RSS during echo; short spikes between samples may be missed.
+        RSS includes shared resident pages and is not a private-heap measurement. No shared-memory transport, external payloads, or forced garbage collection is used.
+      </p>
+      <p>
+        Build and run on the same macOS ARM64 host using
+        <a class="qf-link" href="https://github.com/Query-farm/vgi-rpc-website/blob/main/benchmarks/FOOTPRINT.md" target="_blank" rel="noopener noreferrer">the measurement recipe</a>.
+        Publication rejects incomplete language sets, missing rounds, incorrect results, or source-pin mismatches.
+      </p>
+    </div>
+  </details>
+</section>
+
+<script>
+  type Row = { id: string; name: string; [key: string]: string | number };
+  const descriptions: Record<string, string> = {
+    idle_rss_bytes: 'Median RSS after 1,000 scalar calls and a 0.5-second idle period. Shared resident pages are included.',
+    peak_rss_bytes: 'Median of five sampled peaks during 200 consecutive 1 MiB echo calls. Target sampling interval: 10 ms.',
+    artifact_bytes: 'Native executable, worker JAR/assembly, or first-party source. This alone excludes separately installed dependencies and runtimes.',
+    app_bytes: 'Worker files plus packaged dependencies and non-system native libraries. The separately installed language runtime is excluded.',
+    runtime_bytes: 'Counted language runtime files outside the application. Native implementations need no separately installed language runtime.',
+    total_bytes: 'Application, dependencies, and the counted untrimmed runtime files. System libraries and build directories are excluded.',
+  };
+  document.querySelectorAll<HTMLElement>('[data-worker-footprint]').forEach(root => {
+    const rows: Row[] = JSON.parse(root.dataset.values!);
+    const select = root.querySelector<HTMLSelectElement>('[data-footprint-metric]')!;
+    const list = root.querySelector<HTMLOListElement>('[data-footprint-bars]')!;
+    const nodes = new Map([...list.querySelectorAll<HTMLElement>('[data-footprint-bar]')].map(node => [node.dataset.footprintBar, node]));
+    select.addEventListener('change', () => {
+      const metric = select.value;
+      const ordered = [...rows].sort((a, b) => Number(a[metric]) - Number(b[metric]));
+      const max = Math.max(1, ...ordered.map(row => Number(row[metric])));
+      for (const row of ordered) {
+        const node = nodes.get(row.id)!;
+        const value = Number(row[metric]);
+        node.querySelector<HTMLElement>('[data-bar-fill]')!.style.width = `${value / max * 100}%`;
+        node.querySelector('[data-bar-value]')!.textContent = (value / 1048576).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        list.append(node);
+      }
+      root.querySelector('[data-footprint-description]')!.textContent = descriptions[metric];
+    });
+  });
+</script>

@@ -1,7 +1,9 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import BenchmarkVisuals from '../components/BenchmarkVisuals.astro';
+import WorkerFootprint from '../components/WorkerFootprint.astro';
 import benchmarkData from '../data/benchmarks.json';
+import footprintData from '../data/footprint.json';
 
 type BenchmarkResult = {
   layer: 'controlled' | 'native';
@@ -65,20 +67,29 @@ function bytes(value?: number): string {
   return gib >= 1 ? `${gib.toFixed(2)} GiB/s` : `${(value / (1024 ** 2)).toFixed(1)} MiB/s`;
 }
 
-const description = 'Reproducible vgi-rpc benchmarks across languages and transports. Compare latency and throughput from release-pinned servers over subprocess, sockets, and HTTP.';
+const description = 'Compare vgi-rpc latency, throughput, worker binary and package sizes, and resident memory across languages, with source-pinned reproducible measurements.';
+const modifiedAt = [benchmarkData.generated_at, footprintData.generated_at].filter(Boolean).sort().at(-1);
 const jsonLd = {
   '@type': 'Dataset',
   '@id': 'https://vgi-rpc.query.farm/benchmarks/#dataset',
   name: 'vgi-rpc cross-language benchmark results',
   description,
   url: 'https://vgi-rpc.query.farm/benchmarks/',
-  dateModified: benchmarkData.generated_at,
+  dateModified: modifiedAt,
   creator: {
     '@type': 'Organization',
     name: 'Query.Farm',
     url: 'https://query.farm',
   },
   measurementTechnique: 'Controlled same-host RPC latency, throughput, payload-bandwidth, and client-scaling workloads',
+  hasPart: {
+    '@type': 'Dataset',
+    name: 'vgi-rpc worker file size and resident memory',
+    url: 'https://vgi-rpc.query.farm/benchmarks/#worker-footprint',
+    dateModified: footprintData.generated_at,
+    measurementTechnique: 'File inventories and sampled process-tree RSS on macOS ARM64; five fresh processes per implementation',
+    distribution: [{ '@type': 'DataDownload', encodingFormat: 'application/json', contentUrl: 'https://vgi-rpc.query.farm/benchmarks/footprint.json' }],
+  },
   distribution: [
     {
       '@type': 'DataDownload',
@@ -101,7 +112,7 @@ const jsonLd = {
   ogType="article"
   ogImage="/og/benchmarks.png"
   ogImageAlt="vgi-rpc by Query.Farm. Measured across languages. Across transports. An illustrative bar chart in Query.Farm earth tones."
-  dateModified={benchmarkData.generated_at}
+  dateModified={modifiedAt}
   articleSection="Benchmarks"
   articleTags={['RPC benchmarks', 'Apache Arrow', 'Transport performance', 'Cross-language performance']}
   jsonLd={jsonLd}
@@ -111,15 +122,26 @@ const jsonLd = {
       <div>
         <h1 class="text-4xl font-semibold text-soil-900 dark:text-cream">Benchmarks</h1>
         <p class="mt-3 max-w-3xl text-soil-700 dark:text-cream-2">
-          One release-built Rust client measures every server on the same machine and workloads,
-          separating server and transport costs from language-specific client overhead.
+          Compare worker file sizes and memory, then explore latency and throughput across transports.
+          Each dataset records its own machine, workloads, and source revisions.
         </p>
       </div>
       <div class="flex gap-3 text-sm">
-        <a href="/benchmarks/latest.json" class="qf-link">Download JSON</a>
-        {benchmarkData.status === 'published' && <a href="/benchmarks/latest.csv" class="qf-link">Download CSV</a>}
+        <a href="#worker-footprint" class="qf-link">Size &amp; memory</a>
+        <a href="#latency-throughput" class="qf-link">Latency &amp; throughput</a>
       </div>
     </div>
+
+    <WorkerFootprint />
+
+    <section id="latency-throughput" class="mt-12 scroll-mt-24">
+      <h2 class="text-3xl font-semibold text-soil-900 dark:text-cream">Latency &amp; throughput</h2>
+      <p class="mt-3 text-sm text-soil-700 dark:text-cream-2">One release-built Rust client measures every server on the same Linux machine and workloads.</p>
+      <div class="mt-3 flex gap-4 text-sm">
+        <a href="/benchmarks/latest.json" class="qf-link">Latency JSON</a>
+        <a href="/benchmarks/latest.csv" class="qf-link">Latency CSV</a>
+      </div>
+    </section>
 
     {benchmarkData.status !== 'published' ? (
       <section class="mt-10 border-l-[3px] border-sun-400 bg-white dark:bg-rock-800 rounded-r-lg p-6">

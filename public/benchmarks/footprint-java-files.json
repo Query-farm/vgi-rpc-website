@@ -1,0 +1,588 @@
+{
+  "artifact": {
+    "bytes": 20515,
+    "files": 1,
+    "sha256": "3e9e2828d173ec083fe0d40a169866760393c549d81daf45b077213c6f0ea648",
+    "inventory": [
+      {
+        "path": "{root}/.footprint-cache/sources/java/conformance-worker/build/install/conformance-worker/lib/conformance-worker-0.27.1.jar",
+        "bytes": 20515,
+        "sha256": "5e8e2c0e3f007a3a0713ff561a5c5a9d04141ff08f954b93fdc02ce15e5516fe"
+      }
+    ]
+  },
+  "app": {
+    "bytes": 18990159,
+    "files": 34,
+    "sha256": "2b6dd6d337aa745deb02ccbaba9f5dc8d0db5f5b2f8d2a05830ab0c2d56f6332",
+    "inventory": [
+      {
+        "path": "{root}/.footprint-cache/sources/java/conformance-worker/build/install/conformance-worker/bin/conformance-worker",
+        "bytes": 10145,
+        "sha256": "98d1ff75a2e4989a6263c78a0263d652dbef1e138674b3c1087344bd253f7f90"
+      },
+      {
+        "path": "{root}/.footprint-cache/sources/java/conformance-worker/build/install/conformance-worker/bin/conformance-worker.bat",
+        "bytes": 4405,
+        "sha256": "72218a93478c5f879699050bc2515d14d5a076756d11886ebd0d87530cd6e4dd"
+      },
+      {
+        "path": "{root}/.footprint-cache/sources/java/conformance-worker/build/install/conformance-worker/lib/arrow-format-19.0.0.jar",
+        "bytes": 121518,
+        "sha256": "e805ea51ba8b517ec6c18a96ea83bef5cda5172a2b74419d4b48fb3584ce4504"
+      },
+      {
+        "path": "{root}/.footprint-cache/sources/java/conformance-worker/build/install/conformance-worker/lib/arrow-memory-core-19.0.0.jar",
+        "bytes": 118167,
+        "sha256": "0d3646cc2fa9ae94e95dc8b3e0ed5a51e1df15b59dc548f359e941023471884d"
+      },
+      {
+        "path": "{root}/.footprint-cache/sources/java/conformance-worker/build/install/conformance-worker/lib/arrow-memory-netty-19.0.0.jar",
+        "bytes": 10829,
+        "sha256": "e882e201a9a8de25f450e697491a3fb4689fb7cba9883c3323a966087fcf8c84"
+      },
+      {
+        "path": "{root}/.footprint-cache/sources/java/conformance-worker/build/install/conformance-worker/lib/arrow-memory-netty-buffer-patch-19.0.0.jar",
+        "bytes": 32356,
+        "sha256": "47a8d7d1c9df06b3b84a0e49815615dad86c8c91afddf5b9817ed3e777784557"
+      },
+      {
+        "path": "{root}/.footprint-cache/sources/java/conformance-worker/build/install/conformance-worker/lib/arrow-vector-19.0.0.jar",
+        "bytes": 1594858,
+        "sha256": "113e70317945e780050f13d17027d862d4c5d1cebe06c9fd8a5e922945bb2f8c"
+      },
+      {
+        "path": "{root}/.footprint-cache/sources/java/conformance-worker/build/install/conformance-worker/lib/commons-codec-1.21.0.jar",
+        "bytes": 402494,
+        "sha256": "4da851cb6abfb98bfe9eb77c5e5fc47f5414fa28b94e21b7fd9a646705dc167f"
+      },
+      {
+        "path": "{root}/.footprint-cache/sources/java/conformance-worker/build/install/conformance-worker/lib/conformance-0.27.1.jar",
+        "bytes": 55465,
+        "sha256": "9b44df99abbd9690a66a265cf4de0fbae2e5a085e91150bed251ce428341b6f8"
+      },
+      {
+        "path": "{root}/.footprint-cache/sources/java/conformance-worker/build/install/conformance-worker/lib/conformance-worker-0.27.1.jar",
+        "bytes": 20515,
+        "sha256": "5e8e2c0e3f007a3a0713ff561a5c5a9d04141ff08f954b93fdc02ce15e5516fe"
+      },
+      {
+        "path": "{root}/.footprint-cache/sources/java/conformance-worker/build/install/conformance-worker/lib/flatbuffers-java-25.2.10.jar",
+        "bytes": 110881,
+        "sha256": "587bd6c31cda747587493a113bec8602d3a0b0ca579b2b1b838ef71b19e6525d"
+      },
+      {
+        "path": "{root}/.footprint-cache/sources/java/conformance-worker/build/install/conformance-worker/lib/jackson-annotations-2.21.jar",
+        "bytes": 82104,
+        "sha256": "53ca085f4a150f703f49e1aabd935bd03b43e1ea3d55d135438292af22cef56b"
+      },
+      {
+        "path": "{root}/.footprint-cache/sources/java/conformance-worker/build/install/conformance-worker/lib/jackson-core-2.21.0.jar",
+        "bytes": 594496,
+        "sha256": "e22604bcd9b24e462d5df102007cb06e1ed811e86f1ce6081ca62f385f2db87b"
+      },
+      {
+        "path": "{root}/.footprint-cache/sources/java/conformance-worker/build/install/conformance-worker/lib/jackson-databind-2.21.0.jar",
+        "bytes": 1701513,
+        "sha256": "0057817ee40bc71544072dc2a3ba575ef91dce53a2d87489bde91c05f3a22621"
+      },
+      {
+        "path": "{root}/.footprint-cache/sources/java/conformance-worker/build/install/conformance-worker/lib/jackson-dataformat-cbor-2.21.0.jar",
+        "bytes": 73395,
+        "sha256": "79a579275cb0dd5847406930a58ce8a49d06db7815bba38a0d4a6ae1db3fb043"
+      },
+      {
+        "path": "{root}/.footprint-cache/sources/java/conformance-worker/build/install/conformance-worker/lib/jackson-datatype-jsr310-2.21.0.jar",
+        "bytes": 136581,
+        "sha256": "b350169a3b2cc53d781541fe1bfbc0f00c978d185884da79b8330be8fb7aefeb"
+      },
+      {
+        "path": "{root}/.footprint-cache/sources/java/conformance-worker/build/install/conformance-worker/lib/jakarta.servlet-api-6.0.0.jar",
+        "bytes": 347613,
+        "sha256": "c034eb1afb158987dbb53a5fea0cadf611c8dae8daadd59c44d9d5ab70129cef"
+      },
+      {
+        "path": "{root}/.footprint-cache/sources/java/conformance-worker/build/install/conformance-worker/lib/jetty-alpn-client-12.0.16.jar",
+        "bytes": 7167,
+        "sha256": "28ff9568536483af9844b06a840af90ff21ad4549aee284070ec614060305531"
+      },
+      {
+        "path": "{root}/.footprint-cache/sources/java/conformance-worker/build/install/conformance-worker/lib/jetty-client-12.0.16.jar",
+        "bytes": 353760,
+        "sha256": "0d5375c83a60362f2225ae06d4837463942f39c5bc6bd83172b4ad2aef28df29"
+      },
+      {
+        "path": "{root}/.footprint-cache/sources/java/conformance-worker/build/install/conformance-worker/lib/jetty-ee10-servlet-12.0.16.jar",
+        "bytes": 432340,
+        "sha256": "18a6c41074061a0ff440d618b43e7ab328e81226ec21c4d6a4d53b90b2c94a55"
+      },
+      {
+        "path": "{root}/.footprint-cache/sources/java/conformance-worker/build/install/conformance-worker/lib/jetty-http-12.0.16.jar",
+        "bytes": 429896,
+        "sha256": "b0751b3dd9a8abc79ba0c5061613843dba1d2ce231057f53ad3d038ca888dfb0"
+      },
+      {
+        "path": "{root}/.footprint-cache/sources/java/conformance-worker/build/install/conformance-worker/lib/jetty-io-12.0.16.jar",
+        "bytes": 328245,
+        "sha256": "c8dfd2d88d34be5461417f2256be0cc868865c45815f7ee0e409ddd872f0e84f"
+      },
+      {
+        "path": "{root}/.footprint-cache/sources/java/conformance-worker/build/install/conformance-worker/lib/jetty-security-12.0.16.jar",
+        "bytes": 144950,
+        "sha256": "7a6d5b2d0edb1b5012b5510a80411c7fb4b9844b3879938d3b6e9ace3b9b6876"
+      },
+      {
+        "path": "{root}/.footprint-cache/sources/java/conformance-worker/build/install/conformance-worker/lib/jetty-server-12.0.16.jar",
+        "bytes": 629536,
+        "sha256": "9e3f17ca732154ee2c67cc2bc340f322b29335f74d65f7cc0104c2e9cdc6640e"
+      },
+      {
+        "path": "{root}/.footprint-cache/sources/java/conformance-worker/build/install/conformance-worker/lib/jetty-session-12.0.16.jar",
+        "bytes": 117239,
+        "sha256": "5d7dfd24c94472c368441488791412a31ea476ad4f1d9286b4f5802c5d85514b"
+      },
+      {
+        "path": "{root}/.footprint-cache/sources/java/conformance-worker/build/install/conformance-worker/lib/jetty-util-12.0.16.jar",
+        "bytes": 688128,
+        "sha256": "a03d43c194993ebb4d51fbfe7fe29134d7863b28708380eeedd11797c83543cf"
+      },
+      {
+        "path": "{root}/.footprint-cache/sources/java/conformance-worker/build/install/conformance-worker/lib/netty-buffer-4.2.9.Final.jar",
+        "bytes": 365821,
+        "sha256": "d013a96acea4889bc01ee03738d53c2e4a05e3faec14c25a92b4224c77d7a408"
+      },
+      {
+        "path": "{root}/.footprint-cache/sources/java/conformance-worker/build/install/conformance-worker/lib/netty-common-4.2.9.Final.jar",
+        "bytes": 793126,
+        "sha256": "99d965d507b09599ab2d215e940c690d4f7ce8cd97ff13776aa17eb4e0d90b8a"
+      },
+      {
+        "path": "{root}/.footprint-cache/sources/java/conformance-worker/build/install/conformance-worker/lib/nimbus-jose-jwt-10.0.1.jar",
+        "bytes": 814025,
+        "sha256": "f28dbd9ab128324f05050d76b78469d3a9cd83e0319aabc68d1c276e3923e13a"
+      },
+      {
+        "path": "{root}/.footprint-cache/sources/java/conformance-worker/build/install/conformance-worker/lib/slf4j-api-2.0.17.jar",
+        "bytes": 69908,
+        "sha256": "7b751d952061954d5abfed7181c1f645d336091b679891591d63329c622eb832"
+      },
+      {
+        "path": "{root}/.footprint-cache/sources/java/conformance-worker/build/install/conformance-worker/lib/slf4j-simple-2.0.16.jar",
+        "bytes": 15704,
+        "sha256": "effc32018658bea09d1e08c7d1060ccad46c086960f583d07dd7ffe9c1172a47"
+      },
+      {
+        "path": "{root}/.footprint-cache/sources/java/conformance-worker/build/install/conformance-worker/lib/vgirpc-0.27.1.jar",
+        "bytes": 1036421,
+        "sha256": "40a10bfcaac76a493857f6e8329f2a28c5639fd0741d1c4938b32c0c0f1ac73c"
+      },
+      {
+        "path": "{root}/.footprint-cache/sources/java/conformance-worker/build/install/conformance-worker/lib/vgirpc-oauth-0.27.1.jar",
+        "bytes": 18711,
+        "sha256": "8e7ea2f737e88c9fb502b7d43928a53f72d092ddae389eac948b74c083bfbd5a"
+      },
+      {
+        "path": "{root}/.footprint-cache/sources/java/conformance-worker/build/install/conformance-worker/lib/zstd-jni-1.5.6-8.jar",
+        "bytes": 7327847,
+        "sha256": "57081e5c898cff772f97f5d96f5e74c7d8370797520e652b5d2a33b98e3cfc96"
+      }
+    ]
+  },
+  "runtime": {
+    "bytes": 257070074,
+    "files": 78,
+    "sha256": "3f4defebf534ccd9616069c181d4e3f8c86a2819b47f1817ee789195a50ef616",
+    "inventory": [
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/bin/java",
+        "bytes": 69856,
+        "sha256": "ef16142dc0b0c11b152721d1b350196feedf4336740725dbeafa562321d614e3"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/conf/jaxp.properties",
+        "bytes": 7302,
+        "sha256": "7d95c49465d0c836d608d02856d3b097934dfb5dc4bd2279affaf337d045b708"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/conf/logging.properties",
+        "bytes": 2732,
+        "sha256": "b62d2733ab99556b108a1951d894c5a8d76b1ac7a00c02c388f9eb9be046c56f"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/conf/management/jmxremote.access",
+        "bytes": 3997,
+        "sha256": "0c25d26ee212ca1e8c33f67c3c460d43fe849c3a1d23dbe341148517602b280c"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/conf/management/jmxremote.password.template",
+        "bytes": 5690,
+        "sha256": "0273b6a6b9e20e6ce54c5aee70164028e0395063b2b7d39060a40b6495543dbf"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/conf/management/management.properties",
+        "bytes": 14988,
+        "sha256": "07dffdd85b01c19bf46ca320a699aba48dd6b01043eb0bd6a9528c7993312bad"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/conf/net.properties",
+        "bytes": 7441,
+        "sha256": "2e070ed1d97052f0ce8771ed2ef74a38d7c260a45fde7a3682c8844e5fdf58a4"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/conf/security/java.policy",
+        "bytes": 2294,
+        "sha256": "d51bcab7ed301caeff3779a5e777e6019864cecee5e2abc102ef991b0de77af2"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/conf/security/java.security",
+        "bytes": 71413,
+        "sha256": "cf62c92ef0260bd0adca121fea4067aa7ac00675ab4ddccd75e62370165523d6"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/conf/security/policy/README.txt",
+        "bytes": 2390,
+        "sha256": "6da0747334b0fea7592fd92614b2bbc8b126535e129b1fee483774d914e98eb5"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/conf/security/policy/limited/default_US_export.policy",
+        "bytes": 146,
+        "sha256": "758b930a526fc670ab7537f8c26321527050a31f5f42149a2dda623c56a0a1a9"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/conf/security/policy/limited/default_local.policy",
+        "bytes": 647,
+        "sha256": "2b2627548e61316150d47ffc3e6cad465ca05b3cccd4785eb7d21aa7baa0f441"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/conf/security/policy/limited/exempt_local.policy",
+        "bytes": 566,
+        "sha256": "8c3d7648abcd95a272ce12db870082937f4d7f6878d730d83cb7fbb31eb8b2c9"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/conf/security/policy/unlimited/default_US_export.policy",
+        "bytes": 146,
+        "sha256": "758b930a526fc670ab7537f8c26321527050a31f5f42149a2dda623c56a0a1a9"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/conf/security/policy/unlimited/default_local.policy",
+        "bytes": 193,
+        "sha256": "8d8a318e6d90dfd7e26612d2b6385aa704f686ca6134c551f8928418d92b851a"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/conf/sound.properties",
+        "bytes": 1210,
+        "sha256": "299c2360b6155eb28990ec49cd21753f97e43442fe8fab03e04f3e213df43a66"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/lib/classlist",
+        "bytes": 77202,
+        "sha256": "01b9c997aa616618b9cd713dda43b66fbcf5f25976cfe12240415d0641db801a"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/lib/ct.sym",
+        "bytes": 10715134,
+        "sha256": "dd974e760e97ccf2fba4e93881ef25fb7824be3b3508bd6208b080349aa59856"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/lib/fontconfig.bfc",
+        "bytes": 2922,
+        "sha256": "5409952a218126c5c11cf0e4963665711aeeab50f5648264d70866fca705a950"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/lib/fontconfig.properties.src",
+        "bytes": 8931,
+        "sha256": "c8d20a4a39240665252306bdd3dbc8d71e1e246c8cd8c7985b32e4101658a148"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/lib/jfr/default.jfc",
+        "bytes": 37449,
+        "sha256": "4fed4b508c5f1b69578293df84f94a63752f86b4259d97e12884e3b2ec56ef50"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/lib/jfr/profile.jfc",
+        "bytes": 37401,
+        "sha256": "485fb90dbecee9a950c45247464351162b1eb0c35387fbb929f002c600807251"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/lib/jrt-fs.jar",
+        "bytes": 110118,
+        "sha256": "db9ad5264ed36926f46a2812a6be59a0b2d330a511561ef04d1eeadb2fab119d"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/lib/jspawnhelper",
+        "bytes": 71392,
+        "sha256": "96b4713461595953c89f891160561ac273fbb9f309de55da435d3329c0be68d8"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/lib/jvm.cfg",
+        "bytes": 29,
+        "sha256": "aa9efb969444c1484e29adecab55a122458090616e766b2f1230ef05bc3867e0"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/lib/libattach.dylib",
+        "bytes": 52416,
+        "sha256": "902122427c9223cce14157e1f792f0e7e804d727dac82900d31da9632156aa6f"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/lib/libawt.dylib",
+        "bytes": 467744,
+        "sha256": "c2567f63588686fdb1537a8dce1e105b0615da15537c1128430a71116969ef4b"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/lib/libawt_lwawt.dylib",
+        "bytes": 1218736,
+        "sha256": "742d9f9d4dc6172ca56325fbc49b43e700a63e39c79a60861e90958b1e1f763b"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/lib/libdt_socket.dylib",
+        "bytes": 54560,
+        "sha256": "d807adb65fd1bec4dd66b804259bdaa8ed78eaf225f4f58bff099132e09fe689"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/lib/libextnet.dylib",
+        "bytes": 51600,
+        "sha256": "655c3449dfd8fc96d0f2bad042365c3c3c0d9ed544f5bf2b8b8200c71db193fa"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/lib/libfontmanager.dylib",
+        "bytes": 95120,
+        "sha256": "c38f2bfdd47a378fa88fb2d60135031f0723ae476fa0b2a4d0779d9b31dbb6ca"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/lib/libinstrument.dylib",
+        "bytes": 89632,
+        "sha256": "fa5af1dcde0d895e3b1e30cbed8f3e68da577cc3a7c8303d391bbcacc6317633"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/lib/libj2gss.dylib",
+        "bytes": 73488,
+        "sha256": "a9c6f1def998410b0f149c02cb0162dd549bee5e03e146478f2544b66979c5c9"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/lib/libj2pcsc.dylib",
+        "bytes": 52160,
+        "sha256": "73e4d52098de1e60b0d3eeb50b4483d476904603e14e1c3a91a8f1141d719597"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/lib/libj2pkcs11.dylib",
+        "bytes": 111856,
+        "sha256": "509e3440110cda8a94acef0f0f96267c6866a9e864d51b7f69721775a923edd3"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/lib/libjaas.dylib",
+        "bytes": 50560,
+        "sha256": "6eb3b7e08af353f9886accc71566318d0f337a4d843adbd0da6bb3b3832e9a3a"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/lib/libjava.dylib",
+        "bytes": 169600,
+        "sha256": "3e68c7b10c771250892b7adfb37372ee308ff9ffe85abc0578e9a77f20ab41fe"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/lib/libjavajpeg.dylib",
+        "bytes": 73936,
+        "sha256": "c101e6460143faf895633fdf9a2e27cc39b5716dfc3acdc044a6e2c254974cc9"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/lib/libjawt.dylib",
+        "bytes": 33936,
+        "sha256": "8ce27ea667349ba795874a88e71e5bf5c5581a14acc6b38a684a72513e62dc12"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/lib/libjdwp.dylib",
+        "bytes": 277328,
+        "sha256": "c0ef43979719692dcc3d12c5d969eacd2d0b2aa27573c20f3112abe61a9fea55"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/lib/libjimage.dylib",
+        "bytes": 58144,
+        "sha256": "9f06e9e12ed73f5370375d7c90aba88ba7db95ec75cc722ca82923f1bacc65bb"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/lib/libjli.dylib",
+        "bytes": 112176,
+        "sha256": "24afddaa2368b4866eaabe327b34e4a9ca4f5aca02a305b8d8551108bd71a201"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/lib/libjsig.dylib",
+        "bytes": 51504,
+        "sha256": "6f202db58e98004b424de0b92c1ee211843b1d53ce202abb6cadecbd94d7105b"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/lib/libjsound.dylib",
+        "bytes": 100384,
+        "sha256": "012207b52dfca978cef21eb6df1bed9c3f2fbed820821d05afd092f57eb8d817"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/lib/liblcms.dylib",
+        "bytes": 54016,
+        "sha256": "514c22eec93cb3948edce447e08b20e1efd1b38ef6eab199a91f0723d9b7f1f0"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/lib/lible.dylib",
+        "bytes": 51856,
+        "sha256": "056feab67141b00b267cbb94610e156b2b95d9eac595545e816ac053ce132fc9"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/lib/libmanagement.dylib",
+        "bytes": 57312,
+        "sha256": "0cb55c0a1f4b4e998644ee4bdada32eda331cbb908702de668ad2514dd50cd1c"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/lib/libmanagement_agent.dylib",
+        "bytes": 50480,
+        "sha256": "ba222a1969289c5ccf1b8fb408edf893f58b48ecb7d9e868a4a45ecf4815861e"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/lib/libmanagement_ext.dylib",
+        "bytes": 56464,
+        "sha256": "f365efc4ae9cebc775ee8a191a0563c856b27040c5f655b0e8306670a733495f"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/lib/libmlib_image.dylib",
+        "bytes": 356336,
+        "sha256": "80319092325014395cc6e4fd5a994c94dd4ec555306880fd3903087188745fd9"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/lib/libnet.dylib",
+        "bytes": 94944,
+        "sha256": "519058e152e55933b0e821e32d3d61eb941787f0e944b7d6f553326ecc88a6a7"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/lib/libnio.dylib",
+        "bytes": 108640,
+        "sha256": "64b4c152f9808ab47b3625b32f8c73adfbe8cfcbfbca9ca9363ae33813d9e007"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/lib/libosx.dylib",
+        "bytes": 71760,
+        "sha256": "611128c9a350cbab1b28d32f35901fc31cba4f693aa87a0c962f8a38e344e740"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/lib/libosxapp.dylib",
+        "bytes": 186480,
+        "sha256": "1670ae955323317268ba4ccd1556b1624554ed0e7aa6d20e8aac17523c6159a5"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/lib/libosxkrb5.dylib",
+        "bytes": 71552,
+        "sha256": "87009520569c599f62c5b4027aafd0da599a646e140c1f551c9c73a283e41f74"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/lib/libosxsecurity.dylib",
+        "bytes": 72160,
+        "sha256": "13c2b89bd6bdf946246f1358e9de4da6de9ca611f3144b5b07f5a64a8484a01c"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/lib/libosxui.dylib",
+        "bytes": 96608,
+        "sha256": "80a3886d76c488bc983567497ccfb00b12fd93d1a9f4bafe8e5d5ea6d892e28c"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/lib/libprefs.dylib",
+        "bytes": 55152,
+        "sha256": "bc25a92ae9a69b2e1cf2fd122a4663500728f5b77306eccf8047a11d7de2ed1e"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/lib/librmi.dylib",
+        "bytes": 50160,
+        "sha256": "e76c5b2a7e29db432061bc8604ae62d8a4d68a2bf3536beef61237169e238134"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/lib/libsaproc.dylib",
+        "bytes": 93184,
+        "sha256": "20216afa4d136f2b03f59da5941802d05bfcaa6f4b5303a196c4a83ebf05a34e"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/lib/libsplashscreen.dylib",
+        "bytes": 95840,
+        "sha256": "765a457019d7fa326939c827b8d9f47f1d1c31891235a810303fe0abe77412a4"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/lib/libsyslookup.dylib",
+        "bytes": 16896,
+        "sha256": "41e4b0eea72c1fc1e62a8c919ed5f52eff48a1bd5f063596799f12c3dc0f2d6a"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/lib/libverify.dylib",
+        "bytes": 71168,
+        "sha256": "870eec2925467748d48eda0364eec0b238ca26ff85ef86ff7bceab333dc1ff7e"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/lib/libzip.dylib",
+        "bytes": 73056,
+        "sha256": "76f6c821dfb63b22d02e3711d3b30f707a94d544e2f5f5a45576eef9467b939f"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/lib/modules",
+        "bytes": 140707827,
+        "sha256": "9064aaa0db3217b843cf29675a7d962199a604dd3da67be288011c9fa21fb390"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/lib/psfont.properties.ja",
+        "bytes": 3793,
+        "sha256": "5a4bd51b969bf187ff86d94f4a71fdfbfa602762975fa3c73d264b4575f7c78f"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/lib/psfontj2d.properties",
+        "bytes": 11390,
+        "sha256": "780c565d5af3ee6f68b887b75c041cdf46a0592f67012f12eeb691283e92630a"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/lib/security/blocked.certs",
+        "bytes": 2488,
+        "sha256": "96572f243f31c2ef81a6e627542e596f6a9295cff3c7ae095c1b595cb1457ded"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/lib/security/cacerts",
+        "bytes": 134174,
+        "sha256": "2675a0aa6e7c158bbccf1181383ee794319e362df9a6bc88e1a5f8469a4c1dd7"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/lib/security/default.policy",
+        "bytes": 10657,
+        "sha256": "2bd418aab30b091b136962f80be7ddf39dcba85f082a558a6993848ae65366ae"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/lib/security/public_suffix_list.dat",
+        "bytes": 227396,
+        "sha256": "16b42002aa6f83a7763c4cdbd399ecf738460377d447e362884495545afd60a3"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/lib/server/classes.jsa",
+        "bytes": 14565376,
+        "sha256": "6ae3ca382ac62d3bbd4d7e7e8eed5107c6b3d4c2ed5160c4c34fdf180144fbfc"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/lib/server/classes_nocoops.jsa",
+        "bytes": 14958592,
+        "sha256": "f16d465e6f4fe3681ca94ae94640f4c65abdb2e248b9791c01cbcecfd7e9d091"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/lib/server/libjsig.dylib",
+        "bytes": 51504,
+        "sha256": "f472c37bbc4a813e5bf8f41cc634e5783ebcd7f3d0144452b5f6df9dff8f99eb"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/lib/server/libjvm.dylib",
+        "bytes": 15707632,
+        "sha256": "9c4dba4862f203886a277c5844fbe418bf0f1ef4f184b802b32739da78b9c431"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/lib/shaders.metallib",
+        "bytes": 156893,
+        "sha256": "9b16dfdbb765d8427765ad82edd5157129cad8e04de15abf785c5c75209ac946"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/lib/src.zip",
+        "bytes": 54198863,
+        "sha256": "c4ef32be6c98b51e7ad4c01a583bf85f456304012271f019f34f6c3b1a93e1a3"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home/lib/tzdb.dat",
+        "bytes": 102956,
+        "sha256": "5906b44e25a8a730131d7ba1beb5d15af27043f6536f1a169ca8a5d8b8bed8f8"
+      }
+    ]
+  }
+}

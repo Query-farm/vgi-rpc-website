@@ -1,0 +1,32 @@
+{
+  "artifact": {
+    "bytes": 16336336,
+    "files": 1,
+    "sha256": "1cde8d51ea3f805de32fd1d489b605694126b0aa2f429bd90c1d66df1be3c2b5",
+    "inventory": [
+      {
+        "path": "{root}/.footprint-cache/sources/cpp/build/conformance/conformance_worker",
+        "bytes": 16336336,
+        "sha256": "99c734a702932bb73f8fd8119868dd28822b7b1aa2ffc5a99ec602398032946f"
+      }
+    ]
+  },
+  "app": {
+    "bytes": 16336336,
+    "files": 1,
+    "sha256": "1cde8d51ea3f805de32fd1d489b605694126b0aa2f429bd90c1d66df1be3c2b5",
+    "inventory": [
+      {
+        "path": "{root}/.footprint-cache/sources/cpp/build/conformance/conformance_worker",
+        "bytes": 16336336,
+        "sha256": "99c734a702932bb73f8fd8119868dd28822b7b1aa2ffc5a99ec602398032946f"
+      }
+    ]
+  },
+  "runtime": {
+    "bytes": 0,
+    "files": 0,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "inventory": []
+  }
+}

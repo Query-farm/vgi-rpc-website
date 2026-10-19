@@ -1,5 +1,10 @@
 # Release benchmarks
 
+For worker executable/package sizes and resident memory, see
+[Worker file size and memory](FOOTPRINT.md). That separate, source-pinned macOS
+snapshot is published alongside the latency suite without changing its host or
+release policy.
+
 This suite produces the single benchmark snapshot published at
 `/benchmarks/latest.json`. A new publish replaces that file; the website does
 not retain or compare older benchmark releases.

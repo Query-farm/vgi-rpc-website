@@ -8,12 +8,14 @@
     "build": "npm run diagrams && astro build && node scripts/test-social-metadata.mjs",
     "preview": "astro preview",
     "astro": "astro",
-    "test": "python3 -m unittest discover -s benchmarks/tests -p 'test_*.py' && python3 benchmarks/run.py validate",
+    "test": "python3 -m unittest discover -s benchmarks/tests -p 'test_*.py' && python3 benchmarks/run.py validate && python3 benchmarks/footprint.py validate",
     "test:metadata": "node scripts/test-social-metadata.mjs",
     "benchmark:verify": "python3 benchmarks/run.py verify",
     "benchmark:quick": "python3 benchmarks/run.py quick",
     "benchmark:full": "python3 benchmarks/run.py full",
     "benchmark:publish": "python3 benchmarks/run.py publish",
+    "benchmark:footprint:build": "python3 benchmarks/footprint.py build",
+    "benchmark:footprint:validate": "python3 benchmarks/footprint.py validate",
     "og": "node scripts/generate-og-images.mjs"
   },
   "dependencies": {

@@ -7,6 +7,8 @@ dist/
 node_modules/
 .benchmark-cache/
 .benchmark-results/
+.footprint-cache/
+.footprint-results/
 benchmarks/driver/target/
 __pycache__/
 .playwright-mcp/
