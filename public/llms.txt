@@ -132,3 +132,4 @@ Clone https://github.com/Query-farm/vgi-rpc-c, then run `cmake -S . -B build` an
 - [PyPI Package](https://pypi.org/project/vgi-rpc/): Install Python implementation via pip
 - [Benchmarks](https://vgi-rpc.query.farm/benchmarks): Transport and serialization performance data
 - [vgi-rpc Website](https://vgi-rpc.query.farm): Project homepage with feature comparison
+- [VGI C versus Rust example worker footprint](https://vgi-rpc.query.farm/benchmarks/#vgi-sdk-footprint): Full application workers, separate from RPC conformance workers.

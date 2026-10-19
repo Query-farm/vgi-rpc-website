@@ -2,6 +2,8 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import BenchmarkVisuals from '../components/BenchmarkVisuals.astro';
 import WorkerFootprint from '../components/WorkerFootprint.astro';
+import SdkFootprint from '../components/SdkFootprint.astro';
+import sdkFootprintData from '../data/sdk-footprint.json';
 import benchmarkData from '../data/benchmarks.json';
 import footprintData from '../data/footprint.json';
 
@@ -68,7 +70,7 @@ function bytes(value?: number): string {
 }
 
 const description = 'Compare vgi-rpc latency, throughput, worker binary and package sizes, and resident memory across languages, with source-pinned reproducible measurements.';
-const modifiedAt = [benchmarkData.generated_at, footprintData.generated_at].filter(Boolean).sort().at(-1);
+const modifiedAt = [benchmarkData.generated_at, footprintData.generated_at, sdkFootprintData.generated_at].filter(Boolean).sort().at(-1);
 const jsonLd = {
   '@type': 'Dataset',
   '@id': 'https://vgi-rpc.query.farm/benchmarks/#dataset',
@@ -82,14 +84,21 @@ const jsonLd = {
     url: 'https://query.farm',
   },
   measurementTechnique: 'Controlled same-host RPC latency, throughput, payload-bandwidth, and client-scaling workloads',
-  hasPart: {
+  hasPart: [{
     '@type': 'Dataset',
     name: 'vgi-rpc worker file size and resident memory',
     url: 'https://vgi-rpc.query.farm/benchmarks/#worker-footprint',
     dateModified: footprintData.generated_at,
     measurementTechnique: 'File inventories and sampled process-tree RSS on macOS ARM64; five fresh processes per implementation',
     distribution: [{ '@type': 'DataDownload', encodingFormat: 'application/json', contentUrl: 'https://vgi-rpc.query.farm/benchmarks/footprint.json' }],
-  },
+  }, {
+    '@type': 'Dataset',
+    name: 'VGI C versus Rust application worker file size and resident memory',
+    url: 'https://vgi-rpc.query.farm/benchmarks/#vgi-sdk-footprint',
+    dateModified: sdkFootprintData.generated_at,
+    measurementTechnique: 'Full example workers, identical VGI scalar workloads, macOS ARM64, five fresh processes per implementation',
+    distribution: [{ '@type': 'DataDownload', encodingFormat: 'application/json', contentUrl: 'https://vgi-rpc.query.farm/benchmarks/sdk/footprint.json' }],
+  }],
   distribution: [
     {
       '@type': 'DataDownload',
@@ -126,13 +135,15 @@ const jsonLd = {
           Each dataset records its own machine, workloads, and source revisions.
         </p>
       </div>
-      <div class="flex gap-3 text-sm">
+      <div class="flex flex-wrap gap-3 text-sm">
         <a href="#worker-footprint" class="qf-link">Size &amp; memory</a>
+        <a href="#vgi-sdk-footprint" class="qf-link">VGI C vs Rust</a>
         <a href="#latency-throughput" class="qf-link">Latency &amp; throughput</a>
       </div>
     </div>
 
     <WorkerFootprint />
+    <SdkFootprint />
 
     <section id="latency-throughput" class="mt-12 scroll-mt-24">
       <h2 class="text-3xl font-semibold text-soil-900 dark:text-cream">Latency &amp; throughput</h2>

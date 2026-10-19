@@ -63,7 +63,9 @@ Copy should read as deliberate, not autopilot (after https://robotsatemyhomework
   publish through its validation gate; do not hand-edit the generated dataset or
   mix hosts. `benchmarks/FOOTPRINT.md` defines file accounting, runtime boundaries,
   and sampled process-tree RSS. Keep the downloadable JSON/CSV and file
-  inventories in sync via the publisher. `npm test` checks both benchmark contracts.
+  inventories in sync via the publisher. `npm test` checks all benchmark datasets.
+
+- Full VGI application workers have a separate C/Rust comparison in `src/data/sdk-footprint.json`, generated with `benchmarks/sdk_footprint.py`. See `benchmarks/SDK_FOOTPRINT.md`; keep it distinct from RPC conformance workers.
 
 ## CI/CD
 

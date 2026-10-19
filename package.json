@@ -8,7 +8,7 @@
     "build": "npm run diagrams && astro build && node scripts/test-social-metadata.mjs",
     "preview": "astro preview",
     "astro": "astro",
-    "test": "python3 -m unittest discover -s benchmarks/tests -p 'test_*.py' && python3 benchmarks/run.py validate && python3 benchmarks/footprint.py validate",
+    "test": "python3 -m unittest discover -s benchmarks/tests -p 'test_*.py' && python3 benchmarks/run.py validate && python3 benchmarks/footprint.py validate && python3 benchmarks/sdk_footprint.py validate",
     "test:metadata": "node scripts/test-social-metadata.mjs",
     "benchmark:verify": "python3 benchmarks/run.py verify",
     "benchmark:quick": "python3 benchmarks/run.py quick",

@@ -1,0 +1,62 @@
+{
+  "artifact": {
+    "bytes": 20185888,
+    "files": 1,
+    "sha256": "18ce3be5da545718462c157145c44794ca619d75ea4d0319739abb406b88f907",
+    "inventory": [
+      {
+        "path": "/private/tmp/vgi-sdk-footprint/c/build/example-worker/vgi-example-worker",
+        "bytes": 20185888,
+        "sha256": "59dc139b57e7ece83cfdd80bb6ebfeea31ff329e9d013c66076a06441871bfda"
+      }
+    ]
+  },
+  "app": {
+    "bytes": 21816672,
+    "files": 7,
+    "sha256": "be5a074484e7c0891edb23db6c7cc29a6c4a57b0a17f38295654d2fa8779fe77",
+    "inventory": [
+      {
+        "path": "/opt/homebrew/Cellar/json-c/0.19/lib/libjson-c.5.5.0.dylib",
+        "bytes": 96608,
+        "sha256": "9ad5f3172d94f983239c64c33326ed227a83a9f172577068302725a81caf252f"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/libevent/2.1.13/lib/libevent-2.1.7.dylib",
+        "bytes": 303104,
+        "sha256": "520a633990c1b0d7e72a01dcddda116a762ee6a2b79c133cde2edf79e824a7b1"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/libevent/2.1.13/lib/libevent_pthreads-2.1.7.dylib",
+        "bytes": 51920,
+        "sha256": "51ff8f8020c3e4ec4b7fc09e50a00f9c11b9eb3bf324961244eb5c76954eedce"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/libsodium/1.0.22/lib/libsodium.26.dylib",
+        "bytes": 348864,
+        "sha256": "de7b977930938f98a2cd4ece60f9f5af453413e5589fd8ad5a62c09a41f01b08"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/lz4/1.10.0/lib/liblz4.1.10.0.dylib",
+        "bytes": 176960,
+        "sha256": "db6063b0815362b2152012e549797ca86e7bbd00c080f3e6dd642334f838bb01"
+      },
+      {
+        "path": "/opt/homebrew/Cellar/zstd/1.5.7_1/lib/libzstd.1.5.7.dylib",
+        "bytes": 653328,
+        "sha256": "69d8dee81bccdee425d167300d11431f3c5ecc34a3011400e536aa89f7756189"
+      },
+      {
+        "path": "/private/tmp/vgi-sdk-footprint/c/build/example-worker/vgi-example-worker",
+        "bytes": 20185888,
+        "sha256": "59dc139b57e7ece83cfdd80bb6ebfeea31ff329e9d013c66076a06441871bfda"
+      }
+    ]
+  },
+  "runtime": {
+    "bytes": 0,
+    "files": 0,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "inventory": []
+  }
+}

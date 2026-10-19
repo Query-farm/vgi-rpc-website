@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "description": "Full VGI application example workers; independent of RPC conformance workers.",
+  "implementations": {
+    "vgi-c": {
+      "name": "vgi-c",
+      "version": "0.1.0",
+      "sha": "cf3c8ab2731f4db605187ec7ef922b44ec5ff4a3",
+      "repository": "https://github.com/Query-farm/vgi-c",
+      "directory": "c",
+      "binary": "build/example-worker/vgi-example-worker"
+    },
+    "vgi-rust": {
+      "name": "vgi-rust",
+      "version": "0.43.0",
+      "sha": "f73752737ed2431a6f702ba292dd8cb70d259ad5",
+      "repository": "https://github.com/Query-farm/vgi-rust",
+      "directory": "rust",
+      "binary": "target/release/vgi-example-worker"
+    }
+  },
+  "sources": {
+    "python": {
+      "repository": "https://github.com/Query-farm/vgi-python",
+      "sha": "89e08530fe665649753e2ac36b837227f1cf80d0"
+    },
+    "rpc-python": {
+      "repository": "https://github.com/Query-farm/vgi-rpc-python",
+      "sha": "73108975795d63dd8d1da03117b286d7a4aeb6ef"
+    },
+    "rpc-c": {
+      "repository": "https://github.com/Query-farm/vgi-rpc-c",
+      "sha": "01ab087349a4cf4c733b8fea194858a34c6ecc74"
+    }
+  },
+  "rust_lock_sha256": "3d39b4e126d6fcd8e5e5f60473eece75bc5a47764a94537ac24c49108666fd1a",
+  "workload": {
+    "transport": "stdio",
+    "warmup_method": "double",
+    "warmup_value": 2,
+    "payload_method": "passthru",
+    "payload_type": "UTF-8 string",
+    "warmup_calls": 1000,
+    "payload_bytes": 1048576,
+    "payload_calls": 200,
+    "rounds": 5,
+    "sample_interval_seconds": 0.01,
+    "idle_seconds": 0.5,
+    "concurrency": 1,
+    "pool": false,
+    "shared_memory": false
+  }
+}

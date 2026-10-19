@@ -1,0 +1,32 @@
+{
+  "artifact": {
+    "bytes": 23247200,
+    "files": 1,
+    "sha256": "097ec3688d897195dffddc1c854964eb4c73de29737b757571d24111e04420f9",
+    "inventory": [
+      {
+        "path": "/private/tmp/vgi-sdk-footprint/rust/target/release/vgi-example-worker",
+        "bytes": 23247200,
+        "sha256": "2c3a1e951331f2f931a5faaf4e3d26cb0b2fdffe762fc81325cc57f620c37a1d"
+      }
+    ]
+  },
+  "app": {
+    "bytes": 23247200,
+    "files": 1,
+    "sha256": "097ec3688d897195dffddc1c854964eb4c73de29737b757571d24111e04420f9",
+    "inventory": [
+      {
+        "path": "/private/tmp/vgi-sdk-footprint/rust/target/release/vgi-example-worker",
+        "bytes": 23247200,
+        "sha256": "2c3a1e951331f2f931a5faaf4e3d26cb0b2fdffe762fc81325cc57f620c37a1d"
+      }
+    ]
+  },
+  "runtime": {
+    "bytes": 0,
+    "files": 0,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "inventory": []
+  }
+}

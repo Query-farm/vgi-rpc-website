@@ -1,0 +1,86 @@
+---
+import data from '../data/sdk-footprint.json';
+const mib = (value: number) => (value / 1048576).toFixed(2);
+const c = data.results.find(row => row.id === 'vgi-c')!;
+const rust = data.results.find(row => row.id === 'vgi-rust')!;
+const metrics = [
+  ['artifact_bytes', 'Stripped executable'],
+  ['app_bytes', 'Executable + dependencies'],
+  ['idle_rss_bytes', 'Warmed RSS'],
+  ['peak_rss_bytes', 'Sampled peak RSS'],
+] as const;
+---
+
+<section id="vgi-sdk-footprint" class="mt-12 scroll-mt-24 border-b border-soil-300 pb-10 dark:border-rock-700">
+  <p class="text-xs font-semibold uppercase tracking-wider text-sun-700 dark:text-cream-2">VGI application SDKs</p>
+  <h2 class="mt-2 text-3xl font-semibold text-soil-900 dark:text-cream">C and Rust: full example workers</h2>
+  <p class="mt-3 max-w-3xl text-sm leading-relaxed text-soil-700 dark:text-cream-2">
+    The <code>vgi-c</code> and <code>vgi-rust</code> application workers include catalogs and function execution on top of RPC.
+    This separate comparison runs their full integration fixture workers through the same VGI client:
+    1,000 scalar <code>double</code> calls, then 200 <code>passthru</code> calls carrying a 1 MiB string.
+  </p>
+  <p class="mt-4 text-xs text-soil-700 dark:text-cream-2">
+    Measured <time datetime={data.generated_at}>{data.generated_at.slice(0, 10)}</time> · {data.host.chip} · macOS ARM64 ·
+    Five fresh processes per implementation · Stdio · One caller and worker · MiB.
+  </p>
+  <p class="mt-5 text-xs text-soil-700 dark:text-cream-2 sm:hidden">Scroll the table horizontally for dependency sizes and memory.</p>
+  <div class="mt-6 overflow-x-auto rounded-xl border border-soil-300 dark:border-rock-700" role="region" aria-label="C and Rust VGI SDK worker measurements" tabindex="0">
+    <table class="w-full min-w-[720px] text-sm">
+      <caption class="sr-only">Full VGI example worker sizes and resident memory in MiB. Memory values are medians of five rounds.</caption>
+      <thead class="bg-soil-100 text-soil-900 dark:bg-rock-800 dark:text-cream">
+        <tr>
+          <th scope="col" class="px-4 py-3 text-left">Example worker</th>
+          {metrics.map(([, label]) => <th scope="col" class="px-4 py-3 text-right">{label}</th>)}
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-soil-200 dark:divide-rock-700">
+        {data.results.map(row => (
+          <tr class="bg-white dark:bg-rock-900">
+            <th scope="row" class="px-4 py-4 text-left font-normal">
+              <span class="font-semibold text-soil-900 dark:text-cream">{row.name}</span>
+              <span class="ml-2 qf-figure text-xs text-soil-700 dark:text-cream-2">{row.version}</span>
+              <div class="mt-1 flex gap-3 text-xs">
+                <a href={`${row.repository}/tree/${row.sha}`} target="_blank" rel="noopener noreferrer" class="qf-link font-mono">{row.sha.slice(0, 8)}</a>
+                <a href={`/benchmarks/sdk/footprint-${row.id}-files.json`} class="qf-link">Files</a>
+              </div>
+            </th>
+            {metrics.map(([key]) => (
+              <td data-numeric class="px-4 py-4 text-right text-soil-900 dark:text-cream">
+                {mib(row[key])}
+                {(key === 'idle_rss_bytes' || key === 'peak_rss_bytes') && (
+                  <div class="mt-1 text-xs text-soil-700 dark:text-cream-2">{mib(row[`${key}_min`])}–{mib(row[`${key}_max`])}</div>
+                )}
+              </td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+  <p class="mt-4 max-w-3xl text-sm leading-relaxed text-soil-700 dark:text-cream-2">
+    Rust uses {((1 - rust.idle_rss_bytes / c.idle_rss_bytes) * 100).toFixed(0)}% less warmed resident memory in this snapshot;
+    C’s executable is {((1 - c.artifact_bytes / rust.artifact_bytes) * 100).toFixed(0)}% smaller.
+    The C example embeds 17.73 MiB of captured Arrow catalog and function fixtures and decodes catalog data at startup.
+    These figures describe the current full fixture workers, including their different catalog storage and dependency sets.
+  </p>
+  <details class="mt-4 text-sm text-soil-700 dark:text-cream-2">
+    <summary class="cursor-pointer font-medium text-soil-900 dark:text-cream">Measurement details and reproduction</summary>
+    <div class="mt-3 max-w-3xl space-y-3 leading-relaxed">
+      <p>Both builds use release optimization and stripped symbols. C uses nanoarrow and Rust uses Arrow Rust.
+        Non-system dynamic libraries count toward dependencies; system libraries are excluded. Neither needs a separately installed language runtime.
+        C uses RPC C at <code>01ab0873</code>; Rust resolves RPC Rust 0.31.3 from the recorded Cargo.lock.</p>
+      <p>Every call’s result is checked. Warmed RSS is sampled for 0.5 seconds after the scalar calls;
+        peak RSS is sampled at a target 10 ms interval during the 200 pass-through calls. The table gives medians and min–max ranges across five rounds.
+        RSS includes shared resident pages and excludes the client. Short-lived peaks may be missed.
+        The run uses one fresh worker per round, without worker pooling or shared-memory transport.</p>
+      <p>The workload includes VGI binding and stream setup on each invocation. It differs from the RPC conformance workload above;
+        its memory figures should be compared within this table.</p>
+      <p class="flex flex-wrap gap-x-5 gap-y-2">
+        <a href="/benchmarks/sdk/footprint.json" class="qf-link">JSON + raw rounds</a>
+        <a href="/benchmarks/sdk/footprint.csv" class="qf-link">CSV</a>
+        <a href="https://github.com/Query-farm/vgi-rpc-website/blob/main/benchmarks/SDK_FOOTPRINT.md" target="_blank" rel="noopener noreferrer" class="qf-link">Reproduce the comparison</a>
+        <a href={`${c.repository}/blob/${c.sha}/example-worker/fixtures.c`} target="_blank" rel="noopener noreferrer" class="qf-link">C fixture loading</a>
+      </p>
+    </div>
+  </details>
+</section>
