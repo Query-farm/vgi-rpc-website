@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-19T17:12:36.505565+00:00",
+  "generated_at": "2026-10-19T19:41:20.274175+00:00",
   "languages": {
     "python": {
       "version": "0.47.2",
@@ -485,7 +485,7 @@
       },
       "evidence": "declared",
       "repo": "https://github.com/Query-farm/vgi-rpc-c",
-      "docs": "https://github.com/Query-farm/vgi-rpc-c/tree/main/docs",
+      "docs": "https://vgi-rpc-c.pages.dev",
       "package_url": null,
       "transports": {
         "pipe": true,
