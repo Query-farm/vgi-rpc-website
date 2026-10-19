@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-19T15:29:17.743615+00:00",
+  "generated_at": "2026-10-19T17:12:36.505565+00:00",
   "languages": {
     "python": {
       "version": "0.47.2",
@@ -478,8 +478,8 @@
     "c": {
       "version": "0.1.0",
       "source": {
-        "sha": "32e1ba0637eb46353434cdd05cb0247d5a55e0f9",
-        "source": "https://github.com/Query-farm/vgi-rpc-c/blob/32e1ba0637eb46353434cdd05cb0247d5a55e0f9/docs/conformance.md",
+        "sha": "01ab087349a4cf4c733b8fea194858a34c6ecc74",
+        "source": "https://github.com/Query-farm/vgi-rpc-c/blob/01ab087349a4cf4c733b8fea194858a34c6ecc74/docs/conformance.md",
         "version": "0.1.0",
         "reviewed_at": "2026-10-19"
       },
@@ -492,7 +492,7 @@
         "stdio": true,
         "unix_socket": true,
         "tcp": true,
-        "shared_memory": false,
+        "shared_memory": true,
         "http": true
       },
       "patterns": {
@@ -513,7 +513,7 @@
         "annotated_types": true,
         "authentication": true,
         "external_storage": true,
-        "opentelemetry": false
+        "opentelemetry": true
       },
       "client": {
         "available": true,
@@ -532,10 +532,10 @@
           "tcp": true,
           "http": true,
           "http_zstd": true,
-          "shared_memory": false
+          "shared_memory": true
         },
         "features": {
-          "worker_pool": false,
+          "worker_pool": true,
           "introspection": true,
           "authentication": true,
           "client_logging": true,

@@ -240,7 +240,7 @@ LANGUAGES: dict[str, dict[str, Any]] = {
         "version_cmd": None,
         "known_transports": {
             "pipe": True, "stdio": True, "unix_socket": True, "tcp": True,
-            "shared_memory": False, "http": True,
+            "shared_memory": True, "http": True,
         },
         "known_patterns": {pattern: True for pattern in [
             "unary", "unary_void", "producer", "producer_with_header",
@@ -250,7 +250,7 @@ LANGUAGES: dict[str, dict[str, Any]] = {
             "introspection": True, "client_logging": True, "error_propagation": True,
             "complex_types": True, "optional_types": True, "dataclass_types": True,
             "annotated_types": True, "authentication": True, "external_storage": True,
-            "opentelemetry": False,
+            "opentelemetry": True,
         },
     },
 }
@@ -373,10 +373,10 @@ CLIENTS: dict[str, dict[str, Any]] = {
         "transports": {
             "iroh": False, "httpi": False,
             "subprocess": True, "unix_socket": True, "tcp": True,
-            "http": True, "http_zstd": True, "shared_memory": False,
+            "http": True, "http_zstd": True, "shared_memory": True,
         },
         "features": {
-            "worker_pool": False, "introspection": True, "authentication": True,
+            "worker_pool": True, "introspection": True, "authentication": True,
             "client_logging": True, "external_storage": True,
         },
     },
