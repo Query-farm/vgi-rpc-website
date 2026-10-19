@@ -765,7 +765,9 @@ def main():
             "peak_rss_bytes",
         ]
         with (ROOT / "public/benchmarks/footprint.csv").open("w") as handle:
-            writer = csv.DictWriter(handle, fields, extrasaction="ignore")
+            writer = csv.DictWriter(
+                handle, fields, extrasaction="ignore", lineterminator="\n"
+            )
             writer.writeheader()
             writer.writerows(data["results"])
     else:

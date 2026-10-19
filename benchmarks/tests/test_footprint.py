@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import copy
+import csv
 import json
 import os
 import sys
@@ -32,6 +33,24 @@ class FootprintTests(unittest.TestCase):
         changed["results"][0]["app_bytes"] += 1
         with self.assertRaisesRegex(ValueError, "inventory"):
             validate_inventories(changed, ROOT / "public/benchmarks", public=True)
+
+    def test_csv_download_matches_json_and_uses_lf(self):
+        path = ROOT / "public/benchmarks/footprint.csv"
+        self.assertNotIn(b"\r", path.read_bytes())
+        with path.open() as handle:
+            rows = list(csv.DictReader(handle))
+        expected = {row["id"]: row for row in self.data["results"]}
+        self.assertEqual({row["id"] for row in rows}, set(expected))
+        for row in rows:
+            for field in (
+                "artifact_bytes",
+                "app_bytes",
+                "runtime_bytes",
+                "total_bytes",
+                "idle_rss_bytes",
+                "peak_rss_bytes",
+            ):
+                self.assertEqual(float(row[field]), expected[row["id"]][field])
 
     def test_incomplete_language_set_cannot_publish(self):
         changed = copy.deepcopy(self.data)
