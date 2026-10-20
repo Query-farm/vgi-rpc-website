@@ -233,7 +233,7 @@ LANGUAGES: dict[str, dict[str, Any]] = {
     },
     "c": {
         "repo": "https://github.com/Query-farm/vgi-rpc-c",
-        "docs": "https://vgi-rpc-c.pages.dev",
+        "docs": "https://vgi-rpc-c.query.farm",
         "package_url": None,
         "build_cmd": None,
         "worker_cmd": None,

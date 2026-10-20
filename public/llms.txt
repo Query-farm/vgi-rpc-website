@@ -11,7 +11,7 @@
 - [Rust API Documentation](https://docs.rs/vgi-rpc): Rust server API reference
 - [Java API Documentation](https://javadoc.io/doc/farm.query/vgirpc): Java API reference
 - [C# Documentation](https://github.com/Query-farm/vgi-rpc-csharp#readme): C# API reference and guides
-- [C Documentation](https://vgi-rpc-c.pages.dev): C11 nanoarrow API and conformance guides
+- [C Documentation](https://vgi-rpc-c.query.farm): C11 nanoarrow API and conformance guides
 - [C++ Documentation](https://vgi-rpc-cpp.query.farm): C++ API reference and guides
 - [Wire Protocol](https://vgi-rpc.query.farm/wire-protocol): Binary framing and message format specification
 - [Benchmarks](https://vgi-rpc.query.farm/benchmarks): Performance benchmarks across transports and languages
@@ -125,7 +125,7 @@ SDK documentation reviewed October 1, 2026; the C implementation was added and r
 - **Features:** Arrow C Data clients and servers using nanoarrow, protocol reflection, client logging, error propagation, complex/optional/annotated types, authentication, compression, stateless continuations, sticky sessions, external storage, verified HTTPS clients, worker pooling, OpenTelemetry traces and metrics
 - **Scope:** native Iroh and bundled OAuth/cloud-provider SDKs are not implemented. Shared-memory decoding returns owned buffers rather than mmap-backed application arrays. The separate [vgi-c](https://github.com/Query-farm/vgi-c) SDK provides VGI application workers.
 
-Clone https://github.com/Query-farm/vgi-rpc-c, then run `cmake -S . -B build` and `cmake --build build --parallel`. Link `vgi_rpc::vgi_rpc` and include `<vgi_rpc/client.h>` or `<vgi_rpc/rpc.h>`. The compiled calculator examples show schema declaration, a handler, and a native subprocess/HTTP client. Documentation: https://vgi-rpc-c.pages.dev. Validation at the reviewed source commit passed 1,692 shared tests plus a cross-worker test, and 1,397 native-client tests against Python.
+Clone https://github.com/Query-farm/vgi-rpc-c, then run `cmake -S . -B build` and `cmake --build build --parallel`. Link `vgi_rpc::vgi_rpc` and include `<vgi_rpc/client.h>` or `<vgi_rpc/rpc.h>`. The compiled calculator examples show schema declaration, a handler, and a native subprocess/HTTP client. Documentation: https://vgi-rpc-c.query.farm. Validation at the reviewed source commit passed 1,692 shared tests plus a cross-worker test, and 1,397 native-client tests against Python.
 
 ## Optional
 
