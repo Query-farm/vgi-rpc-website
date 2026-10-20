@@ -34,6 +34,7 @@ scripts/           # test-capabilities.py — CI script that probes language imp
 - **Astro components**: frontmatter (TypeScript) between `---` fences, template below. Props use `interface Props`.
 - **Styling**: Inline Tailwind classes. Dark mode via `dark:` prefix. Responsive mobile-first (`sm:`, `md:`, `lg:`).
 - **Design system**: Query.Farm **Strata Sun**, ported from `~/Development/query-farm-astro` (its `DESIGN_BRIEF.md` is the authority). Tokens in `src/styles/global.css`: `soil-*` grounds/text (paper `soil-50`, ink `soil-900`), `sun-*` gold for identity and accents, `field-*` green for CTAs and interaction, `rock-*` dark grounds and code, `cream`/`cream-2` text on dark, `link*`, `cat-*` tints only where hue carries meaning.
+- **Dark reading surfaces**: use `dark-page`, `dark-panel`, `dark-raised`, `dark-inset`, and `dark-rule` for pages, tables, and controls. Preserve `rock-900` for code blocks.
 - **Contrast law**: `sun-700` is the only gold that may carry text on a light ground; `sun-400` gold is never body text; code blocks always sit on `rock-900`; buttons darken on hover.
 - **Fonts**: Petrona 600 (headings, via `font-display`), Noto Sans (body; figures and numeric columns use `.qf-figure` / `td[data-numeric]`), JetBrains Mono (code), from Google Fonts.
 - **External links**: Always use `target="_blank" rel="noopener noreferrer"`.

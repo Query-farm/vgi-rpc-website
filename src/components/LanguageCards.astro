@@ -77,7 +77,7 @@ const languages = [
 ];
 ---
 
-<section id="languages" class="py-20 md:py-24 bg-soil-100 dark:bg-rock-950/50">
+<section id="languages" class="py-20 md:py-24 bg-soil-100 dark:bg-dark-inset/50">
   <div class="illustrated-section max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <RpcIllustration variant="languages" class="section-illustration" />
     <h2 class="text-3xl md:text-4xl text-center
@@ -92,7 +92,7 @@ const languages = [
       {languages.map(lang => (
         <div class="language-entry flex flex-col p-6 rounded-xl border shadow-sm
           bg-white border-soil-300/60
-          dark:bg-rock-800 dark:border-rock-700 dark:shadow-none">
+          dark:bg-dark-raised dark:border-dark-rule dark:shadow-none">
           <div class="flex items-start justify-between">
             <div class="flex items-center gap-3">
               <img src={lang.logo} alt={`${lang.name} logo`} class:list={['w-8 h-8', (lang.name === 'Rust' || lang.name === 'Java') && 'dark:invert']} />

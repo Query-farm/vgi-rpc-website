@@ -62,7 +62,7 @@ const transports = [
 ] as const;
 ---
 
-<section id="transports" class="py-20 md:py-24 bg-soil-50 dark:bg-rock-900">
+<section id="transports" class="py-20 md:py-24 bg-soil-50 dark:bg-dark-panel">
   <div class="illustrated-section max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <RpcIllustration variant="network" class="section-illustration" />
     <h2 class="text-3xl md:text-4xl text-center
@@ -84,7 +84,7 @@ const transports = [
       {transports.map(transport => (
         <div class="transport-entry flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-6 p-5 rounded-xl border shadow-sm
           bg-white border-soil-300/60
-          dark:bg-rock-800 dark:border-rock-700 dark:shadow-none">
+          dark:bg-dark-raised dark:border-dark-rule dark:shadow-none">
           <div class="flex-shrink-0 flex items-center gap-4 w-full md:w-64">
             <TransportIcon transport={transport.icon} />
             <div>
@@ -101,7 +101,7 @@ const transports = [
           </p>
           <span class="flex-shrink-0 inline-flex items-center rounded-full border px-2.5 py-0.5 text-[12.5px] font-medium leading-normal
             border-soil-300 bg-soil-100/70 text-soil-700
-            dark:border-rock-700 dark:bg-rock-900 dark:text-cream-2">
+            dark:border-dark-rule dark:bg-dark-panel dark:text-cream-2">
             {transport.useCase}
           </span>
         </div>

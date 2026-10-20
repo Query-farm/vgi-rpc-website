@@ -29,7 +29,7 @@ const features = [
 ];
 ---
 
-<section id="why" class="py-20 md:py-24 bg-soil-100 dark:bg-rock-950/50">
+<section id="why" class="py-20 md:py-24 bg-soil-100 dark:bg-dark-inset/50">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <h2 class="text-3xl md:text-4xl text-center
       text-soil-900 dark:text-cream">
@@ -43,7 +43,7 @@ const features = [
       {features.map((feature, index) => (
         <div class="feature-entry p-6 rounded-xl border shadow-sm
           bg-white border-soil-300/60
-          dark:bg-rock-800 dark:border-rock-700 dark:shadow-none">
+          dark:bg-dark-raised dark:border-dark-rule dark:shadow-none">
           <span class="feature-index" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
           <h3 class="text-lg text-soil-900 dark:text-cream">
             {feature.title}
@@ -56,7 +56,7 @@ const features = [
     </div>
 
     <div class="rpc-patterns mt-12 grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-16">
-      <article id="batched-exchange" class="border-t border-soil-300 dark:border-rock-700 pt-7">
+      <article id="batched-exchange" class="border-t border-soil-300 dark:border-dark-rule pt-7">
         <h3 class="text-2xl text-soil-900 dark:text-cream">A batch of work. One exchange.</h3>
         <p class="mt-4 text-sm leading-relaxed text-soil-700 dark:text-cream-2">
           A method that scores 1,000 inputs can accept all 1,000 rows in one Arrow record batch and return a batch of scores.
@@ -70,7 +70,7 @@ const features = [
         </p>
         <a class="qf-link inline-block mt-4 text-sm" href="/wire-protocol#stream">How exchange streams work &rarr;</a>
       </article>
-      <article id="http-state" class="border-t border-soil-300 dark:border-rock-700 pt-7">
+      <article id="http-state" class="border-t border-soil-300 dark:border-dark-rule pt-7">
         <h3 class="text-2xl text-soil-900 dark:text-cream">State that can move between workers.</h3>
         <p class="mt-4 text-sm leading-relaxed text-soil-700 dark:text-cream-2">
           HTTP stream state can be externalized into encrypted, authenticated continuation tokens that the client returns

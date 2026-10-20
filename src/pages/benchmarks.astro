@@ -40,7 +40,7 @@ const concurrencies = [...new Set(controlled.map(result => result.concurrency ??
 const benchmarkImplementations = benchmarkData.implementations as BenchmarkImplementation[];
 const implementations = new Map(benchmarkImplementations.map(item => [item.id, item]));
 const pendingImplementations = benchmarkImplementations.filter(item => item.benchmark_status === 'awaiting_canonical_run');
-const filterButtonClass = 'rounded-full border border-soil-300 bg-white px-3 py-1.5 text-xs font-medium text-soil-700 transition-colors hover:border-field-600 hover:text-link-hover aria-pressed:border-field-600 aria-pressed:bg-field-700 aria-pressed:text-white disabled:cursor-not-allowed disabled:opacity-40 dark:border-rock-700 dark:bg-rock-800 dark:text-cream-2 dark:hover:text-link-dark-hover dark:aria-pressed:bg-field-700 dark:aria-pressed:text-white';
+const filterButtonClass = 'rounded-full border border-soil-300 bg-white px-3 py-1.5 text-xs font-medium text-soil-700 transition-colors hover:border-field-600 hover:text-link-hover aria-pressed:border-field-600 aria-pressed:bg-field-700 aria-pressed:text-white disabled:cursor-not-allowed disabled:opacity-40 dark:border-dark-rule dark:bg-dark-raised dark:text-cream-2 dark:hover:text-link-dark-hover dark:aria-pressed:bg-field-700 dark:aria-pressed:text-white';
 
 const transportNames: Record<string, string> = {
   stdio: 'Subprocess / stdio', unix: 'Unix socket', tcp: 'TCP loopback',
@@ -155,7 +155,7 @@ const jsonLd = {
     </section>
 
     {benchmarkData.status !== 'published' ? (
-      <section class="mt-10 border-l-[3px] border-sun-400 bg-white dark:bg-rock-800 rounded-r-lg p-6">
+      <section class="mt-10 border-l-[3px] border-sun-400 bg-white dark:bg-dark-raised rounded-r-lg p-6">
         <p class="text-xs font-bold uppercase tracking-wider text-sun-700 dark:text-sun-400">Awaiting verified release run</p>
         <h2 class="mt-2 text-xl font-semibold text-soil-900 dark:text-cream">Stale figures have been retired</h2>
         <p class="mt-2 max-w-3xl text-sm text-soil-700 dark:text-cream-2">
@@ -171,7 +171,7 @@ const jsonLd = {
     )}
 
     {pendingImplementations.length > 0 && (
-      <section class="mt-6 border-l-[3px] border-sun-400 bg-white dark:bg-rock-800 rounded-r-lg p-5">
+      <section class="mt-6 border-l-[3px] border-sun-400 bg-white dark:bg-dark-raised rounded-r-lg p-5">
         <p class="text-xs font-bold uppercase tracking-wider text-sun-700 dark:text-sun-400">Canonical results pending</p>
         <p class="mt-2 max-w-3xl text-sm text-soil-700 dark:text-cream-2">
           {pendingImplementations.map(item => item.name).join(', ')} has been added to the release-pinned benchmark matrix.
@@ -185,15 +185,15 @@ const jsonLd = {
       <p class="mt-2 text-sm text-soil-700 dark:text-cream-2">
         Every run is bound to the full commit ID behind the release tag selected for that run. These historical measurements may predate the SDK versions in the capability matrix; Iroh has not been measured in this snapshot.
       </p>
-      <div class="mt-4 overflow-x-auto rounded-xl border border-soil-300 dark:border-rock-700">
+      <div class="mt-4 overflow-x-auto rounded-xl border border-soil-300 dark:border-dark-rule">
         <table class="w-full text-sm">
-          <thead class="bg-soil-100 dark:bg-rock-800"><tr>
+          <thead class="bg-soil-100 dark:bg-dark-raised"><tr>
             <th class="px-4 py-3 text-left">Implementation</th><th class="px-4 py-3 text-left">Release</th>
             <th class="px-4 py-3 text-left">Commit</th><th class="px-4 py-3 text-left">Status</th>
           </tr></thead>
-          <tbody class="divide-y divide-soil-200 dark:divide-rock-700">
+          <tbody class="divide-y divide-soil-200 dark:divide-dark-rule">
             {benchmarkImplementations.map(item => (
-              <tr class="bg-white dark:bg-rock-900">
+              <tr class="bg-white dark:bg-dark-panel">
                 <td class="px-4 py-3 font-semibold text-soil-900 dark:text-cream">{item.name}</td>
                 <td class="px-4 py-3 qf-figure text-soil-900 dark:text-cream">{item.release}</td>
                 <td class="px-4 py-3 font-mono text-xs text-soil-700 dark:text-cream-2">{item.sha.slice(0, 12)}</td>
@@ -210,7 +210,7 @@ const jsonLd = {
     {measured.length > 0 && <BenchmarkVisuals />}
 
     {failures.length > 0 && (
-      <section class="mt-12 border-l-[3px] border-cat-clay-ink dark:border-cat-clay bg-white dark:bg-rock-800 rounded-r-lg p-6">
+      <section class="mt-12 border-l-[3px] border-cat-clay-ink dark:border-cat-clay bg-white dark:bg-dark-raised rounded-r-lg p-6">
         <p class="text-xs font-bold uppercase tracking-wider text-cat-clay-ink dark:text-cat-clay">Measured compatibility gaps</p>
         <h2 class="mt-2 text-xl font-semibold text-soil-900 dark:text-cream">{failures.length} scenarios did not complete</h2>
         <p class="mt-2 text-sm text-soil-700 dark:text-cream-2">Failures are part of the reproducible matrix and are published instead of being omitted or converted into performance numbers.</p>
@@ -247,16 +247,16 @@ const jsonLd = {
             <p class="mt-2 text-[11px] text-soil-700 dark:text-cream-2">Single-call workloads have one client; load workloads expose 1, 2, 4, 8, and 16.</p>
           </div>
         </div>
-        <div class="mt-5 overflow-x-auto rounded-xl border border-soil-300 dark:border-rock-700">
+        <div class="mt-5 overflow-x-auto rounded-xl border border-soil-300 dark:border-dark-rule">
           <table class="w-full text-sm">
-            <thead class="bg-soil-100 dark:bg-rock-800"><tr>
+            <thead class="bg-soil-100 dark:bg-dark-raised"><tr>
               <th class="px-4 py-3 text-left">Server</th><th class="px-4 py-3 text-right">Clients</th><th class="px-4 py-3 text-right">Mean</th><th class="px-4 py-3 text-right">P50</th>
               <th class="px-4 py-3 text-right">P95</th><th class="px-4 py-3 text-right">P99</th>
               <th class="px-4 py-3 text-right">Calls</th><th class="px-4 py-3 text-right">Payload</th><th class="px-4 py-3 text-right">Host CPU</th><th class="px-4 py-3 text-right">Quality</th>
             </tr></thead>
-            <tbody class="divide-y divide-soil-200 dark:divide-rock-700">
+            <tbody class="divide-y divide-soil-200 dark:divide-dark-rule">
               {controlled.map(result => (
-                <tr class="hidden bg-white dark:bg-rock-900" data-row data-workload={result.workload} data-transport={result.transport} data-concurrency={result.concurrency ?? 1}>
+                <tr class="hidden bg-white dark:bg-dark-panel" data-row data-workload={result.workload} data-transport={result.transport} data-concurrency={result.concurrency ?? 1}>
                   <td class="px-4 py-3 font-semibold text-soil-900 dark:text-cream">{implementations.get(result.server)?.name ?? result.server}</td>
                   <td data-numeric class="px-4 py-3 text-right">{result.concurrency ?? 1}</td>
                   <td data-numeric class="px-4 py-3 text-right font-semibold text-soil-900 dark:text-cream">{latency(result.mean_ns)}</td>
@@ -276,13 +276,13 @@ const jsonLd = {
     )}
 
     <section class="mt-12">
-      <div class="rounded-xl border border-soil-300 p-6 dark:border-rock-700">
+      <div class="rounded-xl border border-soil-300 p-6 dark:border-dark-rule">
         <h2 class="text-xl font-semibold text-soil-900 dark:text-cream">What is excluded</h2>
         <p class="mt-2 text-sm text-soil-700 dark:text-cream-2">In-process pipes, WSGI test clients, debug builds, unpinned working trees, first-call startup time, and results from shared CI hosts are not used for cross-language claims.</p>
       </div>
     </section>
 
-    <section class="mt-12 rounded-xl border border-soil-300 bg-soil-100/30 p-6 dark:border-rock-700 dark:bg-rock-800/50">
+    <section class="mt-12 rounded-xl border border-soil-300 bg-soil-100/30 p-6 dark:border-dark-rule dark:bg-dark-raised/50">
       <h2 class="text-xl font-semibold text-soil-900 dark:text-cream">Methodology</h2>
       <ul class="mt-4 grid gap-3 text-sm text-soil-700 dark:text-cream-2 md:grid-cols-2">
         <li>Release builds from isolated checkouts pinned to the commits above.</li><li>Python HTTP uses pinned Granian 2.8.1 with 16 worker processes and one blocking thread each.</li><li>Java runs on Amazon Corretto 25.0.4 so negotiated shared memory uses the JDK 22+ FFM implementation.</li><li>Latency uses a one-second warm-up and five one-second rounds; unstable cases receive two extension rounds.</li>
@@ -293,7 +293,7 @@ const jsonLd = {
       <p class="mt-4 text-xs text-soil-700 dark:text-cream-2">Results compare only within one snapshot, host, workload, and benchmark layer. They are not universal hardware-independent rankings.</p>
     </section>
 
-    <div class="mt-16 border-t border-soil-300 pt-8 text-center dark:border-rock-700">
+    <div class="mt-16 border-t border-soil-300 pt-8 text-center dark:border-dark-rule">
       <a href="/" class="text-sm font-medium text-link hover:text-link-hover dark:text-link-dark dark:hover:text-link-dark-hover">&larr; Back to home</a>
     </div>
   </article>

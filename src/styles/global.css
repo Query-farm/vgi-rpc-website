@@ -33,6 +33,13 @@
   --color-rock-900: #1a1512;  /* code ground — always */
   --color-rock-950: #100d0a;
 
+  /* Reading surfaces: lighter than the code palette in dark mode. */
+  --color-dark-page: #302b27;
+  --color-dark-panel: #3a332e;
+  --color-dark-raised: #463d35;
+  --color-dark-inset: #29241f;
+  --color-dark-rule: #786b5e;
+
   /* field — the one cool note: CTAs and interaction */
   --color-field-400: #7a9a54;
   --color-field-600: #5f7a3c;
@@ -78,6 +85,7 @@
 
 @layer base {
   html {
+    color-scheme: light dark;
     scroll-behavior: smooth;
     scroll-padding-top: calc(var(--qf-nav-h) + 16px);
   }
@@ -109,7 +117,7 @@
 
   @media (prefers-color-scheme: dark) {
     body {
-      background-color: var(--color-rock-900);
+      background-color: var(--color-dark-page);
       color: var(--color-cream);
     }
   }
@@ -292,10 +300,10 @@
 .install-entry code { border-radius: 0; }
 .rpc-home #get-started .install-layout > p { grid-column: 2; font-size: 12px; }
 @media (prefers-color-scheme: dark) {
-  :root { --editorial-rule: var(--color-rock-700); --editorial-muted: var(--color-cream-2); }
+  :root { --editorial-rule: var(--color-dark-rule); --editorial-muted: var(--color-cream-2); }
   .edition-label .font-mono { color: var(--color-cream); }
   .hero-copy h1 em, #what-is h2 em, .feature-index { color: var(--color-sun-300); }
-  .rpc-home #example, .rpc-home #comparison { background: var(--color-rock-950); }
+  .rpc-home #example, .rpc-home #comparison { background: var(--color-dark-panel); }
 }
 @media (max-width: 1023px) {
   .hero-layout { gap: 24px; padding: 56px 0; }

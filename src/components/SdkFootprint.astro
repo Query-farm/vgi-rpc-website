@@ -11,7 +11,7 @@ const metrics = [
 ] as const;
 ---
 
-<section id="vgi-sdk-footprint" class="mt-12 scroll-mt-24 border-b border-soil-300 pb-10 dark:border-rock-700">
+<section id="vgi-sdk-footprint" class="mt-12 scroll-mt-24 border-b border-soil-300 pb-10 dark:border-dark-rule">
   <p class="text-xs font-semibold uppercase tracking-wider text-sun-700 dark:text-cream-2">VGI application SDKs</p>
   <h2 class="mt-2 text-3xl font-semibold text-soil-900 dark:text-cream">C and Rust: full example workers</h2>
   <p class="mt-3 max-w-3xl text-sm leading-relaxed text-soil-700 dark:text-cream-2">
@@ -24,18 +24,18 @@ const metrics = [
     Five fresh processes per implementation · Stdio · One caller and worker · MiB.
   </p>
   <p class="mt-5 text-xs text-soil-700 dark:text-cream-2 sm:hidden">Scroll the table horizontally for dependency sizes and memory.</p>
-  <div class="mt-6 overflow-x-auto rounded-xl border border-soil-300 dark:border-rock-700" role="region" aria-label="C and Rust VGI SDK worker measurements" tabindex="0">
+  <div class="mt-6 overflow-x-auto rounded-xl border border-soil-300 dark:border-dark-rule" role="region" aria-label="C and Rust VGI SDK worker measurements" tabindex="0">
     <table class="w-full min-w-[720px] text-sm">
       <caption class="sr-only">Full VGI example worker sizes and resident memory in MiB. Memory values are medians of five rounds.</caption>
-      <thead class="bg-soil-100 text-soil-900 dark:bg-rock-800 dark:text-cream">
+      <thead class="bg-soil-100 text-soil-900 dark:bg-dark-raised dark:text-cream">
         <tr>
           <th scope="col" class="px-4 py-3 text-left">Example worker</th>
           {metrics.map(([, label]) => <th scope="col" class="px-4 py-3 text-right">{label}</th>)}
         </tr>
       </thead>
-      <tbody class="divide-y divide-soil-200 dark:divide-rock-700">
+      <tbody class="divide-y divide-soil-200 dark:divide-dark-rule">
         {data.results.map(row => (
-          <tr class="bg-white dark:bg-rock-900">
+          <tr class="bg-white dark:bg-dark-panel">
             <th scope="row" class="px-4 py-4 text-left font-normal">
               <span class="font-semibold text-soil-900 dark:text-cream">{row.name}</span>
               <span class="ml-2 qf-figure text-xs text-soil-700 dark:text-cream-2">{row.version}</span>

@@ -170,7 +170,7 @@ const badgeText: Record<string, string> = {
 };
 ---
 
-<section id="capabilities" class="py-20 md:py-24 bg-soil-50 dark:bg-rock-900">
+<section id="capabilities" class="py-20 md:py-24 bg-soil-50 dark:bg-dark-panel">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <h2 class="text-3xl md:text-4xl text-center text-soil-900 dark:text-cream">
       What Each SDK Supports
@@ -196,7 +196,7 @@ const badgeText: Record<string, string> = {
         <p class="mt-5 qf-eyebrow text-soil-600 dark:text-cream-2">Supported by all eight</p>
         <ul class="mt-2 flex flex-wrap gap-1.5">
           {workerUniversal.map(row => (
-            <li class="rounded-md border border-soil-300 bg-white px-2 py-0.5 text-xs text-soil-700 dark:border-rock-700 dark:bg-rock-800 dark:text-cream-2">{row.label}</li>
+            <li class="rounded-md border border-soil-300 bg-white px-2 py-0.5 text-xs text-soil-700 dark:border-dark-rule dark:bg-dark-raised dark:text-cream-2">{row.label}</li>
           ))}
         </ul>
       </div>
@@ -209,20 +209,20 @@ const badgeText: Record<string, string> = {
         <p class="mt-4 qf-eyebrow text-soil-600 dark:text-cream-2">Supported by every client</p>
         <ul class="mt-2 flex flex-wrap gap-1.5">
           {clientUniversal.map(label => (
-            <li class="rounded-md border border-soil-300 bg-white px-2 py-0.5 text-xs text-soil-700 dark:border-rock-700 dark:bg-rock-800 dark:text-cream-2">{label}</li>
+            <li class="rounded-md border border-soil-300 bg-white px-2 py-0.5 text-xs text-soil-700 dark:border-dark-rule dark:bg-dark-raised dark:text-cream-2">{label}</li>
           ))}
         </ul>
-        <div class="mt-4 overflow-x-auto rounded-xl border border-soil-300 bg-white shadow-sm dark:border-rock-700 dark:bg-rock-800 dark:shadow-none">
+        <div class="mt-4 overflow-x-auto rounded-xl border border-soil-300 bg-white shadow-sm dark:border-dark-rule dark:bg-dark-raised dark:shadow-none">
           <table class="w-full min-w-[640px] border-collapse text-[14px]">
             <thead>
-              <tr class="border-b border-soil-300 bg-[#fbf7ee] dark:border-rock-700 dark:bg-rock-950/40">
+              <tr class="border-b border-soil-300 bg-[#fbf7ee] dark:border-dark-rule dark:bg-dark-inset/40">
                 <th class="text-left px-[14px] py-2.5 text-[12.5px] font-semibold whitespace-nowrap text-soil-600 dark:text-cream-2">Language</th>
                 {clientColumns.map(column => (
                   <th class="px-[10px] py-2.5 text-center text-[12.5px] font-semibold text-soil-600 dark:text-cream-2">{column.label}</th>
                 ))}
               </tr>
             </thead>
-            <tbody class="divide-y divide-soil-200 dark:divide-rock-700">
+            <tbody class="divide-y divide-soil-200 dark:divide-dark-rule">
               {languages.map(language => (
                 <tr>
                   <th scope="row" class="px-[14px] py-2.5 text-left font-medium whitespace-nowrap text-soil-900 dark:text-cream">{langLabels[language]}</th>
@@ -234,7 +234,7 @@ const badgeText: Record<string, string> = {
                           ? <span class="font-semibold text-field-700 dark:text-field-400" aria-label="Supported" title="Supported">&#x2713;</span>
                           : value === false || value === undefined || value === null || value === ''
                             ? <span class="text-soil-300 dark:text-rock-700" aria-label="Not supported" title="Not supported">&#x2014;</span>
-                            : <span class="inline-flex items-center justify-center rounded-md border px-2 py-0.5 text-[11.5px] font-medium leading-snug whitespace-nowrap border-soil-300 bg-soil-100/70 text-soil-700 dark:border-rock-700 dark:bg-rock-900 dark:text-cream-2">{badgeText[value] ?? value}</span>}
+                            : <span class="inline-flex items-center justify-center rounded-md border px-2 py-0.5 text-[11.5px] font-medium leading-snug whitespace-nowrap border-soil-300 bg-soil-100/70 text-soil-700 dark:border-dark-rule dark:bg-dark-panel dark:text-cream-2">{badgeText[value] ?? value}</span>}
                       </td>
                     );
                   })}
@@ -249,13 +249,13 @@ const badgeText: Record<string, string> = {
       </div>
     </div>
 
-    <details class="group mt-12 rounded-xl border border-soil-300 bg-white/60 dark:border-rock-700 dark:bg-rock-800/40">
+    <details class="group mt-12 rounded-xl border border-soil-300 bg-white/60 dark:border-dark-rule dark:bg-dark-raised/40">
       <summary class="cursor-pointer list-none px-5 py-4 font-medium text-soil-900 dark:text-cream">
         <span class="mr-2 inline-block transition-transform group-open:rotate-90" aria-hidden="true">&#x203A;</span>
         Full capability matrix
         <span class="ml-1 text-sm font-normal text-soil-700 dark:text-cream-2">(every declared capability, by language)</span>
       </summary>
-      <div class="border-t border-soil-300 px-5 pb-6 dark:border-rock-700">
+      <div class="border-t border-soil-300 px-5 pb-6 dark:border-dark-rule">
         <div class="mt-10">
           <h3 class="text-lg text-soil-900 dark:text-cream">Client Implementations</h3>
           <p class="mt-1 mb-4 text-sm text-soil-700 dark:text-cream-2">
@@ -277,7 +277,7 @@ const badgeText: Record<string, string> = {
           </p>
         </div>
 
-        <div class="mt-12 border-t border-soil-300 pt-10 dark:border-rock-700">
+        <div class="mt-12 border-t border-soil-300 pt-10 dark:border-dark-rule">
           <h3 class="text-lg text-soil-900 dark:text-cream">Worker Transports</h3>
           <p class="mt-1 mb-4 text-sm text-soil-700 dark:text-cream-2">
             Ways each implementation can host a worker. All eight can expose raw or HTTP workers through the standalone Iroh bridge; Rust also offers an embedded native Iroh server. Stdio availability does not imply a native subprocess-launching client.

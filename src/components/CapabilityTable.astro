@@ -16,10 +16,10 @@ interface Props {
 const { firstColumnLabel, languages, languageLabels, rows } = Astro.props;
 ---
 
-<div class="overflow-x-auto rounded-xl border border-soil-300 bg-white shadow-sm dark:border-rock-700 dark:bg-rock-800 dark:shadow-none">
+<div class="overflow-x-auto rounded-xl border border-soil-300 bg-white shadow-sm dark:border-dark-rule dark:bg-dark-raised dark:shadow-none">
   <table class="w-full min-w-[880px] table-fixed border-collapse text-[14px]">
     <thead>
-      <tr class="border-b border-soil-300 bg-[#fbf7ee] dark:border-rock-700 dark:bg-rock-950/40">
+      <tr class="border-b border-soil-300 bg-[#fbf7ee] dark:border-dark-rule dark:bg-dark-inset/40">
         <th class="w-[24%] text-left px-[14px] py-2.5 text-[12.5px] font-semibold whitespace-nowrap text-soil-600 dark:text-cream-2">{firstColumnLabel}</th>
         {languages.map(language => (
           <th class="text-center px-[14px] py-2.5 text-[12.5px] font-semibold whitespace-nowrap text-soil-600 dark:text-cream-2">
@@ -28,7 +28,7 @@ const { firstColumnLabel, languages, languageLabels, rows } = Astro.props;
         ))}
       </tr>
     </thead>
-    <tbody class="divide-y divide-soil-200 dark:divide-rock-700">
+    <tbody class="divide-y divide-soil-200 dark:divide-dark-rule">
       {rows.map(row => (
         <tr>
           <td class="px-[14px] py-2.5 font-medium text-soil-900 dark:text-cream">{row.label}</td>
@@ -44,7 +44,7 @@ const { firstColumnLabel, languages, languageLabels, rows } = Astro.props;
                       ? <span class="text-soil-300 dark:text-rock-700" aria-label="Not supported" title="Not supported">&#x2014;</span>
                       : value === undefined || value === null || value === ''
                         ? <span class="text-soil-300 dark:text-rock-700" aria-label="Not declared" title="Not declared">&#x2014;</span>
-                        : <span class="inline-flex items-center justify-center rounded-md border px-2 py-0.5 text-[11.5px] font-medium leading-snug border-soil-300 bg-soil-100/70 text-soil-700 dark:border-rock-700 dark:bg-rock-900 dark:text-cream-2">{value}</span>}
+                        : <span class="inline-flex items-center justify-center rounded-md border px-2 py-0.5 text-[11.5px] font-medium leading-snug border-soil-300 bg-soil-100/70 text-soil-700 dark:border-dark-rule dark:bg-dark-panel dark:text-cream-2">{value}</span>}
               </td>
             );
           })}

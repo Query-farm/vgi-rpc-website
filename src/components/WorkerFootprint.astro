@@ -11,7 +11,7 @@ const sourceUrl = (row: typeof rows[number]) => `${row.repository.replace(/\.git
 const measuredDate = data.generated_at.slice(0, 10);
 ---
 
-<section id="worker-footprint" class="mt-12 scroll-mt-24 border-y border-soil-300 py-10 dark:border-rock-700" data-worker-footprint data-values={JSON.stringify(chartData)}>
+<section id="worker-footprint" class="mt-12 scroll-mt-24 border-y border-soil-300 py-10 dark:border-dark-rule" data-worker-footprint data-values={JSON.stringify(chartData)}>
   <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
     <div>
       <p class="text-xs font-semibold uppercase tracking-wider text-sun-700 dark:text-cream-2">Binary size &amp; memory</p>
@@ -34,11 +34,11 @@ const measuredDate = data.generated_at.slice(0, 10);
     This snapshot has its own host and source pins, separate from the Linux latency results below.
   </p>
 
-  <div class="mt-8 rounded-xl border border-soil-300 bg-white p-4 sm:p-6 dark:border-rock-700 dark:bg-rock-900">
+  <div class="mt-8 rounded-xl border border-soil-300 bg-white p-4 sm:p-6 dark:border-dark-rule dark:bg-dark-panel">
     <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
       <label class="flex items-center gap-3 text-sm font-medium text-soil-900 dark:text-cream">
         Compare
-        <select data-footprint-metric class="max-w-full rounded-md border border-soil-400 bg-soil-50 px-3 py-2 text-sm text-soil-900 focus:outline-2 focus:outline-field-700 dark:border-rock-600 dark:bg-rock-800 dark:text-cream">
+        <select data-footprint-metric class="max-w-full rounded-md border border-soil-400 bg-soil-50 px-3 py-2 text-sm text-soil-900 focus:outline-2 focus:outline-field-700 dark:border-dark-rule dark:bg-dark-raised dark:text-cream">
           <option value="idle_rss_bytes">Warmed worker RSS</option>
           <option value="peak_rss_bytes">Peak RSS during 1 MiB echo</option>
           <option value="artifact_bytes">Worker artifact only</option>
@@ -56,8 +56,8 @@ const measuredDate = data.generated_at.slice(0, 10);
       {rows.map(row => (
         <li data-footprint-bar={row.id} class="grid grid-cols-[5rem_1fr_5rem] items-center gap-3 text-sm sm:grid-cols-[7rem_1fr_6rem]">
           <span class="font-medium text-soil-900 dark:text-cream">{row.name}</span>
-          <span class="h-5 overflow-hidden rounded-sm bg-soil-100 dark:bg-rock-800" aria-hidden="true">
-            <span data-bar-fill class="block h-full rounded-sm bg-field-700 dark:bg-field-500" style={`width: ${row.idle_rss_bytes / maxIdle * 100}%`}></span>
+          <span class="h-5 overflow-hidden rounded-sm bg-soil-100 dark:bg-dark-raised" aria-hidden="true">
+            <span data-bar-fill class="block h-full rounded-sm bg-field-700 dark:bg-field-400" style={`width: ${row.idle_rss_bytes / maxIdle * 100}%`}></span>
           </span>
           <span data-bar-value class="qf-figure text-right text-soil-900 dark:text-cream">{mib(row.idle_rss_bytes)}</span>
         </li>
@@ -66,10 +66,10 @@ const measuredDate = data.generated_at.slice(0, 10);
   </div>
 
   <p class="mt-6 text-xs text-soil-700 dark:text-cream-2 sm:hidden">Scroll the table horizontally for dependency sizes and memory.</p>
-  <div class="mt-3 overflow-x-auto rounded-xl border border-soil-300 sm:mt-6 dark:border-rock-700" role="region" aria-label="Worker file size and memory measurements" tabindex="0">
+  <div class="mt-3 overflow-x-auto rounded-xl border border-soil-300 sm:mt-6 dark:border-dark-rule" role="region" aria-label="Worker file size and memory measurements" tabindex="0">
     <table class="w-full min-w-[920px] text-sm">
       <caption class="sr-only">Worker sizes in MiB. Memory values are medians across five fresh processes.</caption>
-      <thead class="bg-soil-100 text-soil-900 dark:bg-rock-800 dark:text-cream">
+      <thead class="bg-soil-100 text-soil-900 dark:bg-dark-raised dark:text-cream">
         <tr>
           <th scope="col" class="px-4 py-3 text-left">Implementation</th>
           <th scope="col" class="px-4 py-3 text-right">Worker artifact</th>
@@ -79,9 +79,9 @@ const measuredDate = data.generated_at.slice(0, 10);
           <th scope="col" class="px-4 py-3 text-right">Sampled peak RSS</th>
         </tr>
       </thead>
-      <tbody class="divide-y divide-soil-200 dark:divide-rock-700">
+      <tbody class="divide-y divide-soil-200 dark:divide-dark-rule">
         {rows.map(row => (
-          <tr class="bg-white dark:bg-rock-900">
+          <tr class="bg-white dark:bg-dark-panel">
             <th scope="row" class="px-4 py-4 text-left font-normal">
               <span class="font-semibold text-soil-900 dark:text-cream">{row.name}</span>
               <span class="ml-2 qf-figure text-xs text-soil-700 dark:text-cream-2">{row.version}</span>
@@ -114,7 +114,7 @@ const measuredDate = data.generated_at.slice(0, 10);
   </div>
   <p class="mt-3 text-xs text-soil-700 dark:text-cream-2">All sizes are MiB (1,048,576 bytes). The smaller figures under memory values show the minimum–maximum across rounds.</p>
 
-  <details class="mt-6 rounded-lg border border-soil-300 p-5 text-sm dark:border-rock-700">
+  <details class="mt-6 rounded-lg border border-soil-300 p-5 text-sm dark:border-dark-rule">
     <summary class="cursor-pointer font-semibold text-soil-900 dark:text-cream">What is counted, and how to reproduce it</summary>
     <div class="mt-4 space-y-4 leading-relaxed text-soil-700 dark:text-cream-2">
       <p>
