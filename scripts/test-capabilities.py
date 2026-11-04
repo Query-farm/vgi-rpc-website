@@ -292,16 +292,16 @@ CLIENTS: dict[str, dict[str, Any]] = {
     },
     "go": {
         "available": True,
-        "scope": "HTTP + Iroh provider",
+        "scope": "HTTP, TCP, Unix + Iroh provider",
         "api_style": "Schema-first",
         "patterns": {"unary": True, "producer": True, "exchange": True},
         "transports": {
             "iroh": "Provider required", "httpi": "Provider required",
-            "subprocess": False, "unix_socket": False, "tcp": False,
+            "subprocess": False, "unix_socket": True, "tcp": True,
             "http": True, "http_zstd": True, "shared_memory": False,
         },
         "features": {
-            "worker_pool": False, "introspection": False, "authentication": True,
+            "worker_pool": False, "introspection": True, "authentication": True,
             "client_logging": True, "external_storage": True,
         },
     },

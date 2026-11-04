@@ -1,50 +1,50 @@
 {
   "python": {
-    "sha": "7f1f40aff9309b680f0aad80cec54161d568962e",
-    "source": "https://github.com/Query-farm/vgi-rpc-python/blob/7f1f40aff9309b680f0aad80cec54161d568962e/README.md",
-    "version": "0.47.2",
-    "reviewed_at": "2026-10-01"
+    "sha": "8f54dac758ffe8ffbd9a703428029ac0daa2e94b",
+    "source": "https://github.com/Query-farm/vgi-rpc-python/blob/8f54dac758ffe8ffbd9a703428029ac0daa2e94b/README.md",
+    "version": "0.52.4",
+    "reviewed_at": "2026-11-04"
   },
   "typescript": {
-    "sha": "776ec3ee887f3631d5f4fdb4876900a9870e0f35",
-    "source": "https://github.com/Query-farm/vgi-rpc-typescript/blob/776ec3ee887f3631d5f4fdb4876900a9870e0f35/README.md",
-    "version": "0.25.4",
-    "reviewed_at": "2026-10-01"
+    "sha": "5fc83653d70f1c946f34155d24f90f24cf81d0a0",
+    "source": "https://github.com/Query-farm/vgi-rpc-typescript/blob/5fc83653d70f1c946f34155d24f90f24cf81d0a0/README.md",
+    "version": "0.29.3",
+    "reviewed_at": "2026-11-04"
   },
   "go": {
-    "sha": "701db8aff4e3a54c425c4777d8103a9567244135",
-    "source": "https://github.com/Query-farm/vgi-rpc-go/blob/701db8aff4e3a54c425c4777d8103a9567244135/README.md",
-    "version": "0.30.0",
-    "reviewed_at": "2026-10-01"
+    "sha": "42e784e66625fa46c37a0a8f9a1765b969696b43",
+    "source": "https://github.com/Query-farm/vgi-rpc-go/blob/42e784e66625fa46c37a0a8f9a1765b969696b43/README.md",
+    "version": "0.36.0",
+    "reviewed_at": "2026-11-04"
   },
   "rust": {
-    "sha": "97d48df4e04d2aa60c02697350ecfeeb0394d082",
-    "source": "https://github.com/Query-farm/vgi-rpc-rust/blob/97d48df4e04d2aa60c02697350ecfeeb0394d082/README.md",
-    "version": "0.28.0",
-    "reviewed_at": "2026-10-01"
+    "sha": "7fc2a26bc4ffab8ea7bbeb0a277d532c8e858378",
+    "source": "https://github.com/Query-farm/vgi-rpc-rust/blob/7fc2a26bc4ffab8ea7bbeb0a277d532c8e858378/README.md",
+    "version": "0.32.0",
+    "reviewed_at": "2026-11-04"
   },
   "java": {
-    "sha": "ebde99f632f01af2b6a9ceec9d6210b07c10f882",
-    "source": "https://github.com/Query-farm/vgi-rpc-java/blob/ebde99f632f01af2b6a9ceec9d6210b07c10f882/README.md",
-    "version": "0.27.1",
-    "reviewed_at": "2026-10-01"
+    "sha": "2f13ace76882659d1f1bcd745b869bb2099d2bd6",
+    "source": "https://github.com/Query-farm/vgi-rpc-java/blob/2f13ace76882659d1f1bcd745b869bb2099d2bd6/README.md",
+    "version": "0.33.2",
+    "reviewed_at": "2026-11-04"
   },
   "csharp": {
-    "sha": "a7cc6d55b4b1987faad9fc0191089e542b91272d",
-    "source": "https://github.com/Query-farm/vgi-rpc-csharp/blob/a7cc6d55b4b1987faad9fc0191089e542b91272d/README.md",
-    "version": "0.12.0",
-    "reviewed_at": "2026-10-01"
+    "sha": "3717e1e8da99f8479aaf3aff081e065bcad888d9",
+    "source": "https://github.com/Query-farm/vgi-rpc-csharp/blob/3717e1e8da99f8479aaf3aff081e065bcad888d9/README.md",
+    "version": "0.18.1",
+    "reviewed_at": "2026-11-04"
   },
   "cpp": {
-    "sha": "b1e3326f23dc4f4a16184deb7eb005050e918bc6",
-    "source": "https://github.com/Query-farm/vgi-rpc-cpp/blob/b1e3326f23dc4f4a16184deb7eb005050e918bc6/docs/native-iroh-client.md",
-    "version": "0.5.0",
-    "reviewed_at": "2026-10-01"
+    "sha": "25fad89ed4bc7746e2958537752a00fe0a707ecd",
+    "source": "https://github.com/Query-farm/vgi-rpc-cpp/blob/25fad89ed4bc7746e2958537752a00fe0a707ecd/docs/native-iroh-client.md",
+    "version": "0.11.0",
+    "reviewed_at": "2026-11-04"
   },
   "c": {
-    "sha": "01ab087349a4cf4c733b8fea194858a34c6ecc74",
-    "source": "https://github.com/Query-farm/vgi-rpc-c/blob/01ab087349a4cf4c733b8fea194858a34c6ecc74/docs/conformance.md",
+    "sha": "e97881ae773f145cd19137222e161b8592415a7b",
+    "source": "https://github.com/Query-farm/vgi-rpc-c/blob/e97881ae773f145cd19137222e161b8592415a7b/docs/conformance.md",
     "version": "0.1.0",
-    "reviewed_at": "2026-10-19"
+    "reviewed_at": "2026-11-04"
   }
 }
