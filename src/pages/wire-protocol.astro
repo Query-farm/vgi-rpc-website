@@ -32,7 +32,7 @@ const jsonLd = {
   description,
   url: 'https://vgi-rpc.query.farm/wire-protocol/',
   image: 'https://vgi-rpc.query.farm/og/wire-protocol.png',
-  dateModified: '2026-10-01',
+  dateModified: '2026-11-04',
   version: '1',
   author: {
     '@type': 'Organization',
@@ -59,7 +59,7 @@ const jsonLd = {
   ogType="article"
   ogImage="/og/wire-protocol.png"
   ogImageAlt="vgi-rpc by Query.Farm. The wire protocol. Every batch, specified. Columnar batch illustration on a paper background."
-  dateModified="2026-10-01T00:00:00-04:00"
+  dateModified="2026-11-04T00:00:00-05:00"
   articleSection="Technical specification"
   articleTags={['RPC protocol', 'Apache Arrow IPC', 'Shared memory', 'HTTP streaming', 'Protocol reflection']}
   jsonLd={jsonLd}
@@ -97,7 +97,7 @@ const jsonLd = {
           Wire Protocol Specification
         </h1>
         <p class="mt-2 text-soil-700 dark:text-cream-2">
-          Wire version 1 &mdash; Normative &mdash; Reconciled with vgi-rpc Python 0.47.2
+          Wire version 1 &mdash; Normative &mdash; Reconciled with vgi-rpc Python 0.52.4
         </p>
         <p class="mt-2 text-sm text-soil-700 dark:text-cream-2">
           This is the web edition of the cross-language contract. The{' '}
@@ -229,7 +229,9 @@ const jsonLd = {
                     <tr class="bg-white dark:bg-dark-panel"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.log_level</td><td class="px-4 py-2">EXCEPTION, ERROR, WARN, INFO, DEBUG, TRACE</td><td class="px-4 py-2">Severity level. Present on log/error batches.</td></tr>
                     <tr class="bg-white dark:bg-dark-panel"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.log_message</td><td class="px-4 py-2">UTF-8 string</td><td class="px-4 py-2">Human-readable message text.</td></tr>
                     <tr class="bg-white dark:bg-dark-panel"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.log_extra</td><td class="px-4 py-2">JSON string</td><td class="px-4 py-2">Additional structured data. Optional.</td></tr>
-                    <tr class="bg-white dark:bg-dark-panel"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.error_kind</td><td class="px-4 py-2">UTF-8 token</td><td class="px-4 py-2">Stable, machine-readable error category. Optional and open-ended.</td></tr>
+                    <tr class="bg-white dark:bg-dark-panel"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.error_kind</td><td class="px-4 py-2">UTF-8 token</td><td class="px-4 py-2">Stable, machine-readable error category: the reason. EXCEPTION batches only. Optional and open-ended.</td></tr>
+                    <tr class="bg-white dark:bg-dark-panel"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.error_code</td><td class="px-4 py-2">Canonical code name</td><td class="px-4 py-2">One of sixteen codes, such as <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">UNAVAILABLE</code>. EXCEPTION batches only; required whenever <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">error_kind</code> is set.</td></tr>
+                    <tr class="bg-white dark:bg-dark-panel"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.error_details</td><td class="px-4 py-2">JSON array</td><td class="px-4 py-2">Typed details from a fixed catalog, at most 4 KiB. EXCEPTION batches only. Optional.</td></tr>
                     <tr class="bg-white dark:bg-dark-panel"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.server_id</td><td class="px-4 py-2">12-char hex</td><td class="px-4 py-2">Server instance identifier.</td></tr>
                     <tr class="bg-white dark:bg-dark-panel"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.request_id</td><td class="px-4 py-2">UTF-8 string</td><td class="px-4 py-2">Echoed request correlation ID.</td></tr>
                     <tr class="bg-white dark:bg-dark-panel"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.transport.shm</td><td class="px-4 py-2">"true" / "false"</td><td class="px-4 py-2">Server SHM capability on the transport-options response.</td></tr>
@@ -328,6 +330,25 @@ const jsonLd = {
                   able to tell &ldquo;you do not speak this protocol&rdquo; from &ldquo;you speak it but lack this
                   method&rdquo;.
                 </p>
+
+                <h3 class="text-lg font-semibold text-soil-900 dark:text-cream mt-6">Hosting several application protocols</h3>
+                <p class="text-sm text-soil-700 dark:text-cream-2">
+                  A server MUST let an application register any number of protocols when it is constructed, each a{' '}
+                  <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">(name, version, implementation)</code> triple. A worker that serves its own surface and a shared
+                  one needs this, and a port limited to one protocol forces every such worker to fork the framework.
+                </p>
+                <ul class="list-disc list-inside space-y-1 text-sm text-soil-700 dark:text-cream-2">
+                  <li><strong class="text-soil-900 dark:text-cream">The protocol is the unit of optionality.</strong> There is no API for hosting a subset of a protocol's methods. A capability that may be absent is its own protocol, so a client learns about it from <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">list_protocols</code>. <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">vgi_rpc.Identity.v2</code>&rsquo;s hook-driven narrowing is framework-owned and unaffected.</li>
+                  <li><strong class="text-soil-900 dark:text-cream">The set is fixed for the server's lifetime</strong> and sealed no later than when it first serves on any transport. A later registration MUST fail loudly, so reflection output and every <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">protocol_hash</code> stay stable.</li>
+                  <li><strong class="text-soil-900 dark:text-cream">Every transport hosts the same set.</strong> The only exceptions are framework protocols scoped by definition, such as <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">vgi_rpc.Identity.v2</code> on transports that authenticate callers.</li>
+                  <li><strong class="text-soil-900 dark:text-cream">The reserved prefix applies however a name was derived</strong>: declared, taken from a class or interface, or generated by a binding.</li>
+                  <li><strong class="text-soil-900 dark:text-cream">Names are unique.</strong> Registering a name twice is a construction-time error.</li>
+                  <li><strong class="text-soil-900 dark:text-cream">Order is registration order, primary first.</strong> Framework protocols may appear anywhere in <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">list_protocols</code>; clients filter the reserved prefix and rely on the order of what remains.</li>
+                </ul>
+                <p class="text-sm text-soil-700 dark:text-cream-2">
+                  Each binding is versioned, gated, and hashed independently. Nothing about a server is &ldquo;the&rdquo;
+                  protocol except which one is listed first.
+                </p>
               </div>
             </div>
           </section>
@@ -370,6 +391,9 @@ const jsonLd = {
                 A dataclass used directly as an RPC parameter or return value is a binary column containing a complete
                 Arrow IPC stream. Inside that dataclass stream, nested dataclasses are Arrow structs. Container conversion
                 is recursive, including lists, maps, sets, enums, nullable values, and nested dataclasses.
+              </p>
+              <p class="text-sm text-soil-700 dark:text-cream-2">
+                Since 0.52.3 the Python reference decodes such a value only as a complete single-batch stream. Physical EOF and the legacy or modern Arrow EOS marker are accepted; extra messages, trailing bytes, and truncated endings are rejected, even with batch validation disabled. Streaming inputs and results are framed as before.
               </p>
             </div>
           </section>
@@ -467,25 +491,35 @@ const jsonLd = {
               <ul class="list-disc list-inside space-y-1 text-sm text-soil-700 dark:text-cream-2">
                 <li><strong>error_type</strong>: from <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">log_extra.exception_type</code></li>
                 <li><strong>error_message</strong>: from <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">vgi_rpc.log_message</code></li>
-                <li><strong>remote_traceback</strong>: from <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">log_extra.traceback</code></li>
+                <li><strong>remote_traceback</strong>: from <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">log_extra.traceback</code>, or empty when the operator turned tracebacks off</li>
                 <li><strong>request_id</strong>: from <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">vgi_rpc.request_id</code></li>
-                <li><strong>error_kind</strong>: stable, open-ended classification &mdash; a client MUST treat an unrecognised value as an unclassified error rather than rejecting the batch</li>
+                <li><strong>error_code</strong>: from <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">vgi_rpc.error_code</code>, or empty from a server that predates the error model</li>
+                <li><strong>error_kind</strong>: stable, open-ended classification, or empty when absent &mdash; a client MUST treat an unrecognised value as an unclassified error rather than rejecting the batch</li>
+                <li><strong>error_details</strong>: the decoded <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">vgi_rpc.error_details</code> array, every element in order with unknown types included, or an empty list</li>
               </ul>
+              <p class="text-sm text-soil-700 dark:text-cream-2">
+                Each of the last three is read from its top-level key first, then from the <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">log_extra</code> mirror. A client MUST surface all three on every decode path (unary, stream init, stream exchange, an externalized error batch) and expose an <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">is_retryable</code> check.
+              </p>
+              <p class="text-sm text-soil-700 dark:text-cream-2">
+                A kind is unique within the protocol that raised it, and each kind names exactly one canonical code.
+              </p>
               <div class="overflow-x-auto rounded-lg border border-soil-300 dark:border-dark-rule">
                 <table class="w-full text-sm">
                   <thead>
                     <tr class="bg-soil-100 dark:bg-dark-raised">
                       <th class="px-4 py-2 text-left font-semibold">Well-known error_kind</th>
+                      <th class="px-4 py-2 text-left font-semibold">Code</th>
+                      <th class="px-4 py-2 text-left font-semibold">Details</th>
                       <th class="px-4 py-2 text-left font-semibold">Meaning</th>
                     </tr>
                   </thead>
                   <tbody class="divide-y divide-soil-200 dark:divide-dark-rule text-soil-700 dark:text-cream-2">
-                    <tr class="bg-white dark:bg-dark-panel"><td class="px-4 py-2 font-mono text-xs">method_not_implemented</td><td class="px-4 py-2">The named protocol is hosted but has no such method. The intended signal for capability detection with fallback.</td></tr>
-                    <tr class="bg-white dark:bg-dark-panel"><td class="px-4 py-2 font-mono text-xs">protocol_not_specified</td><td class="px-4 py-2">The request carried no <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">vgi_rpc.protocol</code> routing key.</td></tr>
-                    <tr class="bg-white dark:bg-dark-panel"><td class="px-4 py-2 font-mono text-xs">protocol_not_supported</td><td class="px-4 py-2">This server does not host the named protocol, or the path and the metadata named different ones. Also the answer for an incompatible major, since the major is part of the name.</td></tr>
-                    <tr class="bg-white dark:bg-dark-panel"><td class="px-4 py-2 font-mono text-xs">protocol_version_mismatch</td><td class="px-4 py-2">The client's <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">vgi_rpc.protocol_version</code> is incompatible with the server's, for the protocol the resolved method belongs to.</td></tr>
-                    <tr class="bg-white dark:bg-dark-panel"><td class="px-4 py-2 font-mono text-xs">session_lost</td><td class="px-4 py-2">An HTTP sticky-session token could not be honoured &mdash; expired, evicted, misrouted, or presented under a different principal.</td></tr>
-                    <tr class="bg-white dark:bg-dark-panel"><td class="px-4 py-2 font-mono text-xs">server_draining</td><td class="px-4 py-2">The server is shutting down and refuses new sticky-session opens.</td></tr>
+                    <tr class="bg-white dark:bg-dark-panel"><td class="px-4 py-2 font-mono text-xs">method_not_implemented</td><td class="px-4 py-2 font-mono text-xs">UNIMPLEMENTED</td><td class="px-4 py-2 font-mono text-xs">&mdash;</td><td class="px-4 py-2">The named protocol is hosted but has no such method. The intended signal for capability detection with fallback.</td></tr>
+                    <tr class="bg-white dark:bg-dark-panel"><td class="px-4 py-2 font-mono text-xs">protocol_not_specified</td><td class="px-4 py-2 font-mono text-xs">INVALID_ARGUMENT</td><td class="px-4 py-2 font-mono text-xs">&mdash;</td><td class="px-4 py-2">The request carried no <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">vgi_rpc.protocol</code> routing key.</td></tr>
+                    <tr class="bg-white dark:bg-dark-panel"><td class="px-4 py-2 font-mono text-xs">protocol_not_supported</td><td class="px-4 py-2 font-mono text-xs">UNIMPLEMENTED</td><td class="px-4 py-2 font-mono text-xs">&mdash;</td><td class="px-4 py-2">This server does not host the named protocol, or the path and the metadata named different ones. Also the answer for an incompatible major, since the major is part of the name.</td></tr>
+                    <tr class="bg-white dark:bg-dark-panel"><td class="px-4 py-2 font-mono text-xs">protocol_version_mismatch</td><td class="px-4 py-2 font-mono text-xs">FAILED_PRECONDITION</td><td class="px-4 py-2 font-mono text-xs">PreconditionFailure</td><td class="px-4 py-2">The client's <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">vgi_rpc.protocol_version</code> is incompatible with the server's, for the protocol the resolved method belongs to.</td></tr>
+                    <tr class="bg-white dark:bg-dark-panel"><td class="px-4 py-2 font-mono text-xs">session_lost</td><td class="px-4 py-2 font-mono text-xs">ABORTED</td><td class="px-4 py-2 font-mono text-xs">&mdash;</td><td class="px-4 py-2">An HTTP sticky-session token could not be honoured &mdash; expired, evicted, misrouted, or presented under a different principal. Retry the whole session, not the call.</td></tr>
+                    <tr class="bg-white dark:bg-dark-panel"><td class="px-4 py-2 font-mono text-xs">server_draining</td><td class="px-4 py-2 font-mono text-xs">UNAVAILABLE</td><td class="px-4 py-2 font-mono text-xs">RetryInfo</td><td class="px-4 py-2">The server is shutting down and refuses new sticky-session opens.</td></tr>
                   </tbody>
                 </table>
               </div>
@@ -495,6 +529,86 @@ const jsonLd = {
                 surface both what it asked for and what it was told.{' '}
                 <a href="#identity" class="text-link hover:text-link-hover transition-colors dark:text-link-dark dark:hover:text-link-dark-hover">Section 16</a> defines five further kinds specific to{' '}
                 <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">vgi_rpc.Identity.v2</code>.
+              </p>
+              <h3 class="text-lg font-semibold text-soil-900 dark:text-cream mt-6">Error model</h3>
+              <p class="text-sm text-soil-700 dark:text-cream-2">
+                Errors take the shape of gRPC's <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">google.rpc.Status</code>, with <a href="https://google.aip.dev/193" target="_blank" rel="noopener noreferrer" class="text-link hover:text-link-hover transition-colors dark:text-link-dark dark:hover:text-link-dark-hover">AIP-193</a> as the usage guide. Three layers ride on every EXCEPTION batch, and <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">vgi_rpc.log_message</code> stays developer-facing English.
+              </p>
+              <div class="overflow-x-auto rounded-lg border border-soil-300 dark:border-dark-rule">
+                <table class="w-full text-sm">
+                  <thead>
+                    <tr class="bg-soil-100 dark:bg-dark-raised">
+                      <th class="px-4 py-2 text-left font-semibold">Layer</th>
+                      <th class="px-4 py-2 text-left font-semibold">Key</th>
+                      <th class="px-4 py-2 text-left font-semibold">Set</th>
+                      <th class="px-4 py-2 text-left font-semibold">Purpose</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-soil-200 dark:divide-dark-rule text-soil-700 dark:text-cream-2">
+                    <tr class="bg-white dark:bg-dark-panel"><td class="px-4 py-2">Code</td><td class="px-4 py-2 font-mono text-xs">vgi_rpc.error_code</td><td class="px-4 py-2">Closed: the sixteen below</td><td class="px-4 py-2">Generic handling: whether to retry, how to show it, and the HTTP status a proxy maps it to</td></tr>
+                    <tr class="bg-white dark:bg-dark-panel"><td class="px-4 py-2">Reason</td><td class="px-4 py-2 font-mono text-xs">vgi_rpc.error_kind</td><td class="px-4 py-2">Open; unique within the raising protocol</td><td class="px-4 py-2">What a client branches on</td></tr>
+                    <tr class="bg-white dark:bg-dark-panel"><td class="px-4 py-2">Details</td><td class="px-4 py-2 font-mono text-xs">vgi_rpc.error_details</td><td class="px-4 py-2">Fixed catalog</td><td class="px-4 py-2">Machine-readable specifics: retry delay, which field, which resource</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <h4 class="font-semibold text-soil-900 dark:text-cream mt-4">Codes</h4>
+              <p class="text-sm text-soil-700 dark:text-cream-2">
+                The wire value is the code's name, never its number, so a log line, a proxy rule, and a client switch read the same string. A client that receives any other value treats it as <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">UNKNOWN</code>.
+              </p>
+              <p class="text-sm text-soil-700 dark:text-cream-2 leading-loose">
+                <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">CANCELLED</code>, <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">UNKNOWN</code>, <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">INVALID_ARGUMENT</code>, <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">DEADLINE_EXCEEDED</code>, <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">NOT_FOUND</code>, <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">ALREADY_EXISTS</code>, <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">PERMISSION_DENIED</code>, <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">RESOURCE_EXHAUSTED</code>, <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">FAILED_PRECONDITION</code>, <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">ABORTED</code>, <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">OUT_OF_RANGE</code>, <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">UNIMPLEMENTED</code>, <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">INTERNAL</code>, <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">UNAVAILABLE</code>, <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">DATA_LOSS</code>, <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">UNAUTHENTICATED</code>
+              </p>
+              <h4 class="font-semibold text-soil-900 dark:text-cream mt-4">Detail catalog</h4>
+              <p class="text-sm text-soil-700 dark:text-cream-2">
+                Each detail is a JSON object naming its type in <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">@type</code>, mirroring protobuf's JSON form for <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">Any</code>. String fields absent from an object read as <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">""</code>, and arrays as <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">[]</code>.
+              </p>
+              <div class="overflow-x-auto rounded-lg border border-soil-300 dark:border-dark-rule">
+                <table class="w-full text-sm">
+                  <thead>
+                    <tr class="bg-soil-100 dark:bg-dark-raised">
+                      <th class="px-4 py-2 text-left font-semibold">@type</th>
+                      <th class="px-4 py-2 text-left font-semibold">Fields</th>
+                      <th class="px-4 py-2 text-left font-semibold">Use</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-soil-200 dark:divide-dark-rule text-soil-700 dark:text-cream-2">
+                    <tr class="bg-white dark:bg-dark-panel"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.ErrorInfo</td><td class="px-4 py-2 font-mono text-xs">metadata: {'{'}string: string{'}'}</td><td class="px-4 py-2">Extra context for the reason. The reason and domain are already <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">error_kind</code> and the protocol, so they are not repeated.</td></tr>
+                    <tr class="bg-white dark:bg-dark-panel"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.RetryInfo</td><td class="px-4 py-2 font-mono text-xs">retry_delay_seconds: number</td><td class="px-4 py-2">How long to wait before retrying; finite, at least 0.</td></tr>
+                    <tr class="bg-white dark:bg-dark-panel"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.BadRequest</td><td class="px-4 py-2 font-mono text-xs">field_violations: [{'{'}field, description{'}'}]</td><td class="px-4 py-2">Which inputs were wrong.</td></tr>
+                    <tr class="bg-white dark:bg-dark-panel"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.PreconditionFailure</td><td class="px-4 py-2 font-mono text-xs">violations: [{'{'}type, subject, description{'}'}]</td><td class="px-4 py-2">What state must change first.</td></tr>
+                    <tr class="bg-white dark:bg-dark-panel"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.QuotaFailure</td><td class="px-4 py-2 font-mono text-xs">violations: [{'{'}subject, description{'}'}]</td><td class="px-4 py-2">Which limit was hit.</td></tr>
+                    <tr class="bg-white dark:bg-dark-panel"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.ResourceInfo</td><td class="px-4 py-2 font-mono text-xs">resource_type, resource_name, owner, description</td><td class="px-4 py-2">Which object the error concerns.</td></tr>
+                    <tr class="bg-white dark:bg-dark-panel"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.Help</td><td class="px-4 py-2 font-mono text-xs">links: [{'{'}description, url{'}'}]</td><td class="px-4 py-2">Where to read more.</td></tr>
+                    <tr class="bg-white dark:bg-dark-panel"><td class="px-4 py-2 font-mono text-xs">vgi_rpc.LocalizedMessage</td><td class="px-4 py-2 font-mono text-xs">locale, message</td><td class="px-4 py-2">Text safe to show an end user.</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <h4 class="font-semibold text-soil-900 dark:text-cream mt-4">Rules</h4>
+              <ul class="list-disc list-inside space-y-1 text-sm text-soil-700 dark:text-cream-2">
+                <li><strong class="text-soil-900 dark:text-cream">A code goes on every EXCEPTION batch</strong> from a server implementing this model; unclassified errors get <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">UNKNOWN</code>. A code may be sent without a kind. <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">INTERNAL</code> is reserved for faults an implementation detects in its own machinery and is never the default for an unclassified error.</li>
+                <li><strong class="text-soil-900 dark:text-cream">Details come only from the catalog.</strong> A protocol may define its own type only under its own protocol name, such as <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">vgi.reports.v1.SomeDetail</code>, and should prefer <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">ErrorInfo.metadata</code>. An unlisted type in the reserved <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">vgi_rpc.</code> space, or an unqualified name, is not a detail.</li>
+                <li><strong class="text-soil-900 dark:text-cream">Each type appears at most once</strong> in a details array.</li>
+                <li><strong class="text-soil-900 dark:text-cream">Clients ignore detail types they do not know</strong> and never require details. Typed access skips them, but the client still reports the whole array as received.</li>
+                <li><strong class="text-soil-900 dark:text-cream">The array is bounded.</strong> The serialized value is at most 4096 bytes of UTF-8. A server over the limit omits the whole array, from both the top-level key and the mirror, because a client cannot tell a partial list from a complete one. It likewise omits an array that breaks the uniqueness or catalog rules. The code and kind are sent regardless.</li>
+                <li><strong class="text-soil-900 dark:text-cream">Details MUST NOT carry credentials, tokens, or user data.</strong></li>
+                <li><strong class="text-soil-900 dark:text-cream"><code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">log_extra</code> mirrors the keys.</strong> <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">error_code</code> and <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">error_kind</code> are strings there and <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">error_details</code> is a JSON array, not a string. The top-level keys are canonical.</li>
+              </ul>
+              <h4 class="font-semibold text-soil-900 dark:text-cream mt-4">Retryability</h4>
+              <p class="text-sm text-soil-700 dark:text-cream-2">
+                Retryability follows the code. <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">UNAVAILABLE</code> is retryable, and so is <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">RESOURCE_EXHAUSTED</code> when it carries <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">RetryInfo</code>; a retry waits at least that long. <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">ABORTED</code> means retry the whole operation at a higher level, such as re-opening the session. Everything else is final.
+              </p>
+              <p class="text-sm text-soil-700 dark:text-cream-2">
+                Clients expose this as a check and do not retry RPC errors automatically, because a method may not be idempotent. Transport-level retry of replay-safe HTTP responses (429, 502, 503, and 504 before any RPC body) is a separate mechanism.
+              </p>
+              <h4 class="font-semibold text-soil-900 dark:text-cream mt-4">Tracebacks</h4>
+              <p class="text-sm text-soil-700 dark:text-cream-2">
+                A server setting decides whether EXCEPTION batches carry <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">log_extra.traceback</code>, and with it <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">frames</code>, <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">cause</code>, and <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">context</code>. It is on by default on every transport, and an operator may turn it off for the whole server. The exception type, message, code, kind, and details are sent either way.
+              </p>
+              <p class="text-sm text-soil-700 dark:text-cream-2">
+                The default includes them everywhere because at least one client puts the remote traceback into the error a user sees: the DuckDB extension does. Operators who do not want file and function names leaving the process turn the setting off.
+              </p>
+              <p class="text-sm text-soil-700 dark:text-cream-2">
+                When the setting is on, <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">log_extra.traceback</code> MUST be a non-empty string. A language with no stack trace for an error, such as C++ or Rust, sends a synthesized one: at minimum <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">&lt;ErrorType&gt;: &lt;message&gt;</code> and the <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">&lt;protocol&gt;/&lt;method&gt;</code> that raised it, one per line. <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">frames</code> may be an empty array. Test vectors are in <a href="https://github.com/Query-farm/vgi-rpc-python/blob/main/tools/cross-port/specs/MULTI_PROTOCOL_HOSTING.md" target="_blank" rel="noopener noreferrer" class="text-link hover:text-link-hover transition-colors dark:text-link-dark dark:hover:text-link-dark-hover">MULTI_PROTOCOL_HOSTING.md</a>.
               </p>
             </div>
           </section>
@@ -724,6 +838,13 @@ Sealed payload:
                 readers that receive it must verify the uncompressed payload. Resolution enforces scheme, host, redirect,
                 encoded-size, decoded-size, and retry limits before opening the fetched IPC stream.
               </p>
+              <h3 class="text-lg font-semibold text-soil-900 dark:text-cream mt-6">Pre-published references</h3>
+              <p class="text-sm text-soil-700 dark:text-cream-2">
+                A server MAY answer a unary call with a pointer to an object it published earlier. The wire is unchanged: one zero-row batch with the method's result schema carrying <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">vgi_rpc.location</code>, plus <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">vgi_rpc.location.sha256</code> only when the publisher recorded a digest. The object is exactly what the externalizer would have uploaded for that result: an Arrow IPC stream of the result schema holding one 1-row data batch, optionally <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">Content-Encoding</code>-compressed.
+              </p>
+              <p class="text-sm text-soil-700 dark:text-cream-2">
+                Such a pointer is written regardless of the externalization threshold or storage configuration, is never inlined or routed through shared memory, and uploads nothing during the call. Readers resolve it like any other pointer.
+              </p>
             </div>
           </section>
 
@@ -880,7 +1001,7 @@ describe(protocol: utf8) -> ServiceDescription`}</pre>
                     <tr class="bg-white dark:bg-dark-panel"><td class="px-4 py-2 font-mono text-xs">protocol_hash</td><td class="px-4 py-2 font-mono text-xs">utf8</td><td class="px-4 py-2">64 lowercase hex. See below.</td></tr>
                     <tr class="bg-white dark:bg-dark-panel"><td class="px-4 py-2 font-mono text-xs">deprecated</td><td class="px-4 py-2 font-mono text-xs">bool</td><td class="px-4 py-2">Whether callers should migrate off.</td></tr>
                     <tr class="bg-white dark:bg-dark-panel"><td class="px-4 py-2 font-mono text-xs">deprecation_message</td><td class="px-4 py-2 font-mono text-xs">utf8</td><td class="px-4 py-2">What to migrate to. Empty unless deprecated.</td></tr>
-                    <tr class="bg-white dark:bg-dark-panel"><td class="px-4 py-2 font-mono text-xs">features</td><td class="px-4 py-2 font-mono text-xs">list&lt;utf8&gt;</td><td class="px-4 py-2">Open set of capability tokens.</td></tr>
+                    <tr class="bg-white dark:bg-dark-panel"><td class="px-4 py-2 font-mono text-xs">features</td><td class="px-4 py-2 font-mono text-xs">list&lt;utf8&gt;</td><td class="px-4 py-2"><strong class="text-soil-900 dark:text-cream">Reserved.</strong> MUST be emitted as an empty list in this version; clients MUST ignore its contents. A capability that may be absent is hosted as its own protocol instead.</td></tr>
                   </tbody>
                 </table>
               </div>
@@ -1131,6 +1252,20 @@ issue_grant(purpose: utf8, scopes: list<utf8>, ttl_seconds: int64) -> IssuedGran
                 invisible here. It is never parsed and never logged.
               </p>
 
+              <h3 class="text-lg font-semibold text-soil-900 dark:text-cream mt-6">Accepting identity credentials</h3>
+              <p class="text-sm text-soil-700 dark:text-cream-2">
+                A grant is minted to be presented later as an ordinary bearer, and <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">resolve_token</code> resolves opaque bearers, so both MUST feed back into HTTP authentication. The byte-level contract and test vectors are in section 9 of <a href="https://github.com/Query-farm/vgi-rpc-python/blob/main/tools/cross-port/specs/IDENTITY_V2_SPEC.md" target="_blank" rel="noopener noreferrer" class="text-link hover:text-link-hover transition-colors dark:text-link-dark dark:hover:text-link-dark-hover">IDENTITY_V2_SPEC.md</a>.
+              </p>
+              <ul class="list-disc list-inside space-y-1 text-sm text-soil-700 dark:text-cream-2">
+                <li><strong class="text-soil-900 dark:text-cream">Sealed grants are opt-in.</strong> With a grant key configured (<code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">VGI_RPC_GRANT_KEYS</code>, base64 of exactly 32 bytes each; the first mints and all verify), the framework provides <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">mint_grant</code> unless the worker supplies one, and accepts its own grants as bearers. A malformed key stops the worker at startup.</li>
+                <li><strong class="text-soil-900 dark:text-cream">Format.</strong> <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">"vgig1." base64url_nopad(kid(8) || envelope)</code>, where the envelope is the state-token XChaCha20-Poly1305 envelope (version <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">0x01</code>) with AAD <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">"vgi_rpc.grant.v1" || 0x00 || kid || audience</code>. Lifetime is capped at the configured maximum, with 60 seconds of clock skew.</li>
+                <li><strong class="text-soil-900 dark:text-cream">AuthContext.</strong> Domain <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">"grant"</code>, the grant's principal, claims <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">{'{'}grant_id, scopes, purpose{'}'}</code>, and no <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">auth_time</code>, so <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">issue_grant</code> refuses it with <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">stale_auth</code>: grants never mint grants.</li>
+                <li><strong class="text-soil-900 dark:text-cream"><code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">resolve_token</code> as a bearer authenticator.</strong> It is consulted for bearers the earlier authenticators did not accept. An identity authenticates under domain <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">"token"</code>; none falls through, to a 401 if nothing accepts; an unavailable error is a 503 with <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">Retry-After</code>. It is never consulted for a <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">vgig1.</code> token, a JWS-shaped one, or one over 4096 bytes.</li>
+                <li><strong class="text-soil-900 dark:text-cream">Order.</strong> The deployment's authenticators (JWT, static), then sealed grants, then <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">resolve_token</code>. A <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">vgig1.</code> bearer that fails is a 401 and stops the chain.</li>
+                <li><strong class="text-soil-900 dark:text-cream">Errors.</strong> A bad, tampered, wrong-key, or expired grant is a 401 on the auth path (<code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">invalid_credential</code>, or <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">expired_credential</code> once authentic), with canonical code <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">UNAUTHENTICATED</code>.</li>
+                <li><strong class="text-soil-900 dark:text-cream">Revocation.</strong> Sealed grants are not individually revocable. Keep the maximum lifetime short and re-issue; removing a key revokes all its grants.</li>
+              </ul>
+
               <h3 class="text-lg font-semibold text-soil-900 dark:text-cream mt-6">Error kinds</h3>
               <p class="text-sm text-soil-700 dark:text-cream-2">
                 These were an HTTP route whose callers classified definitive-versus-transient on the status code (404 vs
@@ -1143,22 +1278,29 @@ issue_grant(purpose: utf8, scopes: list<utf8>, ttl_seconds: int64) -> IssuedGran
                   <thead>
                     <tr class="bg-soil-100 dark:bg-dark-raised">
                       <th class="px-4 py-2 text-left font-semibold">error_kind</th>
+                      <th class="px-4 py-2 text-left font-semibold">Code</th>
                       <th class="px-4 py-2 text-left font-semibold">Meaning</th>
                       <th class="px-4 py-2 text-left font-semibold">Caller</th>
                     </tr>
                   </thead>
                   <tbody class="divide-y divide-soil-200 dark:divide-dark-rule text-soil-700 dark:text-cream-2">
-                    <tr class="bg-white dark:bg-dark-panel"><td class="px-4 py-2 font-mono text-xs">introspection_refused</td><td class="px-4 py-2">The caller may not introspect.</td><td class="px-4 py-2">Definitive; MAY cache.</td></tr>
-                    <tr class="bg-white dark:bg-dark-panel"><td class="px-4 py-2 font-mono text-xs">token_unresolved</td><td class="px-4 py-2">The subject credential did not resolve.</td><td class="px-4 py-2">Definitive; MAY cache.</td></tr>
-                    <tr class="bg-white dark:bg-dark-panel"><td class="px-4 py-2 font-mono text-xs">stale_auth</td><td class="px-4 py-2">The caller has not authenticated recently enough to mint.</td><td class="px-4 py-2">Definitive, and actionable &mdash; re-prompt.</td></tr>
-                    <tr class="bg-white dark:bg-dark-panel"><td class="px-4 py-2 font-mono text-xs">grant_refused</td><td class="px-4 py-2">The worker declined to mint.</td><td class="px-4 py-2">Definitive.</td></tr>
-                    <tr class="bg-white dark:bg-dark-panel"><td class="px-4 py-2 font-mono text-xs">identity_unavailable</td><td class="px-4 py-2">The answer is not <em>knowable</em> &mdash; a store is down.</td><td class="px-4 py-2"><strong class="text-soil-900 dark:text-cream">Transient</strong>; MUST NOT negative-cache.</td></tr>
+                    <tr class="bg-white dark:bg-dark-panel"><td class="px-4 py-2 font-mono text-xs">introspection_refused</td><td class="px-4 py-2 font-mono text-xs">PERMISSION_DENIED</td><td class="px-4 py-2">The caller may not introspect.</td><td class="px-4 py-2">Definitive; MAY cache.</td></tr>
+                    <tr class="bg-white dark:bg-dark-panel"><td class="px-4 py-2 font-mono text-xs">token_unresolved</td><td class="px-4 py-2 font-mono text-xs">NOT_FOUND</td><td class="px-4 py-2">The subject credential did not resolve.</td><td class="px-4 py-2">Definitive; MAY cache.</td></tr>
+                    <tr class="bg-white dark:bg-dark-panel"><td class="px-4 py-2 font-mono text-xs">stale_auth</td><td class="px-4 py-2 font-mono text-xs">UNAUTHENTICATED</td><td class="px-4 py-2">The caller has not authenticated recently enough to mint.</td><td class="px-4 py-2">Definitive, and actionable &mdash; re-prompt.</td></tr>
+                    <tr class="bg-white dark:bg-dark-panel"><td class="px-4 py-2 font-mono text-xs">grant_refused</td><td class="px-4 py-2 font-mono text-xs">PERMISSION_DENIED</td><td class="px-4 py-2">The worker declined to mint.</td><td class="px-4 py-2">Definitive.</td></tr>
+                    <tr class="bg-white dark:bg-dark-panel"><td class="px-4 py-2 font-mono text-xs">identity_unavailable</td><td class="px-4 py-2 font-mono text-xs">UNAVAILABLE</td><td class="px-4 py-2">The answer is not <em>knowable</em> &mdash; a store is down.</td><td class="px-4 py-2"><strong class="text-soil-900 dark:text-cream">Transient</strong>; MUST NOT negative-cache.</td></tr>
                   </tbody>
                 </table>
               </div>
               <p class="text-sm text-soil-700 dark:text-cream-2">
                 A caller that negative-caches a transient failure locks out valid users; one that retries a definitive
                 rejection hammers the worker.
+              </p>
+              <p class="text-sm text-soil-700 dark:text-cream-2">
+                <strong class="text-soil-900 dark:text-cream"><code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">identity_unavailable</code> MUST carry <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">vgi_rpc.RetryInfo</code></strong> with the delay the failing component asked for, so a caller knows when to ask again.
+              </p>
+              <p class="text-sm text-soil-700 dark:text-cream-2">
+                A hook that raises the transport-auth &ldquo;unavailable&rdquo; error is translated, not passed through. A <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">resolve_token</code> or <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">mint_grant</code> hook typically calls the same store an authenticator does, so the framework MUST emit that error as <code class="px-1 py-0.5 rounded bg-soil-100 dark:bg-dark-raised text-xs">identity_unavailable</code> with the error's own retry hint, never unclassified and never with a substituted default. Untranslated, a caller can no longer tell an outage from a refusal.
               </p>
             </div>
           </section>
