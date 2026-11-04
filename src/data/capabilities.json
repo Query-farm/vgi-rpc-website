@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-04T21:30:09.570455+00:00",
+  "generated_at": "2026-11-04T23:13:46.282237+00:00",
   "languages": {
     "python": {
       "version": "0.52.4",
@@ -204,11 +204,11 @@
       }
     },
     "rust": {
-      "version": "0.32.0",
+      "version": "0.32.2",
       "source": {
-        "sha": "7fc2a26bc4ffab8ea7bbeb0a277d532c8e858378",
-        "source": "https://github.com/Query-farm/vgi-rpc-rust/blob/7fc2a26bc4ffab8ea7bbeb0a277d532c8e858378/README.md",
-        "version": "0.32.0",
+        "sha": "a81f2e9dc127ed9ea80659c75f0e3d4f0d88a2f7",
+        "source": "https://github.com/Query-farm/vgi-rpc-rust/blob/a81f2e9dc127ed9ea80659c75f0e3d4f0d88a2f7/README.md",
+        "version": "0.32.2",
         "reviewed_at": "2026-11-04"
       },
       "evidence": "declared",
@@ -272,11 +272,11 @@
       }
     },
     "java": {
-      "version": "0.33.2",
+      "version": "0.33.3",
       "source": {
-        "sha": "2f13ace76882659d1f1bcd745b869bb2099d2bd6",
-        "source": "https://github.com/Query-farm/vgi-rpc-java/blob/2f13ace76882659d1f1bcd745b869bb2099d2bd6/README.md",
-        "version": "0.33.2",
+        "sha": "84539dd7fb127ca913e52a894f0895a1eb6bb205",
+        "source": "https://github.com/Query-farm/vgi-rpc-java/blob/84539dd7fb127ca913e52a894f0895a1eb6bb205/README.md",
+        "version": "0.33.3",
         "reviewed_at": "2026-11-04"
       },
       "evidence": "declared",
@@ -340,11 +340,11 @@
       }
     },
     "csharp": {
-      "version": "0.18.1",
+      "version": "0.18.2",
       "source": {
-        "sha": "3717e1e8da99f8479aaf3aff081e065bcad888d9",
-        "source": "https://github.com/Query-farm/vgi-rpc-csharp/blob/3717e1e8da99f8479aaf3aff081e065bcad888d9/README.md",
-        "version": "0.18.1",
+        "sha": "5da998271221f05639b9ef54514a6f40a306cda0",
+        "source": "https://github.com/Query-farm/vgi-rpc-csharp/blob/5da998271221f05639b9ef54514a6f40a306cda0/README.md",
+        "version": "0.18.2",
         "reviewed_at": "2026-11-04"
       },
       "evidence": "declared",
@@ -478,8 +478,8 @@
     "c": {
       "version": "0.1.0",
       "source": {
-        "sha": "e97881ae773f145cd19137222e161b8592415a7b",
-        "source": "https://github.com/Query-farm/vgi-rpc-c/blob/e97881ae773f145cd19137222e161b8592415a7b/docs/conformance.md",
+        "sha": "3579c828b4ffbdc4121dc13b289d57b0009fa004",
+        "source": "https://github.com/Query-farm/vgi-rpc-c/blob/3579c828b4ffbdc4121dc13b289d57b0009fa004/docs/conformance.md",
         "version": "0.1.0",
         "reviewed_at": "2026-11-04"
       },

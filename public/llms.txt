@@ -96,19 +96,19 @@ SDK documentation reviewed November 4, 2026. The website capability matrix links
 - **Patterns:** unary, unary void, producer (with header), exchange (with header)
 - **Features:** introspection, client logging, error propagation, complex and optional types, authentication, external storage, OpenTelemetry
 
-### Rust (v0.32.0)
+### Rust (v0.32.2)
 - **Transports:** pipe, stdio, Unix socket, TCP, HTTP, shared-memory side channel
 - **Patterns:** unary, unary void, producer (with header), exchange (with header)
 - **Features:** native clients and servers, derive macros, protocol reflection, client logging, error propagation, complex/optional/annotated types, authentication, OpenTelemetry, sticky sessions, S3/GCS external storage
 - **Package:** [crates.io](https://crates.io/crates/vgi-rpc)
 
-### Java (v0.33.2)
+### Java (v0.33.3)
 - **Transports:** pipe, stdio, Unix socket, TCP, HTTP, shared-memory side channel on JDK 22+
 - **Patterns:** unary, unary void, producer (with header), exchange (with header)
 - **Features:** typed interface proxies, protocol reflection, client logging, error propagation, complex/optional/annotated types, authentication, OpenTelemetry correlation, sticky sessions, S3/GCS external storage
 - **Package:** [Maven Central](https://central.sonatype.com/artifact/farm.query/vgirpc)
 
-### C# (v0.18.1)
+### C# (v0.18.2)
 - **Transports:** pipe, stdio, Unix socket, TCP, HTTP with identity or zstd content encoding, shared-memory side channel
 - **Patterns:** unary, unary void, producer (with header), exchange (with header)
 - **Features:** typed clients and servers, reflection-based POCO contracts, Arrow record batches, protocol reflection, client logging, error propagation, authentication, OpenTelemetry correlation, S3/GCS external storage
