@@ -1,8 +1,8 @@
 {
   "python": {
-    "sha": "ece07f04c197dacc3bded146689c8ae1340c5b50",
-    "source": "https://github.com/Query-farm/vgi-rpc-python/blob/ece07f04c197dacc3bded146689c8ae1340c5b50/README.md",
-    "version": "0.53.0",
+    "sha": "136fc912f5b9e785070849f35727f83b209b01bb",
+    "source": "https://github.com/Query-farm/vgi-rpc-python/blob/136fc912f5b9e785070849f35727f83b209b01bb/README.md",
+    "version": "0.53.1",
     "reviewed_at": "2026-11-04"
   },
   "typescript": {

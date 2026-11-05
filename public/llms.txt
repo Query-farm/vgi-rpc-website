@@ -80,7 +80,7 @@ Probe `HEAD {prefix}/health`, including in browsers. Capability headers also acc
 
 SDK documentation reviewed November 4, 2026. The website capability matrix links to reviewed source commits. These declarations are independent of the older release-pinned benchmark measurements; that snapshot does not measure Iroh.
 
-### Python (v0.53.0)
+### Python (v0.53.1)
 - **Transports:** pipe, stdio, Unix socket, TCP, shared memory, HTTP
 - **Patterns:** unary, unary void, producer (with header), exchange (with header)
 - **Features:** introspection, client logging, error propagation, complex types, optional types, dataclass types, annotated types, authentication, external storage, OpenTelemetry
