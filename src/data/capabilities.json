@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-11-05T03:41:49.418449+00:00",
+  "generated_at": "2026-11-05T07:11:15.836378+00:00",
   "languages": {
     "python": {
-      "version": "0.52.4",
+      "version": "0.53.0",
       "source": {
-        "sha": "8f54dac758ffe8ffbd9a703428029ac0daa2e94b",
-        "source": "https://github.com/Query-farm/vgi-rpc-python/blob/8f54dac758ffe8ffbd9a703428029ac0daa2e94b/README.md",
-        "version": "0.52.4",
+        "sha": "ece07f04c197dacc3bded146689c8ae1340c5b50",
+        "source": "https://github.com/Query-farm/vgi-rpc-python/blob/ece07f04c197dacc3bded146689c8ae1340c5b50/README.md",
+        "version": "0.53.0",
         "reviewed_at": "2026-11-04"
       },
       "evidence": "declared",
