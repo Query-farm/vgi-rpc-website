@@ -86,7 +86,7 @@ SDK documentation reviewed November 4, 2026. The website capability matrix links
 - **Features:** introspection, client logging, error propagation, complex types, optional types, dataclass types, annotated types, authentication, external storage, OpenTelemetry
 - **Package:** [PyPI](https://pypi.org/project/vgi-rpc/)
 
-### TypeScript (v0.29.4)
+### TypeScript (v0.29.5)
 - **Transports:** pipe, stdio, Unix socket, TCP, HTTP
 - **Patterns:** unary, unary void, producer (with header), exchange (with header)
 - **Features:** introspection, client logging, error propagation, complex and optional types, authentication, external storage, OpenTelemetry

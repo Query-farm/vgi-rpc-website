@@ -6,9 +6,9 @@
     "reviewed_at": "2026-11-04"
   },
   "typescript": {
-    "sha": "0bc5b957abe9012828fe1e27e631da96965d2067",
-    "source": "https://github.com/Query-farm/vgi-rpc-typescript/blob/0bc5b957abe9012828fe1e27e631da96965d2067/README.md",
-    "version": "0.29.4",
+    "sha": "8ed247a12a3bd51ea9f4bde71bd586444e58392a",
+    "source": "https://github.com/Query-farm/vgi-rpc-typescript/blob/8ed247a12a3bd51ea9f4bde71bd586444e58392a/README.md",
+    "version": "0.29.5",
     "reviewed_at": "2026-11-04"
   },
   "go": {
